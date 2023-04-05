@@ -28,9 +28,9 @@ git clone https://gitee.com/Guqier/SMP.git
 
   2. 输入代码，更新项目资源
 
-     ```git
-     git push
-     ```
+```git
+git pull
+```
 
 * 从本地仓库提交到远程仓库
 
