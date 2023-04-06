@@ -19,8 +19,8 @@ Social Media Platforms（工程实践2）后端代码仓库
 ```git
 git clone https://gitee.com/Guqier/SMP.git
 ```
-    3. Git在工作空间创建名为SMP的目录，即为项目目录
-    4. 输入`cd SMP`进入项目目录
+  3. Git在工作空间创建名为SMP的目录，即为项目目录
+  4. 输入`cd SMP`进入项目目录
 
 * 从远程仓库更新项目资源到本地（第二次及以上）
 
