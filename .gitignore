@@ -17,7 +17,6 @@ buildNumber.properties
 *.jar
 *.war
 *.ear
-target/
 
 # idea
 .idea/
@@ -39,8 +38,6 @@ target/
 .project
 .settings/
 bin/
-
-*.log
 tem/
 
 #rebel
