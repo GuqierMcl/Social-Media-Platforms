@@ -8,7 +8,7 @@ Social Media Platforms（工程实践2）后端代码仓库
 >
 > @庄可欣
 >
-> @张力文
+> @张力文（test）
 
 #### Git仓库使用手册
 
