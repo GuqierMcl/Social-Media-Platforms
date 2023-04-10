@@ -21,7 +21,8 @@
         <!--配置mybatis-config.xml-->
         <property name="configLocation" value="classpath:mybatis-config.xml"/>
         <!--配置mapper类的别名映射-->
-        <property name="typeAliasesPackage" value="com.thirteen.smp.mapper"/>
+        <property name="typeAliasesPackage" value="com.thirteen.smp.pojo"/>
+
     </bean>
 
     <!--注册mapper.xml文件，即自动扫描mapper包下的mapper.xml文件-->
