@@ -1,12 +1,16 @@
 package com.thirteen.smp.response;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * 用于封装Ajax响应数据的类
+ *
  * @author 顾建平
  * @version 1.0
  * @since 1.0
  */
-public class ResponseBean {
+public class ResponseData {
 
     /**
      * 结果码，成功=1，失败=0
@@ -21,10 +25,10 @@ public class ResponseBean {
      */
     private Object data;
 
-    public ResponseBean() {
+    public ResponseData() {
     }
 
-    public ResponseBean(int code, String msg, Object data) {
+    public ResponseData(int code, String msg, Object data) {
         this.code = code;
         this.msg = msg;
         this.data = data;
@@ -61,5 +65,19 @@ public class ResponseBean {
                 ", msg='" + msg + '\'' +
                 ", data=" + data +
                 '}';
+    }
+
+    /**
+     * 用于向响应对象数据域以Map的形式添加数据
+     * @param key 键
+     * @param o 值
+     */
+    public void addData(String key, Object o) {
+        if (data == null) {
+            data = new HashMap<String, Object>();
+        }
+        Map<String, Object> map = (Map<String, Object>) data;
+        map.put(key, o);
+        data = map;
     }
 }

@@ -38,6 +38,12 @@
             <param-name>contextConfigLocation</param-name>
             <param-value>classpath:spring-mvc.xml</param-value>
         </init-param>
+        <load-on-startup>1</load-on-startup>
+        <multipart-config>
+            <location>/</location>
+            <max-file-size>10240000</max-file-size>
+            <max-request-size>41943040</max-request-size>
+        </multipart-config>
     </servlet>
     <servlet-mapping>
         <servlet-name>SpringMVC</servlet-name>

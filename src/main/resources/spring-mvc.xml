@@ -11,4 +11,20 @@
 
     <!--配置注解扫描-->
     <mvc:annotation-driven/>
+
+    <!--StandardServletMultipartResolver 实例-->
+    <bean class="org.springframework.web.multipart.support.StandardServletMultipartResolver" id="multipartResolver"/>
+
+    <!--注册拦截器-->
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <!--配置拦截的路径(哪些请求被拦截)-->
+            <mvc:mapping path="/**"/>
+            <!--设置放行的请求-->
+            <mvc:exclude-mapping path="/api/auth/login"/>
+            <mvc:exclude-mapping path="/api/auth/register"/>
+            <!--设置进行功能处理的拦截器类-->
+            <bean class="com.thirteen.smp.interceptor.AuthInterceptor"/>
+        </mvc:interceptor>
+    </mvc:interceptors>
 </beans>
