@@ -6,7 +6,7 @@ import java.util.Date;
 
 import com.thirteen.smp.response.ResponseData;
 import com.thirteen.smp.utils.ResponseUtil;
-import com.thirteen.smp.utils.accessTokenUtil;
+import com.thirteen.smp.utils.AccessTokenUtil;
 import jakarta.servlet.http.HttpServletRequest;
 
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -55,7 +55,7 @@ public class UploadController {
         // 拼接保存文件文件名（时间戳 + 后缀）
         String newName =/*userId +*/ format + oldName.substring(oldName.lastIndexOf("."));
 
-        Integer userId = accessTokenUtil.getUserId(request);
+        Integer userId = AccessTokenUtil.getUserId(request);
         newName = userId + newName;
 
         try {

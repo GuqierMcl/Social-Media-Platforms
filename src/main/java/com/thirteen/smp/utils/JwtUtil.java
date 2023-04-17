@@ -13,7 +13,7 @@ import java.util.Map;
 /**
  * JWT生成token和解析token的工具类
  */
-public class jwtUtil {
+public class JwtUtil {
 
     /**
      * 密钥

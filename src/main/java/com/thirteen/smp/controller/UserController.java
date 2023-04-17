@@ -4,13 +4,12 @@ import com.thirteen.smp.response.ResponseData;
 import com.thirteen.smp.pojo.User;
 import com.thirteen.smp.service.UserService;
 import com.thirteen.smp.utils.ResponseUtil;
-import com.thirteen.smp.utils.accessTokenUtil;
+import com.thirteen.smp.utils.AccessTokenUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * 用户操作控制器
@@ -62,10 +61,10 @@ public class UserController {
 
     @RequestMapping(method = RequestMethod.POST)
     public ResponseData updateUserInfo(HttpServletRequest request, @RequestBody User user) {
-        String accessToken = accessTokenUtil.getAccessToken(request);
-        user.setUserId(accessTokenUtil.getUserId(accessToken));
-        user.setUsername(accessTokenUtil.getUsername(accessToken));
-        user.setPassword(accessTokenUtil.getPassword(accessToken));
+        String accessToken = AccessTokenUtil.getAccessToken(request);
+        user.setUserId(AccessTokenUtil.getUserId(accessToken));
+        user.setUsername(AccessTokenUtil.getUsername(accessToken));
+        user.setPassword(AccessTokenUtil.getPassword(accessToken));
 
         boolean res = userService.updateUser(user);
         if (res) {

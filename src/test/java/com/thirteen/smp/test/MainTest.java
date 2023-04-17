@@ -4,7 +4,7 @@ import com.thirteen.smp.mapper.UserMapper;
 import com.thirteen.smp.pojo.User;
 import com.thirteen.smp.service.UserService;
 import com.thirteen.smp.utils.SqlSessionUtil;
-import com.thirteen.smp.utils.accessTokenUtil;
+import com.thirteen.smp.utils.AccessTokenUtil;
 import org.apache.ibatis.session.SqlSession;
 import org.junit.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -24,11 +24,11 @@ public class MainTest {
 
     @Test
     public void testAccessToken() {
-        String accessToken = accessTokenUtil.generateAccessToken(2, "wmy", "8888888");
+        String accessToken = AccessTokenUtil.generateAccessToken(2, "wmy", "8888888");
         System.out.println(accessToken);
-        System.out.println(accessTokenUtil.getUserId(accessToken));
-        System.out.println(accessTokenUtil.getUsername(accessToken));
-        System.out.println(accessTokenUtil.getPassword(accessToken));
+        System.out.println(AccessTokenUtil.getUserId(accessToken));
+        System.out.println(AccessTokenUtil.getUsername(accessToken));
+        System.out.println(AccessTokenUtil.getPassword(accessToken));
     }
 
     @Test

@@ -29,4 +29,9 @@
             <bean class="com.thirteen.smp.interceptor.AuthInterceptor"/>
         </mvc:interceptor>
     </mvc:interceptors>
+
+    <!--配置CORS-->
+    <mvc:cors>
+        <mvc:mapping path="/**"/>
+    </mvc:cors>
 </beans>

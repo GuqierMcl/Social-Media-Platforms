@@ -1,7 +1,7 @@
 package com.thirteen.smp.pojo;
 
 /**
- * 用户实体POJO类，封装用户数据
+ * 用户实体类，封装用户数据
  * @author 顾建平
  * @version 1.0
  * @since 1.0

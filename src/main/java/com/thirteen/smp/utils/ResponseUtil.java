@@ -28,7 +28,12 @@ public class ResponseUtil {
         codeMap.put(203, "保存目录创建失败");
 
         // 4xx为user用户错误
-        codeMap.put(401, "查找用户不存在");
+        codeMap.put(401, "用户不存在");
+        codeMap.put(402, "用户名已存在");
+        codeMap.put(403, "密码错误");
+
+        // 5xx为数据库错误
+        codeMap.put(501, "保存数据到数据库失败");
 
     }
 

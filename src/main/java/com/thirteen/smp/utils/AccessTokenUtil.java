@@ -3,6 +3,7 @@ package com.thirteen.smp.utils;
 import com.thirteen.smp.pojo.User;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -12,7 +13,7 @@ import java.util.Map;
  *
  * @author 顾建平
  */
-public class accessTokenUtil {
+public class AccessTokenUtil {
 
     /**
      * 从request的cookies中获取accessToken
@@ -42,7 +43,7 @@ public class accessTokenUtil {
      * @return 用户ID
      */
     public static Integer getUserId(String accessToken) {
-        Map<String, String> tokenPayloadMap = jwtUtil.getTokenPayloadMap(accessToken);
+        Map<String, String> tokenPayloadMap = JwtUtil.getTokenPayloadMap(accessToken);
         return Integer.parseInt(tokenPayloadMap.get("userId"));
     }
 
@@ -53,7 +54,7 @@ public class accessTokenUtil {
      * @return 用户名
      */
     public static String getUsername(String accessToken) {
-        Map<String, String> tokenPayloadMap = jwtUtil.getTokenPayloadMap(accessToken);
+        Map<String, String> tokenPayloadMap = JwtUtil.getTokenPayloadMap(accessToken);
         return tokenPayloadMap.get("username");
     }
 
@@ -64,7 +65,7 @@ public class accessTokenUtil {
      * @return 密码
      */
     public static String getPassword(String accessToken) {
-        Map<String, String> tokenPayloadMap = jwtUtil.getTokenPayloadMap(accessToken);
+        Map<String, String> tokenPayloadMap = JwtUtil.getTokenPayloadMap(accessToken);
         return tokenPayloadMap.get("password");
     }
 
@@ -103,6 +104,7 @@ public class accessTokenUtil {
 
     /**
      * 生成accessToken
+     *
      * @param user 用户对象
      * @return accessToken
      */
@@ -112,7 +114,8 @@ public class accessTokenUtil {
 
     /**
      * 生成accessToken
-     * @param userId 用户ID
+     *
+     * @param userId   用户ID
      * @param username 用户名
      * @param password 密码
      * @return accessToken
@@ -122,7 +125,34 @@ public class accessTokenUtil {
         map.put("userId", String.valueOf(userId));
         map.put("username", username);
         map.put("password", password);
-        return jwtUtil.generateToken(map);
+        return JwtUtil.generateToken(map);
     }
 
+    /**
+     * 将accessToken保存到cookies中
+     *
+     * @param accessToken accessToken
+     * @param response    响应对象
+     * @return 保存结果
+     */
+    public static void bindTokenToCookies(String accessToken, HttpServletResponse response) {
+        Cookie cookie = new Cookie("accessToken", accessToken);
+        cookie.setMaxAge(60 * 60 * 24 * 30);
+        cookie.setPath("/");
+        System.out.println("bindToCookies");
+        response.addCookie(cookie);
+    }
+
+    /**
+     * 将accessToken从cookies中去除（退出登录）
+     * @param response    响应对象
+     * @return 保存结果
+     */
+    public static void removeTokenToCookies(HttpServletResponse response) {
+        Cookie cookie = new Cookie("accessToken",null);
+        cookie.setMaxAge(0);
+        cookie.setPath("/");
+        System.out.println("removeToCookies");
+        response.addCookie(cookie);
+    }
 }
