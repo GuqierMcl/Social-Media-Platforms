@@ -33,7 +33,11 @@ public class ResponseUtil {
         codeMap.put(403, "密码错误");
 
         // 5xx为数据库错误
-        codeMap.put(501, "保存数据到数据库失败");
+        codeMap.put(501, "更新数据到数据库失败");
+
+        // 6xx为帖子错误
+        codeMap.put(601,"帖子不存在");
+        codeMap.put(602,"评论不存在");
 
     }
 
