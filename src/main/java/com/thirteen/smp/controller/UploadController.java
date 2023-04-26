@@ -7,6 +7,7 @@ import java.util.Date;
 import com.thirteen.smp.response.ResponseData;
 import com.thirteen.smp.utils.ResponseUtil;
 import com.thirteen.smp.utils.AccessTokenUtil;
+import com.thirteen.smp.utils.SettingUtil;
 import jakarta.servlet.http.HttpServletRequest;
 
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,7 +26,7 @@ import org.springframework.web.multipart.MultipartFile;
 @RequestMapping("/upload")
 public class UploadController {
 
-    private static final String imgSavePath = "/assets/store";
+    private static final String imgSavePath = SettingUtil.getImgSavingPath();
 
     @RequestMapping(method = RequestMethod.POST)
     public ResponseData fileUpload(MultipartFile img, HttpServletRequest request) {

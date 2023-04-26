@@ -7,6 +7,7 @@ import com.thirteen.smp.mapper.UserMapper;
 import com.thirteen.smp.pojo.Post;
 import com.thirteen.smp.pojo.User;
 import com.thirteen.smp.service.UserService;
+import com.thirteen.smp.utils.SettingUtil;
 import com.thirteen.smp.utils.SqlSessionUtil;
 import com.thirteen.smp.utils.AccessTokenUtil;
 import org.apache.ibatis.session.SqlSession;
@@ -27,6 +28,12 @@ import java.util.List;
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration("classpath:applicationContext.xml")
 public class MainTest {
+
+    @Test
+    public void testSettingUtil(){
+        System.out.println(SettingUtil.getImgSavingPath());
+        System.out.println(SettingUtil.getSecretKey());
+    }
     @Test
     public void testFollowMapper(){
         SqlSession sqlSession = SqlSessionUtil.openSession();

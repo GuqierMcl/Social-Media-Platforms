@@ -18,7 +18,7 @@ public class JwtUtil {
     /**
      * 密钥
      */
-    private static final String SECRET_KEY = "GJPyyds";
+    private static final String SECRET_KEY = SettingUtil.getSecretKey();
 
     /**
      * 持续时间，即有效期
