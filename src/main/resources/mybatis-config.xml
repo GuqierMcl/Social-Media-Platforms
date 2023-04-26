@@ -7,9 +7,11 @@
 
 <configuration>
 
-    <!--开启自动驼峰命名映射MySQL==>JavaPojo-->
+
     <settings>
+        <!--开启自动驼峰命名映射MySQL==>JavaPojo-->
         <setting name="mapUnderscoreToCamelCase" value="true"/>
+        <!--开启logback日志-->
         <setting name="logImpl" value="STDOUT_LOGGING" />
     </settings>
 

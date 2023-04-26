@@ -1,16 +1,26 @@
 package com.thirteen.smp.test;
 
+import com.thirteen.smp.mapper.CommentMapper;
+import com.thirteen.smp.mapper.PostMapper;
 import com.thirteen.smp.mapper.UserMapper;
+import com.thirteen.smp.pojo.Comment;
+import com.thirteen.smp.pojo.Post;
 import com.thirteen.smp.pojo.User;
+import com.thirteen.smp.service.CommentService;
 import com.thirteen.smp.service.UserService;
+import com.thirteen.smp.service.impl.CommentServiceImpl;
 import com.thirteen.smp.utils.SqlSessionUtil;
 import com.thirteen.smp.utils.AccessTokenUtil;
 import org.apache.ibatis.session.SqlSession;
 import org.junit.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * 用于测试Mapper的测试类
@@ -21,6 +31,31 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @ContextConfiguration("classpath:applicationContext.xml")
 public class MainTest {
 
+
+    @Test
+    public void testCommentMapper(){
+        SqlSession sqlSession = SqlSessionUtil.openSession();
+        CommentMapper mapper = sqlSession.getMapper(CommentMapper.class);
+
+        System.out.println(mapper.selectByCommentId(2));
+
+        System.out.println(mapper.selectByPostId(2));
+
+        System.out.println(mapper.selectByUserId(3));
+
+        System.out.println(mapper.selectByPreCommentId(1));
+
+        System.out.println(mapper.selectCountByPostId(2));
+    }
+
+    @Test
+    public void testPostMapper(){
+        SqlSession sqlSession = SqlSessionUtil.openSession();
+        PostMapper mapper = sqlSession.getMapper(PostMapper.class);
+
+        List<Post> posts = mapper.selectByUserId(2);
+        System.out.println(posts);
+    }
 
     @Test
     public void testAccessToken() {

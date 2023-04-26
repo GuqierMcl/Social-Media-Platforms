@@ -7,7 +7,6 @@ import com.thirteen.smp.response.ResponseData;
 import com.thirteen.smp.service.AuthService;
 import com.thirteen.smp.utils.AccessTokenUtil;
 import com.thirteen.smp.utils.ResponseUtil;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -15,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 /**
  * 权限验证控制器
  *
- * @author 顾建平
+ * @author 庄可欣
  * @version 1.0
  * @since 1.0
  */
