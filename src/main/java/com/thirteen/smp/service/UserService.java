@@ -7,8 +7,6 @@ import java.util.List;
 /**
  * 用户模块业务接口
  * @author 顾建平
- * @version 1.0
- * @since 1.0
  */
 public interface UserService {
 

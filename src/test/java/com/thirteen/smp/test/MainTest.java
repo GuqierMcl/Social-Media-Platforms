@@ -1,26 +1,23 @@
 package com.thirteen.smp.test;
 
 import com.thirteen.smp.mapper.CommentMapper;
+import com.thirteen.smp.mapper.FollowMapper;
 import com.thirteen.smp.mapper.PostMapper;
 import com.thirteen.smp.mapper.UserMapper;
-import com.thirteen.smp.pojo.Comment;
 import com.thirteen.smp.pojo.Post;
 import com.thirteen.smp.pojo.User;
-import com.thirteen.smp.service.CommentService;
 import com.thirteen.smp.service.UserService;
-import com.thirteen.smp.service.impl.CommentServiceImpl;
 import com.thirteen.smp.utils.SqlSessionUtil;
 import com.thirteen.smp.utils.AccessTokenUtil;
 import org.apache.ibatis.session.SqlSession;
 import org.junit.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+
 import java.util.List;
-import java.util.Map;
 
 /**
  * 用于测试Mapper的测试类
@@ -30,6 +27,15 @@ import java.util.Map;
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration("classpath:applicationContext.xml")
 public class MainTest {
+    @Test
+    public void testFollowMapper(){
+        SqlSession sqlSession = SqlSessionUtil.openSession();
+        FollowMapper mapper = sqlSession.getMapper(FollowMapper.class);
+
+        mapper.deleteFollow(8,7);
+
+        sqlSession.commit();
+    }
 
 
     @Test
