@@ -1,6 +1,6 @@
 package com.thirteen.smp.exception;
 
-public class UserNotExistsException extends Exception{
+public class UserNotExistsException extends RuntimeException{
     public UserNotExistsException() {
     }
 
