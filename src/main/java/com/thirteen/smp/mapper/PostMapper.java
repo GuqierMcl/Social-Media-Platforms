@@ -2,6 +2,7 @@ package com.thirteen.smp.mapper;
 
 
 import com.thirteen.smp.pojo.Post;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -30,6 +31,13 @@ public interface PostMapper {
      * @return 帖子列表
      */
     List<Post> selectByQuery(String query);
+
+    /**
+     * 根据帖子内容模糊查询用户自己的帖子信息
+     * @param query 搜索内容
+     * @return 帖子列表
+     */
+    List<Post> selectByQuery_self(@Param("query")String query, @Param("userid")int userid);
 
     /**
      * 新增帖子

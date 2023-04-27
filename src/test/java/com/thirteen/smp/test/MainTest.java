@@ -11,7 +11,7 @@ import com.thirteen.smp.utils.SettingUtil;
 import com.thirteen.smp.utils.SqlSessionUtil;
 import com.thirteen.smp.utils.AccessTokenUtil;
 import org.apache.ibatis.session.SqlSession;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.test.context.ContextConfiguration;
@@ -44,6 +44,11 @@ public class MainTest {
         sqlSession.commit();
     }
 
+    @Test
+    public void testPost(){
+
+    }
+
 
     @Test
     public void testCommentMapper(){
@@ -54,7 +59,7 @@ public class MainTest {
 
         System.out.println(mapper.selectByPostId(2));
 
-        System.out.println(mapper.selectByUserId(3));
+        System.out.println(mapper.selectByUserId(1));
 
         System.out.println(mapper.selectByPreCommentId(1));
 

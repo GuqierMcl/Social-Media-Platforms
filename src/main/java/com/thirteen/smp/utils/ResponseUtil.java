@@ -38,6 +38,11 @@ public class ResponseUtil {
         // 6xx为帖子错误
         codeMap.put(601,"帖子不存在");
         codeMap.put(602,"评论不存在");
+        codeMap.put(603,"帖子内容为空");
+        codeMap.put(604,"用户未发布帖子");
+        codeMap.put(605,"用户未发布帖子且关注用户未发布帖子或者未关注用户");
+        codeMap.put(606,"搜索类型未指定或者搜索关键词未指出");
+        codeMap.put(607,"未搜索到相关帖子");
 
     }
 

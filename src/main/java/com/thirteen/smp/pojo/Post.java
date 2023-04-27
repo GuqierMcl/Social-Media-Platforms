@@ -31,6 +31,7 @@ public class Post {
         this.userId = userId;
         this.content = content;
         this.img = img;
+        this.likeNum=0;
     }
 
     public Integer getPostId() {
