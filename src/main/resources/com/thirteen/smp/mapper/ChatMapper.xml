@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thirteen.smp.mapper.ChatMapper">
+
+    <select id="selectByUserId" resultType="Msg">
+        select *
+        from t_chat
+        where user_id = #{userId}
+    </select>
+    <select id="selectByToUserId" resultType="Msg">
+        select *
+        from t_chat
+        where to_user_id = #{toUserId}
+    </select>
+    <select id="selectById" resultType="Msg">
+        select *
+        from t_chat
+        where user_id = #{param1}
+          and to_user_id = #{param2}
+    </select>
+    <select id="selectByMsgId" resultType="Msg">
+        select *
+        from t_chat
+        where id = #{msgId}
+    </select>
+    <insert id="insetMsg" useGeneratedKeys="true" keyProperty="id">
+        insert into t_chat
+        values (#{id}, #{userId}, #{toUserId}, #{time}, #{content}, #{isRead})
+    </insert>
+    <update id="updateMsg">
+        update t_chat
+        set user_id    = #{userId},
+            to_user_id = #{toUserId},
+            time       = #{time},
+            content    = #{content},
+            is_read    = #{isRead}
+        where id = #{id}
+    </update>
+    <delete id="deleteMsgById">
+        delete
+        from t_chat
+        where id = #{msgId}
+    </delete>
+</mapper>

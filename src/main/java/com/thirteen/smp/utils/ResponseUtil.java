@@ -48,6 +48,9 @@ public class ResponseUtil {
         codeMap.put(701,"该用户已经点赞过本帖子");
         codeMap.put(702,"该用户还没点赞本帖子");
 
+        // 8xx为聊天错误
+        codeMap.put(801,"消息不存在");
+
     }
 
     public static ResponseData getResponseData(int code, Object data) {
@@ -58,8 +61,11 @@ public class ResponseUtil {
         return new ResponseData(code, codeMap.get(code), null);
     }
 
-    public static ResponseData getSuccessRes(Object data) {
+    public static ResponseData getSuccessRes(Object data ) {
         return ResponseUtil.getResponseData(1, data);
+    }
+    public static ResponseData getSuccessRes() {
+        return ResponseUtil.getResponseData(1, null);
     }
 
     public static ResponseData getErrorRes(int code) {

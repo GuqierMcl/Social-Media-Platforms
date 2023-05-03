@@ -11,6 +11,7 @@ import com.thirteen.smp.pojo.User;
 import com.thirteen.smp.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
@@ -27,6 +28,7 @@ public class CommentServiceImpl implements CommentService {
     @Autowired
     private UserMapper userMapper;
 
+    @Override
     public int getCount(Integer postId) throws PostNotExistException {
         Post post = postMapper.selectByPostId(postId);
         if (post == null) {
@@ -35,6 +37,7 @@ public class CommentServiceImpl implements CommentService {
         return commentMapper.selectCountByPostId(postId);
     }
 
+    @Override
     public List<Map<String, Object>> getComments(Integer postId) throws PostNotExistException {
         List<Map<String, Object>> resultList = new ArrayList<>();
         List<Comment> commentsLevel1 = new ArrayList<>();
@@ -91,6 +94,8 @@ public class CommentServiceImpl implements CommentService {
         return resultList;
     }
 
+    @Override
+    @Transactional
     public boolean publishComment(Comment comment) throws PostNotExistException, CommentNotExistException {
         Post post = postMapper.selectByPostId(comment.getPostId());
         if (post == null) {
@@ -105,6 +110,8 @@ public class CommentServiceImpl implements CommentService {
         return count == 1;
     }
 
+    @Override
+    @Transactional
     public boolean deleteComment(Integer commentId) {
         int count = commentMapper.deleteCommentByCommentId(commentId);
         return count == 1;

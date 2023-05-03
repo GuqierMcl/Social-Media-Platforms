@@ -1,5 +1,7 @@
 package com.thirteen.smp.pojo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.sql.Timestamp;
 
 /**
@@ -18,6 +20,7 @@ public class Post {
 
     private String content;
 
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private Timestamp postTime;
 
     private Integer likeNum;

@@ -1,12 +1,11 @@
 package com.thirteen.smp.test;
 
-import com.thirteen.smp.mapper.CommentMapper;
-import com.thirteen.smp.mapper.FollowMapper;
-import com.thirteen.smp.mapper.PostMapper;
-import com.thirteen.smp.mapper.UserMapper;
+import com.thirteen.smp.mapper.*;
+import com.thirteen.smp.pojo.Msg;
 import com.thirteen.smp.pojo.Post;
 import com.thirteen.smp.pojo.User;
 import com.thirteen.smp.service.UserService;
+import com.thirteen.smp.utils.IpAddressUtil;
 import com.thirteen.smp.utils.SettingUtil;
 import com.thirteen.smp.utils.SqlSessionUtil;
 import com.thirteen.smp.utils.AccessTokenUtil;
@@ -18,6 +17,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -28,6 +29,21 @@ import java.util.List;
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration("classpath:applicationContext.xml")
 public class MainTest {
+
+    @Test
+    public void testChatMapper(){
+        SqlSession sqlSession = SqlSessionUtil.openSession();
+        ChatMapper mapper = sqlSession.getMapper(ChatMapper.class);
+        mapper.insetMsg(new Msg(null,8,7,new Timestamp(new Date().getTime()),"你好",0));
+        sqlSession.commit();
+    }
+
+    @Test
+    public void testIp(){
+        System.out.println(IpAddressUtil.getIpAddress("183.221.76.134"));
+        System.out.println(IpAddressUtil.getIpAddress("127.0.0.1"));
+        System.out.println(IpAddressUtil.getIpAddressToMap("183.221.76.134"));
+    }
 
     @Test
     public void testSettingUtil(){
@@ -44,11 +60,6 @@ public class MainTest {
         sqlSession.commit();
     }
 
-    @Test
-    public void testPost(){
-
-    }
-
 
     @Test
     public void testCommentMapper(){
@@ -59,7 +70,7 @@ public class MainTest {
 
         System.out.println(mapper.selectByPostId(2));
 
-        System.out.println(mapper.selectByUserId(1));
+        System.out.println(mapper.selectByUserId(3));
 
         System.out.println(mapper.selectByPreCommentId(1));
 

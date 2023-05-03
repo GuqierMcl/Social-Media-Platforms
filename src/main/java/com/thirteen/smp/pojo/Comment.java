@@ -1,5 +1,7 @@
 package com.thirteen.smp.pojo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.sql.Timestamp;
 
 /**
@@ -20,6 +22,7 @@ public class Comment {
 
     private String commentContent;
 
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private Timestamp commentDate;
 
     private Integer preCommentId;
