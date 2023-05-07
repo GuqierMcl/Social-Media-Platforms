@@ -26,6 +26,7 @@ public class UserController {
     private UserService userService;
 
 
+    @CrossOrigin(value = "http://localhost:5173",allowCredentials = "true")
     @RequestMapping(path = "/get/{userName}", method = RequestMethod.GET) // 配置方法路径
     public ResponseData getUserByUsername(@PathVariable("userName") String userName) {
         User resultUser = null;
@@ -37,6 +38,7 @@ public class UserController {
         }
     }
 
+    @CrossOrigin(value = "http://localhost:5173",allowCredentials = "true")
     @RequestMapping(path = "/get-id/{userId}", method = RequestMethod.GET) // 配置方法路径
     public ResponseData getUserByUserId(@PathVariable("userId") Integer userId) {
         User resultUser = null;
@@ -48,6 +50,7 @@ public class UserController {
         }
     }
 
+    @CrossOrigin(value = "http://localhost:5173",allowCredentials = "true")
     @RequestMapping(path = "/get-all", method = RequestMethod.GET)
     public ResponseData getUserAll() {
         List<User> resultUsers = null;
@@ -59,6 +62,7 @@ public class UserController {
         }
     }
 
+    @CrossOrigin(value = "http://localhost:5173",allowCredentials = "true")
     @RequestMapping(method = RequestMethod.POST)
     public ResponseData updateUserInfo(HttpServletRequest request, @RequestBody User user) {
         String accessToken = AccessTokenUtil.getAccessToken(request);
