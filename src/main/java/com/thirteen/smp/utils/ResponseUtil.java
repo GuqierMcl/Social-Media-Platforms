@@ -26,6 +26,7 @@ public class ResponseUtil {
         codeMap.put(201, "上传文件名错误");
         codeMap.put(202, "保存文件失败");
         codeMap.put(203, "保存目录创建失败");
+        codeMap.put(204, "上传文件为空");
 
         // 4xx为user用户错误
         codeMap.put(401, "用户不存在");

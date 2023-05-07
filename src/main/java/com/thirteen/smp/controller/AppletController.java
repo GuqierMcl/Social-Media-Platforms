@@ -32,6 +32,9 @@ public class AppletController {
 
     @RequestMapping(path = "/upload",method = RequestMethod.POST)
     public ResponseData fileUpload(MultipartFile img, HttpServletRequest request) {
+        if(img == null){
+            return ResponseUtil.getErrorRes(204);
+        }
 
         //设置时间戳格式
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmssSSS");

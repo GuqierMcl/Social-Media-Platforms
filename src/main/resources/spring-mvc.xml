@@ -21,6 +21,7 @@
                 path="/**"
                 allowed-origins="http://localhost:5173"
                 allow-credentials="true"
+                allowed-methods="*"
         />
     </mvc:cors>
 
