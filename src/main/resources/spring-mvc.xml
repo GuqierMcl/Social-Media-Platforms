@@ -32,6 +32,6 @@
 
     <!--配置CORS-->
     <mvc:cors>
-        <mvc:mapping path="/**"/>
+        <mvc:mapping path="/**" allowed-origins="*"/>
     </mvc:cors>
 </beans>
