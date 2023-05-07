@@ -13,4 +13,8 @@ public class SettingUtil {
     public static String getSecretKey(){
         return bundle.getString("secretKey");
     }
+
+    public static String getValue(String key){
+        return bundle.getString(key);
+    }
 }

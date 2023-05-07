@@ -5,6 +5,7 @@ import com.thirteen.smp.exception.UserNotExistsException;
 import com.thirteen.smp.mapper.UserMapper;
 import com.thirteen.smp.pojo.User;
 import com.thirteen.smp.service.AuthService;
+import com.thirteen.smp.utils.SettingUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,6 +24,10 @@ public class AuthServiceImpl implements AuthService {
         if (target != null) {
             throw new UserAlreadyExistsException("用户名已存在！");
         }
+
+        // 添加头像和背景图的默认值
+        user.setProfilePic(SettingUtil.getValue("defaultProfilePic"));
+        user.setCoverPic(SettingUtil.getValue("defaultCoverPic"));
 
         int count = userMapper.insertUser(user);
         if (count == 1) {
