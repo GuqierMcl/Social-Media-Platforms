@@ -28,6 +28,8 @@ public class AuthServiceImpl implements AuthService {
         // 添加头像和背景图的默认值
         user.setProfilePic(SettingUtil.getValue("defaultProfilePic"));
         user.setCoverPic(SettingUtil.getValue("defaultCoverPic"));
+        user.setUserLang(SettingUtil.getValue("defaultUserLang"));
+        user.setUserLocation(SettingUtil.getValue("defaultUserLocation"));
 
         int count = userMapper.insertUser(user);
         if (count == 1) {
