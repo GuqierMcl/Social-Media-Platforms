@@ -26,7 +26,7 @@ public class AuthController {
     @Autowired
     private AuthService authService;
 
-    @CrossOrigin(value = "http://localhost:5173",allowCredentials = "true")
+
     @RequestMapping(path = "/login", method = RequestMethod.POST)
     public ResponseData login(HttpServletResponse response, @RequestBody User user) {
         User resultUser = null;

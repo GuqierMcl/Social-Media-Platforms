@@ -15,14 +15,14 @@
     <!--StandardServletMultipartResolver 实例-->
     <bean class="org.springframework.web.multipart.support.StandardServletMultipartResolver" id="multipartResolver"/>
 
-<!--    &lt;!&ndash;配置CORS&ndash;&gt;-->
-<!--    <mvc:cors>-->
-<!--        <mvc:mapping path="/api/**"-->
-<!--                     allowed-origins="http://localhost:5173"-->
-<!--                     allow-credentials="true"-->
-<!--                     max-age="3600"-->
-<!--        />-->
-<!--    </mvc:cors>-->
+    <!--配置CORS-->
+    <mvc:cors>
+        <mvc:mapping
+                path="/**"
+                allowed-origins="http://localhost:5173"
+                allow-credentials="true"
+        />
+    </mvc:cors>
 
     <!--注册拦截器-->
     <mvc:interceptors>
