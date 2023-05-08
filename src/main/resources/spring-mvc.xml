@@ -16,17 +16,22 @@
     <bean class="org.springframework.web.multipart.support.StandardServletMultipartResolver" id="multipartResolver"/>
 
     <!--配置CORS-->
-    <mvc:cors>
-        <mvc:mapping
-                path="/**"
-                allowed-origins="http://localhost:5173"
-                allow-credentials="true"
-                allowed-methods="*"
-        />
-    </mvc:cors>
+<!--    <mvc:cors>-->
+<!--        <mvc:mapping-->
+<!--                path="/**"-->
+<!--                allowed-origins="http://localhost:5173"-->
+<!--                allow-credentials="true"-->
+<!--                allowed-methods="*"-->
+<!--        />-->
+<!--    </mvc:cors>-->
 
     <!--注册拦截器-->
     <mvc:interceptors>
+        <mvc:interceptor>
+            <!--CORS拦截器-->
+            <mvc:mapping path="/**"/>
+            <bean class="com.thirteen.smp.interceptor.CORSInterceptor"/>
+        </mvc:interceptor>
         <mvc:interceptor>
             <!--配置拦截的路径(哪些请求被拦截)-->
             <!--**************************************-->

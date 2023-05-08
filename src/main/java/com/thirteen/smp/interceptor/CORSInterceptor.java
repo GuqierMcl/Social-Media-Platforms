@@ -13,8 +13,8 @@ public class CORSInterceptor implements HandlerInterceptor {
         if (request.getHeader(HttpHeaders.ORIGIN) != null) {
             response.addHeader("Access-Control-Allow-Origin", "http://localhost:5173");
             response.addHeader("Access-Control-Allow-Credentials", "true");
-            response.addHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE, PUT, HEAD");
-            response.addHeader("Access-Control-Allow-Headers", "Content-Type");
+            response.addHeader("Access-Control-Allow-Methods", "*");
+            response.addHeader("Access-Control-Allow-Headers", "*");
             response.addHeader("Access-Control-Max-Age", "3600");
         }
         return true;
