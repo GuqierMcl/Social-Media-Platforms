@@ -72,7 +72,7 @@ public class AppletController {
             ResponseData responseData = ResponseUtil.getResponseData(1);
 //            ResponseData responseData = new ResponseData(1, "success", null);
 //            responseData.addData("url", imgSavePath.replaceAll("/", "\\\\") + "\\" + newName);
-            responseData.addData("url", imgSavePath.replaceAll("/", "\\\\") + "\\" + newName);
+            responseData.addData("url", imgSavePath + "/" + newName);
 
             // 模拟报错
             // String s = null;
