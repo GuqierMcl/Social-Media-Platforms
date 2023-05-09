@@ -22,6 +22,12 @@ public class ChatServiceImpl implements ChatService {
     @Autowired
     private UserMapper userMapper;
 
+    /**
+     * 把一次聊天消息插入表中
+     * @param msg 消息对象
+     * @return boolean 发送成功与否
+     * @throws UserNotExistsException
+     */
     @Override
     @Transactional
     public boolean sendMsg(Msg msg) throws UserNotExistsException {
@@ -38,10 +44,17 @@ public class ChatServiceImpl implements ChatService {
         msg.setTime(new Timestamp(new Date().getTime()));
         msg.setIsRead(0);
 
-        int i = chatMapper.insetMsg(msg);
+        int i = chatMapper.insertMsg(msg);
         return i == 1;
     }
 
+    /**
+     * 获取 userId 与 targetUserId 的所有聊天记录
+     * @param userId 当前用户ID
+     * @param targetUserId 目标用户ID
+     * @return Msg 列表
+     * @throws UserNotExistsException
+     */
     @Override
     public List<Msg> getMsg(Integer userId, Integer targetUserId) throws UserNotExistsException {
         User curr = userMapper.selectById(userId);
@@ -55,14 +68,19 @@ public class ChatServiceImpl implements ChatService {
         return msgList;
     }
 
+    /**
+     * 获取 userId 的所有聊天缩略
+      * @param userId 当前用户ID
+     * @return 聊天缩略映射对象列表
+     */
     @Override
     public List<Map<String, Object>> getChatList(Integer userId) {
         List<Map<String, Object>> res = new ArrayList<>();
 
-        List<Msg> msgList1 = chatMapper.selectByUserId(userId);
-        List<Msg> msgList2 = chatMapper.selectByToUserId(userId);
+        List<Msg> msgList1 = chatMapper.selectByUserId(userId); // 所有以 userId 作为发送者的 Msg
+        List<Msg> msgList2 = chatMapper.selectByToUserId(userId); // 所有以 userId 作为接收者的 Msg
 
-        // 去重
+        // 去重，目的是得到所有与 userId 聊过天的 targetUserId
         LinkedHashSet<Integer> set = new LinkedHashSet<>();
         for (Msg msg : msgList1) {
             set.add(msg.getToUserId());
@@ -72,7 +90,7 @@ public class ChatServiceImpl implements ChatService {
         }
         List<Integer> targetUserId = new ArrayList<>(set);
 
-        // 匹配用户信息
+        // 开始生成聊天缩略映射对象
         for (Integer id : targetUserId) {
             Msg latestMsg = ChatServiceImpl.getLatestMsg(msgList1, msgList2, id);
             User user = userMapper.selectById(id);
@@ -102,6 +120,13 @@ public class ChatServiceImpl implements ChatService {
         return i == 1;
     }
 
+    /**
+     * 删除 userId 跟 targetUserId 的所有聊天记录
+     * @param userId 当前用户ID
+     * @param targetUserId 目标用户ID
+     * @return 聊天消息的数量
+     * @throws UserNotExistsException
+     */
     @Override
     @Transactional
     public int deleteChat(Integer userId, Integer targetUserId) throws UserNotExistsException {
@@ -118,6 +143,13 @@ public class ChatServiceImpl implements ChatService {
         return count;
     }
 
+    /**
+     * 获取当前对象与 targetUserId 的一次最新消息
+     * @param list1 targetUserId 作为发送者且当前用户作为接收者的 Msg 列表
+     * @param list2 targetUserId 作为接收者且当前用户作为发送者的 Msg 列表
+     * @param targetUserId 当前用户的聊天对象Id
+     * @return 当前用户与 targetUserId 的最新一次 Msg
+     */
     private static Msg getLatestMsg(List<Msg> list1, List<Msg> list2, Integer targetUserId) {
         Msg latestMsg = null;
         for (Msg msg : list1) {

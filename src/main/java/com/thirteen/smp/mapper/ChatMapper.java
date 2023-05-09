@@ -43,7 +43,7 @@ public interface ChatMapper {
      * @param msg 消息对象
      * @return 执行结果
      */
-    int insetMsg(Msg msg);
+    int insertMsg(Msg msg);
 
     /**
      * 更新消息
