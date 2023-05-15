@@ -38,7 +38,7 @@ public class ChatServiceImpl implements ChatService {
         msg.setTime(new Timestamp(new Date().getTime()));
         msg.setIsRead(0);
 
-        int i = chatMapper.insetMsg(msg);
+        int i = chatMapper.insertMsg(msg);
         return i == 1;
     }
 

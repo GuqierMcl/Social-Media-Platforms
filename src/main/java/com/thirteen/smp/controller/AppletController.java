@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
- * 文件上传控制器
+ * 小程序控制器
  *
  * @author 顾建平
  * @version 1.0
