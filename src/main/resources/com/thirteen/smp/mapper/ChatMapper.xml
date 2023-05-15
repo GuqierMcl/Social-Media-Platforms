@@ -25,9 +25,9 @@
         from t_chat
         where id = #{msgId}
     </select>
-    <insert id="insetMsg" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insertMsg" useGeneratedKeys="true" keyProperty="id">
         insert into t_chat
-        values (#{id}, #{userId}, #{toUserId}, #{time}, #{content}, #{isRead})
+        values (null, #{userId}, #{toUserId}, #{time}, #{content}, #{isRead})
     </insert>
     <update id="updateMsg">
         update t_chat
