@@ -33,8 +33,7 @@ public class AuthController {
         try {
             resultUser = authService.login(user);
         } catch (UserNotExistsException e) {
-            return ResponseUtil.getErrorRes
-                    (401); // 用户不存在
+            return ResponseUtil.getErrorRes(401); // 用户不存在
         }
         if (resultUser == null) {
             return ResponseUtil.getErrorRes(403); // 密码错误
