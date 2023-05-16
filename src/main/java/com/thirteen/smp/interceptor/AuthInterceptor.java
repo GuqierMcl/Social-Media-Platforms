@@ -24,7 +24,7 @@ public class AuthInterceptor implements HandlerInterceptor {
             return false;
         }
 
-        // TODO 调试避开权限验证
+        // TODO 调试避开权限验证，但是可能会导致BUG
         if (accessToken.equals("-1")) return true;
 
         try {
