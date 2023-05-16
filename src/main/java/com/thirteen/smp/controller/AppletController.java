@@ -28,7 +28,7 @@ import org.springframework.web.multipart.MultipartFile;
 @RequestMapping("/applet")
 public class AppletController {
 
-    private static final String imgSavePath = SettingUtil.getImgSavingPath();
+    private static final String imgSavePath = SettingUtil.getValue("imgSavingPath");
 
     @RequestMapping(path = "/upload", method = RequestMethod.POST)
     public ResponseData fileUpload(MultipartFile img, HttpServletRequest request) {
