@@ -11,7 +11,7 @@ import java.util.Map;
 /**
  * 实现对accessToken生成和解析的工具类
  *
- * @author 顾建平
+ * @author 庄可欣
  */
 public class AccessTokenUtil {
 

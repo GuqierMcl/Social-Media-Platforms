@@ -6,7 +6,6 @@ import java.util.List;
 
 /**
  * 用于t_user表数据库操作的Mapper
- * @author 顾建平
  * @version 1.0
  * @since 1.0
  */

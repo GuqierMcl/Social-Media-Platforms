@@ -12,6 +12,7 @@ import java.util.Map;
 
 /**
  * JWT生成token和解析token的工具类
+ * @author 庄可欣
  */
 public class JwtUtil {
 

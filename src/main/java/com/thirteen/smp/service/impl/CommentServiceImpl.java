@@ -34,19 +34,25 @@ public class CommentServiceImpl implements CommentService {
         if (post == null) {
             throw new PostNotExistException("帖子不存在");
         }
-        return commentMapper.selectCountByPostId(postId);
+        return commentMapper.selectCountByPostId(postId); //返回帖子下的评论数
     }
 
     @Override
     public List<Map<String, Object>> getComments(Integer postId) throws PostNotExistException {
         List<Map<String, Object>> resultList = new ArrayList<>();
         List<Comment> commentsLevel1 = new ArrayList<>();
-        List<Comment> comments = commentMapper.selectByPostId(postId);
+        List<Comment> comments = commentMapper.selectByPostId(postId); // 查询当前帖子的所有评论
 
         Post post = postMapper.selectByPostId(postId);
         if (post == null) {
             throw new PostNotExistException("帖子不存在");
         }
+
+        /*
+        * 查找第一层评论
+        * 查找第二次评论
+        * 拼接返回对象
+        * */
 
         /*查找第一层评论*/
         comments.forEach(comment -> {

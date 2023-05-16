@@ -35,7 +35,7 @@ public class CommentController {
         try {
             return ResponseUtil.getSuccessRes(commentService.getCount(postId));
         } catch (PostNotExistException e) {
-            return ResponseUtil.getErrorRes(601);
+            return ResponseUtil.getErrorRes(601); //帖子不存在
         }
     }
 
@@ -59,12 +59,12 @@ public class CommentController {
         } catch (PostNotExistException e) {
             return ResponseUtil.getErrorRes(601);
         } catch (CommentNotExistException e) {
-            return ResponseUtil.getErrorRes(602);
+            return ResponseUtil.getErrorRes(602); //评论不存在
         }
         if (res) {
             return ResponseUtil.getSuccessRes(null);
         } else {
-            return ResponseUtil.getErrorRes(501);
+            return ResponseUtil.getErrorRes(501); //更新数据库失败
         }
     }
 

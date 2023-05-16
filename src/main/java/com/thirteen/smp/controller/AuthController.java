@@ -33,7 +33,8 @@ public class AuthController {
         try {
             resultUser = authService.login(user);
         } catch (UserNotExistsException e) {
-            return ResponseUtil.getErrorRes(401); // 用户不存在
+            return ResponseUtil.getErrorRes
+                    (401); // 用户不存在
         }
         if (resultUser == null) {
             return ResponseUtil.getErrorRes(403); // 密码错误
@@ -53,11 +54,11 @@ public class AuthController {
         try {
             resultUser = authService.register(user);
         } catch (UserAlreadyExistsException e) {
-            return ResponseUtil.getErrorRes(402);
+            return ResponseUtil.getErrorRes(402); //用户名已存在
         }
 
         if (resultUser == null) {
-            return ResponseUtil.getErrorRes(501);
+            return ResponseUtil.getErrorRes(501); //更新数据库失败
         }
 
         return ResponseUtil.getSuccessRes(resultUser);
@@ -65,7 +66,7 @@ public class AuthController {
 
     @RequestMapping(path = "/logout", method = RequestMethod.POST)
     public ResponseData logout(HttpServletResponse response) {
-        AccessTokenUtil.removeTokenToCookies(response);
+        AccessTokenUtil.removeTokenToCookies(response); //收回AccessToken
         return ResponseUtil.getSuccessRes(null);
     }
 

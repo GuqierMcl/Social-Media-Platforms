@@ -9,7 +9,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
 
 /**
  * auth权限验证拦截器
- * @author 顾建平
+ * @author 庄可欣
  */
 public class AuthInterceptor implements HandlerInterceptor {
 
@@ -20,7 +20,7 @@ public class AuthInterceptor implements HandlerInterceptor {
 
         // 如果没有accessToken信息，同样不予放行
         if (accessToken == null || accessToken.equals("")) {
-            response.getWriter().print(ResponseUtil.parseAsJSON(ResponseUtil.getErrorRes(101)));
+            response.getWriter().print(ResponseUtil.parseAsJSON(ResponseUtil.getErrorRes(101))); //没有accessToken信息
             return false;
         }
 
@@ -32,7 +32,7 @@ public class AuthInterceptor implements HandlerInterceptor {
             return true;  //请求放行
         } catch (Exception e) {
             // 拦截请求并返回错误信息
-            response.getWriter().print(ResponseUtil.parseAsJSON(ResponseUtil.getErrorRes(103)));
+            response.getWriter().print(ResponseUtil.parseAsJSON(ResponseUtil.getErrorRes(103))); //accessToken新无效
             return false;
         }
     }

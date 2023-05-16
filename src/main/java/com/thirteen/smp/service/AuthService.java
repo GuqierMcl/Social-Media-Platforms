@@ -6,7 +6,7 @@ import com.thirteen.smp.pojo.User;
 
 /**
  * 权限验证模块业务接口
- * @author 顾建平
+ * @author 庄可欣
  */
 public interface AuthService {
 
