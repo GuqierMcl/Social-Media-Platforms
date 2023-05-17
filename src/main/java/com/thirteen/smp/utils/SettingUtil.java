@@ -6,14 +6,6 @@ public class SettingUtil {
 
     private static ResourceBundle bundle = ResourceBundle.getBundle("settings");
 
-    public static String getImgSavingPath(){
-        return bundle.getString("imgSavingPath");
-    }
-
-    public static String getSecretKey(){
-        return bundle.getString("secretKey");
-    }
-
     public static String getValue(String key){
         return bundle.getString(key);
     }

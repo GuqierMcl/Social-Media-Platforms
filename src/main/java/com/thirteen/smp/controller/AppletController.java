@@ -28,11 +28,11 @@ import org.springframework.web.multipart.MultipartFile;
 @RequestMapping("/applet")
 public class AppletController {
 
-    private static final String imgSavePath = SettingUtil.getImgSavingPath();
+    private static final String imgSavePath = SettingUtil.getValue("imgSavingPath");
 
-    @RequestMapping(path = "/upload",method = RequestMethod.POST)
+    @RequestMapping(path = "/upload", method = RequestMethod.POST)
     public ResponseData fileUpload(MultipartFile img, HttpServletRequest request) {
-        if(img == null){
+        if (img == null) {
             return ResponseUtil.getErrorRes(204);
         }
 
@@ -72,7 +72,7 @@ public class AppletController {
             ResponseData responseData = ResponseUtil.getResponseData(1);
 //            ResponseData responseData = new ResponseData(1, "success", null);
 //            responseData.addData("url", imgSavePath.replaceAll("/", "\\\\") + "\\" + newName);
-            responseData.addData("url", imgSavePath + "/" + newName);
+            responseData.addData("url", SettingUtil.getValue("serverPath") + imgSavePath + "/" + newName);
 
             // 模拟报错
             // String s = null;
@@ -85,37 +85,37 @@ public class AppletController {
         }
     }
 
-    @RequestMapping(value = "/ip",method = RequestMethod.GET)
-    public Object ipAddress(HttpServletRequest request, String ip){
+    @RequestMapping(value = "/ip", method = RequestMethod.GET)
+    public Object ipAddress(HttpServletRequest request, String ip) {
         System.out.println(ip);
         if (ip == null || "".equals(ip)) {
             // 没有ip参数则为查询请求ip归属地
             // 获取请求ip
             String realIp = request.getHeader("x-forwarded-for");
-            if(realIp == null || realIp.length() == 0 || "unknown".equalsIgnoreCase(realIp)) {
+            if (realIp == null || realIp.length() == 0 || "unknown".equalsIgnoreCase(realIp)) {
                 realIp = request.getHeader("Proxy-Client-IP");
             }
-            if(realIp == null || realIp.length() == 0 || "unknown".equalsIgnoreCase(realIp)) {
+            if (realIp == null || realIp.length() == 0 || "unknown".equalsIgnoreCase(realIp)) {
                 realIp = request.getHeader("HTTP_CLIENT_IP");
             }
-            if(realIp == null || realIp.length() == 0 || "unknown".equalsIgnoreCase(realIp)) {
+            if (realIp == null || realIp.length() == 0 || "unknown".equalsIgnoreCase(realIp)) {
                 realIp = request.getHeader("HTTP_X_FORWARDED_FOR");
             }
-            if(realIp == null || realIp.length() == 0 || "unknown".equalsIgnoreCase(realIp)) {
+            if (realIp == null || realIp.length() == 0 || "unknown".equalsIgnoreCase(realIp)) {
                 realIp = request.getRemoteAddr();
             }
             Map<String, String> ipAddressToMap = IpAddressUtil.getIpAddressToMap(realIp);
-            if(ipAddressToMap == null){
-                return ResponseUtil.getResponseData(0,"内网IP或IP无效");
-            }else {
+            if (ipAddressToMap == null) {
+                return ResponseUtil.getResponseData(0, "内网IP或IP无效");
+            } else {
                 return ResponseUtil.getSuccessRes(ipAddressToMap);
             }
-        }else {
+        } else {
             // 如果给了ip参数，则为查询指定IP归属地
             Map<String, String> ipAddressToMap = IpAddressUtil.getIpAddressToMap(ip);
-            if(ipAddressToMap == null){
-                return ResponseUtil.getResponseData(0,"内网IP或IP无效");
-            }else {
+            if (ipAddressToMap == null) {
+                return ResponseUtil.getResponseData(0, "内网IP或IP无效");
+            } else {
                 return ResponseUtil.getSuccessRes(ipAddressToMap);
             }
         }

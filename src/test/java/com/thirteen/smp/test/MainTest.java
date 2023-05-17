@@ -34,7 +34,7 @@ public class MainTest {
     public void testChatMapper(){
         SqlSession sqlSession = SqlSessionUtil.openSession();
         ChatMapper mapper = sqlSession.getMapper(ChatMapper.class);
-        mapper.insetMsg(new Msg(null,8,7,new Timestamp(new Date().getTime()),"你好",0));
+        mapper.insertMsg(new Msg(null,8,7,new Timestamp(new Date().getTime()),"你好",0));
         sqlSession.commit();
     }
 
@@ -45,11 +45,6 @@ public class MainTest {
         System.out.println(IpAddressUtil.getIpAddressToMap("183.221.76.134"));
     }
 
-    @Test
-    public void testSettingUtil(){
-        System.out.println(SettingUtil.getImgSavingPath());
-        System.out.println(SettingUtil.getSecretKey());
-    }
     @Test
     public void testFollowMapper(){
         SqlSession sqlSession = SqlSessionUtil.openSession();

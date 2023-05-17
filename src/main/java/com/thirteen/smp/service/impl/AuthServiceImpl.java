@@ -25,11 +25,11 @@ public class AuthServiceImpl implements AuthService {
             throw new UserAlreadyExistsException("用户名已存在！");
         }
 
-        // 添加头像和背景图的默认值
-        user.setProfilePic("https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png");
-        user.setCoverPic("https://s3.bmp.ovh/imgs/2022/09/05/ca9af8da4b983b44.jpg");
-        user.setUserLang("简体中文");
-        user.setUserLocation("中国");
+        // 添加用户属性的默认值
+        user.setProfilePic(SettingUtil.getValue("defaultProfilePic"));
+        user.setCoverPic(SettingUtil.getValue("defaultCoverPic"));
+        user.setUserLang(SettingUtil.getValue("defaultUserLang"));
+        user.setUserLocation(SettingUtil.getValue("defaultUserLocation"));
 
         int count = userMapper.insertUser(user);
         if (count == 1) {
