@@ -3,6 +3,7 @@ package com.thirteen.smp.mapper;
 import com.thirteen.smp.pojo.User;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 用于t_user表数据库操作的Mapper
@@ -51,4 +52,27 @@ public interface UserMapper {
      * @return 更新记录条数
      */
     int updateUser(User user);
+
+    /**
+     * 查询用户登录状态
+     * @param userId 用户ID
+     * @return 用户状态结果Map
+     */
+    Map<String,Object> selectUserStatus(Integer userId);
+
+    /**
+     * 新增用户状态
+     * @param userId 用户ID
+     * @param status 状态
+     * @return 执行结果
+     */
+    int insertUserStatus(Integer userId, Integer status);
+
+    /**
+     * 更新用户状态
+     * @param userId 用户ID
+     * @param status 状态
+     * @return 执行结果
+     */
+    int updateUserStatus(Integer userId, Integer status);
 }

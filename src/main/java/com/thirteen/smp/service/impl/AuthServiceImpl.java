@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Map;
+
 @Service
 public class AuthServiceImpl implements AuthService {
 
@@ -39,6 +41,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
+    @Transactional
     public User login(User user) throws UserNotExistsException {
         User target = userMapper.selectByUsername(user.getUsername());
         if (target == null) { // 用户不存在
@@ -46,13 +49,26 @@ public class AuthServiceImpl implements AuthService {
         }
 
         if (user.getPassword().equals(target.getPassword())) {
+            Map<String, Object> status = userMapper.selectUserStatus(target.getUserId());
+            if (status != null) {
+                userMapper.updateUserStatus(target.getUserId(), 1);
+            } else {
+                userMapper.insertUserStatus(target.getUserId(), 1);
+            }
             return target;
         }
         return null;// 密码错误
     }
 
     @Override
-    public boolean logout() {
+    @Transactional
+    public boolean logout(Integer userId) {
+        Map<String, Object> status = userMapper.selectUserStatus(userId);
+        if (status != null) {
+            userMapper.updateUserStatus(userId, 0);
+        } else {
+            userMapper.insertUserStatus(userId, 0);
+        }
         return true;
     }
 }

@@ -6,6 +6,7 @@ import com.thirteen.smp.utils.ResponseUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -18,7 +19,7 @@ public class HomeController {
     @Autowired
     private HomeService homeService;
 
-    @RequestMapping("/user")
+    @RequestMapping(value = "/user",method = RequestMethod.GET)
     public Object recommendUser(HttpServletRequest request, Integer count) {
         Integer userId = AccessTokenUtil.getUserId(request);
         int cnt;
@@ -31,7 +32,7 @@ public class HomeController {
         return ResponseUtil.getSuccessRes(recommendUser);
     }
 
-    @RequestMapping("/post")
+    @RequestMapping(value = "/post",method = RequestMethod.GET)
     public Object postUpdate(HttpServletRequest request, Integer count){
         Integer userId = AccessTokenUtil.getUserId(request);
         int cnt;
@@ -42,6 +43,13 @@ public class HomeController {
         }
         List<Map<String, Object>> postUpdate = homeService.getPostUpdate(cnt, userId);
         return ResponseUtil.getSuccessRes(postUpdate);
+    }
+
+    @RequestMapping(value = "/online",method = RequestMethod.GET)
+    public Object onlineFriend(HttpServletRequest request){
+        Integer userId = AccessTokenUtil.getUserId(request);
+        List<Map<String, Object>> onlineFriend = homeService.getOnlineFriend(0, userId);
+        return ResponseUtil.getSuccessRes(onlineFriend);
     }
 
 }

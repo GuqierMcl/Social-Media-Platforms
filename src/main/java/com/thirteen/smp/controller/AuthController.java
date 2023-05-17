@@ -7,6 +7,7 @@ import com.thirteen.smp.response.ResponseData;
 import com.thirteen.smp.service.AuthService;
 import com.thirteen.smp.utils.AccessTokenUtil;
 import com.thirteen.smp.utils.ResponseUtil;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -64,8 +65,9 @@ public class AuthController {
     }
 
     @RequestMapping(path = "/logout", method = RequestMethod.POST)
-    public ResponseData logout(HttpServletResponse response) {
+    public ResponseData logout(HttpServletResponse response, HttpServletRequest request) {
         AccessTokenUtil.removeTokenToCookies(response); //收回AccessToken
+        authService.logout(AccessTokenUtil.getUserId(request));
         return ResponseUtil.getSuccessRes(null);
     }
 

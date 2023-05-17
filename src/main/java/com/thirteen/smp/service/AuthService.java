@@ -14,6 +14,6 @@ public interface AuthService {
 
     User login(User user) throws UserNotExistsException;
 
-    boolean logout();
+    boolean logout(Integer userId);
 
 }

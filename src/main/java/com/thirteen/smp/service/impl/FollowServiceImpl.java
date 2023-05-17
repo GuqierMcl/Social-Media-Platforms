@@ -35,8 +35,8 @@ public class FollowServiceImpl implements FollowService {
             fanMap.put("userLang", fan.getUserLang());
             fanMap.put("userLocation", fan.getUserLocation());
 
-            List<Map<String, Object>> maps = followMapper.selectByUserId(userId, fan.getUserId());
-            if (maps.size() == 0) {
+            Map<String, Object> map = followMapper.selectByUserId(userId, fan.getUserId());
+            if (map == null) {
                 fanMap.put("isFollowing", false);
             } else {
                 fanMap.put("isFollowing", true);
@@ -93,4 +93,15 @@ public class FollowServiceImpl implements FollowService {
 
         return res == 1;
     }
+
+    @Override
+    public boolean isFollowEach(Integer currentUserId, Integer targetUserId) {
+        Map<String, Object> map1 = followMapper.selectByUserId(currentUserId, targetUserId);
+        Map<String, Object> map2 = followMapper.selectByUserId(targetUserId, currentUserId);
+        if (map1 != null && map2 != null) {
+            return true;
+        }
+        return false;
+    }
+
 }
