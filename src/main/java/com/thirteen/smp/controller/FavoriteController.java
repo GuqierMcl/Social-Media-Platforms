@@ -13,6 +13,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+/**
+ * 收藏夹模块控制器
+ *
+ * @author 庄可欣
+ * @version 1.0
+ * @since 1.0
+ */
 @RestController
 @RequestMapping("/favorite")
 public class FavoriteController {

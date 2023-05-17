@@ -3,7 +3,12 @@ package com.thirteen.smp.pojo;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.sql.Timestamp;
-
+/**
+ * 收藏夹实体类，封装收藏夹数据
+ * @author 庄可欣
+ * @version 1.0
+ * @since 1.0
+ */
 public class Favorite {
     private Integer id;
     private Integer postId;

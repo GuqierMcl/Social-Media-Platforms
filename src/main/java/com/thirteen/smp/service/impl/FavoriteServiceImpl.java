@@ -31,7 +31,7 @@ public class FavoriteServiceImpl implements FavoriteService {
     @Override
     @Transactional // 开启事务
     public int addFavorite(Favorite favorite) throws PostNotExistException{
-
+        //判断帖子是否存在
         Post post = postMapper.selectByPostId(favorite.getPostId());
         if(post==null){
             throw new PostNotExistException("帖子不存在");
