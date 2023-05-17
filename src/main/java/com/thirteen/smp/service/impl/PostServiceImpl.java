@@ -2,6 +2,7 @@ package com.thirteen.smp.service.impl;
 
 import com.thirteen.smp.exception.PostNotExistException;
 import com.thirteen.smp.mapper.FollowMapper;
+import com.thirteen.smp.mapper.LikeMapper;
 import com.thirteen.smp.mapper.PostMapper;
 import com.thirteen.smp.mapper.UserMapper;
 import com.thirteen.smp.pojo.Post;
@@ -12,9 +13,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Service
 public class PostServiceImpl implements PostService {
@@ -22,6 +22,8 @@ public class PostServiceImpl implements PostService {
     // TODO 张力文 实现帖子业务接口
     @Autowired
     private PostMapper postMapper;// 使用Spring自动注入工具类
+    @Autowired
+    private LikeMapper likeMapper;// 使用Spring自动注入工具类
 
     @Autowired
     private FollowMapper followMapper;// 使用Spring自动注入工具类
@@ -58,19 +60,32 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<Post> getPost_self(int userid) throws PostNotExistException {
+    public List<Map<String,Object>> getPost_self(int userid) throws PostNotExistException {
         List<Post> posts = null;
         posts = postMapper.selectByUserId(userid);
         if(posts==null||posts.size()==0){
             throw new PostNotExistException("该用户没有发布帖子");
         } else{
-            return posts;
+            List<Map<String,Object>> results=new ArrayList<>();
+            posts.forEach(post->{
+                Map<String,Object> result=new LinkedHashMap<>();
+                result.put("content",post.getContent());
+                result.put("img",post.getImg());
+                result.put("profilePic",post.getImg());
+                result.put("userId",userid);
+                result.put("postId",post.getPostId());
+                result.put("date",new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(post.getPostTime()));
+                result.put("likeNum",post.getLikeNum());
+                result.put("isLike",likeMapper.jugeLiked(post.getPostId(),userid)!=0);
+                results.add(result);
+            });
+            return results;
         }
 
     }
 
     @Override
-    public List<Post> getPost_self_follow(int userid) throws PostNotExistException {
+    public List<Map<String,Object>> getPost_self_follow(int userid) throws PostNotExistException {
         List<Post> posts = null;
         posts = postMapper.selectByUserId(userid);
         List<User> Follows = followMapper.selectByFollowerUserId(userid);
@@ -81,8 +96,23 @@ public class PostServiceImpl implements PostService {
         if(finalPosts.size()==0){
             throw new PostNotExistException("该用户未发布帖子且关注用户未发布帖子或者未关注其他用户");
         } else{
-            return finalPosts;
+            List<Map<String,Object>> results=new ArrayList<>();
+            finalPosts.forEach(post-> {
+                Map<String, Object> result = new LinkedHashMap<>();
+                result.put("content", post.getContent());
+                result.put("img", post.getImg());
+                result.put("profilePic", post.getImg());
+                result.put("userId", userid);
+                result.put("postId", post.getPostId());
+                result.put("date", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(post.getPostTime()));
+                System.out.println(post.getPostTime());
+                result.put("likeNum", post.getLikeNum());
+                result.put("isLike", likeMapper.jugeLiked(post.getPostId(), userid) != 0);
+                results.add(result);
+            });
+            return results;
         }
+
     }
 
     @Override

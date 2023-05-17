@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 帖子模块控制器
@@ -53,17 +54,18 @@ public class PostController {
     @RequestMapping(method = RequestMethod.GET)
     public ResponseData getPost(HttpServletRequest request, Integer userId) {
         List<Post> posts = null;
+        List<Map<String,Object>> results=null;
         if (userId != null) {
             try {
-                posts = postService.getPost_self(userId);
-                return ResponseUtil.getSuccessRes(posts);
+                results = postService.getPost_self(userId);
+                return ResponseUtil.getSuccessRes(results);
             } catch (PostNotExistException e) {
                 return ResponseUtil.getErrorRes(604);
             }
         }else {
             try {
-                posts = postService.getPost_self_follow(AccessTokenUtil.getUserId(request));
-                return ResponseUtil.getSuccessRes(posts);
+                results = postService.getPost_self_follow(AccessTokenUtil.getUserId(request));
+                return ResponseUtil.getSuccessRes(results);
             } catch (PostNotExistException e) {
                 return ResponseUtil.getErrorRes(605);
             }

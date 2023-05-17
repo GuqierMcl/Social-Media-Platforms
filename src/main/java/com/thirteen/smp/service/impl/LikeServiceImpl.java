@@ -43,7 +43,8 @@ public class LikeServiceImpl implements LikeService {
             throw new LikeExistException("该用户已经点赞过了");
         }
         int res = likemapper.giveLike(postId,userId,new Timestamp(new Date().getTime()));
-        return res==1;
+        Integer res2 = postmapper.likePost(postId);
+        return res==1&&res2==1;
     }
 
     @Override
@@ -74,6 +75,7 @@ public class LikeServiceImpl implements LikeService {
             throw new LikeExistException("该用户还没点赞");
         }
         int res = likemapper.deleteLike(postId,userId);
-        return res==1;
+        int res2 = postmapper.unlikePost(postId);
+        return res==1&&res2==1;
     }
 }

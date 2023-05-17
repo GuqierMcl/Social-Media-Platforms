@@ -38,4 +38,15 @@
             img     = #{img}
         where post_id = #{postId}
     </update>
+    <update id="likePost">
+        update t_post
+        set like_num=like_num+1
+        where post_id=#{postId}
+    </update>
+    <update id="unlikePost">
+        update t_post
+        set like_num=like_num-1
+        where post_id=#{postId}
+    </update>
+
 </mapper>

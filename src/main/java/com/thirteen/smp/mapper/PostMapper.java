@@ -11,6 +11,9 @@ import java.util.List;
  */
 public interface PostMapper {
 
+    Integer likePost(Integer postId);
+    Integer unlikePost(Integer postId);
+
     /**
      * 根据帖子ID查询帖子信息
      * @param postId 帖子ID
