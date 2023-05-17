@@ -1,6 +1,5 @@
 package com.thirteen.smp.service;
 
-import com.thirteen.smp.pojo.User;
 
 import java.util.List;
 import java.util.Map;
@@ -17,6 +16,8 @@ public interface HomeService {
      */
     List<Map<String,Object>> getRecommendUser(Integer count, Integer userId);
 
+    List<Map<String,Object>> getPostUpdate(Integer count, Integer userId);
 
+    List<Map<String,Object>> getOnlineFriend(Integer count, Integer userId);
 
 }

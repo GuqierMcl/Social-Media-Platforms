@@ -21,7 +21,7 @@ public class HomeController {
     @RequestMapping("/user")
     public Object recommendUser(HttpServletRequest request, Integer count) {
         Integer userId = AccessTokenUtil.getUserId(request);
-        Integer cnt = null;
+        int cnt;
         if (count == null) {
             cnt = 2;
         } else {
@@ -29,6 +29,19 @@ public class HomeController {
         }
         List<Map<String, Object>> recommendUser = homeService.getRecommendUser(cnt, userId);
         return ResponseUtil.getSuccessRes(recommendUser);
+    }
+
+    @RequestMapping("/post")
+    public Object postUpdate(HttpServletRequest request, Integer count){
+        Integer userId = AccessTokenUtil.getUserId(request);
+        int cnt;
+        if (count == null) {
+            cnt = 4;
+        } else {
+            cnt = count;
+        }
+        List<Map<String, Object>> postUpdate = homeService.getPostUpdate(cnt, userId);
+        return ResponseUtil.getSuccessRes(postUpdate);
     }
 
 }
