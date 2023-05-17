@@ -35,7 +35,7 @@ public interface FollowMapper {
      * @param followedUserId 被关注用户
      * @return 关注结果
      */
-    List<Map<String, Object>> selectByUserId(Integer followerUserId, Integer followedUserId);
+    Map<String, Object> selectByUserId(Integer followerUserId, Integer followedUserId);
 
     /**
      * 新增关注

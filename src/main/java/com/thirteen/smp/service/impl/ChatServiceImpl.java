@@ -143,6 +143,11 @@ public class ChatServiceImpl implements ChatService {
         return count;
     }
 
+    @Override
+    public int deleteChatMsg(Integer msgId) {
+        return chatMapper.deleteMsgById(msgId);
+    }
+
     /**
      * 获取当前对象与 targetUserId 的一次最新消息
      * @param list1 targetUserId 作为发送者且当前用户作为接收者的 Msg 列表

@@ -31,33 +31,44 @@ import java.util.List;
 public class MainTest {
 
     @Test
-    public void testChatMapper(){
+    public void testUserStatus() {
         SqlSession sqlSession = SqlSessionUtil.openSession();
-        ChatMapper mapper = sqlSession.getMapper(ChatMapper.class);
-        mapper.insertMsg(new Msg(null,8,7,new Timestamp(new Date().getTime()),"你好",0));
+        UserMapper mapper = sqlSession.getMapper(UserMapper.class);
+        mapper.insertUserStatus(8, 1);
+        System.out.println(mapper.selectUserStatus(8));
+        mapper.updateUserStatus(8, 0);
+        System.out.println(mapper.selectUserStatus(8));
         sqlSession.commit();
     }
 
     @Test
-    public void testIp(){
+    public void testChatMapper() {
+        SqlSession sqlSession = SqlSessionUtil.openSession();
+        ChatMapper mapper = sqlSession.getMapper(ChatMapper.class);
+        mapper.insertMsg(new Msg(null, 8, 7, new Timestamp(new Date().getTime()), "你好", 0));
+        sqlSession.commit();
+    }
+
+    @Test
+    public void testIp() {
         System.out.println(IpAddressUtil.getIpAddress("183.221.76.134"));
         System.out.println(IpAddressUtil.getIpAddress("127.0.0.1"));
         System.out.println(IpAddressUtil.getIpAddressToMap("183.221.76.134"));
     }
 
     @Test
-    public void testFollowMapper(){
+    public void testFollowMapper() {
         SqlSession sqlSession = SqlSessionUtil.openSession();
         FollowMapper mapper = sqlSession.getMapper(FollowMapper.class);
 
-        mapper.deleteFollow(8,7);
+        System.out.println(mapper.selectByUserId(2, 1));
 
         sqlSession.commit();
     }
 
 
     @Test
-    public void testCommentMapper(){
+    public void testCommentMapper() {
         SqlSession sqlSession = SqlSessionUtil.openSession();
         CommentMapper mapper = sqlSession.getMapper(CommentMapper.class);
 
@@ -73,7 +84,7 @@ public class MainTest {
     }
 
     @Test
-    public void testPostMapper(){
+    public void testPostMapper() {
         SqlSession sqlSession = SqlSessionUtil.openSession();
         PostMapper mapper = sqlSession.getMapper(PostMapper.class);
 

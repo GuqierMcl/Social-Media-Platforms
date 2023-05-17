@@ -49,4 +49,18 @@
             cover_pic     = #{coverPic}
         where user_id = #{userId}
     </update>
+    <select id="selectUserStatus" resultType="Map">
+        select *
+        from t_user_status
+        where user_id = #{userId}
+    </select>
+    <insert id="insertUserStatus">
+        insert into t_user_status
+        values (null, #{param1}, #{param2})
+    </insert>
+    <update id="updateUserStatus">
+        update t_user_status
+        set status = #{param2}
+        where user_id = #{param1}
+    </update>
 </mapper>

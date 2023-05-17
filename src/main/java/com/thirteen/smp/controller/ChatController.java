@@ -87,9 +87,18 @@ public class ChatController {
             return ResponseUtil.getErrorRes(401);
         }
 
-        Map<String,Object> map = new LinkedHashMap<>();
-        map.put("deleteCount",count);
+        Map<String, Object> map = new LinkedHashMap<>();
+        map.put("deleteCount", count);
         return ResponseUtil.getSuccessRes(map);
+    }
+
+    @RequestMapping(value = "/del", method = RequestMethod.DELETE)
+    public Object deleteChatMsg(Integer msgId) {
+        int res = chatService.deleteChatMsg(msgId);
+        if (res == 0) {
+            return ResponseUtil.getErrorRes(801);
+        }
+        return ResponseUtil.getSuccessRes();
     }
 
 }

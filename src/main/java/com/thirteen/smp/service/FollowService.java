@@ -39,4 +39,11 @@ public interface FollowService {
      */
     boolean cancelFollow(Integer currentUserId, Integer targetUserId);
 
+    /**
+     * 判断用户是否互关
+     * @param currentUserId 当前用户ID
+     * @param targetUserId 目标用户ID
+     * @return 判断结果
+     */
+    boolean isFollowEach(Integer currentUserId, Integer targetUserId);
 }
