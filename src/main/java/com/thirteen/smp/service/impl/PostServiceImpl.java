@@ -1,10 +1,7 @@
 package com.thirteen.smp.service.impl;
 
 import com.thirteen.smp.exception.PostNotExistException;
-import com.thirteen.smp.mapper.FollowMapper;
-import com.thirteen.smp.mapper.LikeMapper;
-import com.thirteen.smp.mapper.PostMapper;
-import com.thirteen.smp.mapper.UserMapper;
+import com.thirteen.smp.mapper.*;
 import com.thirteen.smp.pojo.Post;
 import com.thirteen.smp.pojo.User;
 import com.thirteen.smp.service.PostService;
@@ -20,6 +17,8 @@ import java.util.*;
 public class PostServiceImpl implements PostService {
 
     // TODO 张力文 实现帖子业务接口
+    @Autowired
+    private CommentMapper commentMapper;// 使用Spring自动注入工具类
     @Autowired
     private UserMapper userMapper;// 使用Spring自动注入工具类
     @Autowired
@@ -79,6 +78,7 @@ public class PostServiceImpl implements PostService {
                 result.put("date",new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(post.getPostTime()));
                 result.put("likeNum",post.getLikeNum());
                 result.put("isLike",likeMapper.jugeLiked(post.getPostId(),userid)!=0);
+                result.put("commentNum",commentMapper.selectCountByPostId(post.getPostId()));
                 results.add(result);
             });
             return results;
@@ -110,6 +110,7 @@ public class PostServiceImpl implements PostService {
                 System.out.println(post.getPostTime());
                 result.put("likeNum", post.getLikeNum());
                 result.put("isLike", likeMapper.jugeLiked(post.getPostId(), userid) != 0);
+                result.put("commentNum",commentMapper.selectCountByPostId(post.getPostId()));
                 results.add(result);
             });
             return results;
