@@ -49,4 +49,11 @@ public interface ChatService {
      */
     int deleteChat(Integer userId, Integer targetUserId);
 
+    /**
+     * 删除单挑聊天消息
+     * @param msgId 消息ID
+     * @return 执行结果
+     */
+    int deleteChatMsg(Integer msgId);
+
 }
