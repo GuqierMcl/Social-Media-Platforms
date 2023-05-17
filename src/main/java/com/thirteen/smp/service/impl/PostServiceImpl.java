@@ -21,6 +21,8 @@ public class PostServiceImpl implements PostService {
 
     // TODO 张力文 实现帖子业务接口
     @Autowired
+    private UserMapper userMapper;// 使用Spring自动注入工具类
+    @Autowired
     private PostMapper postMapper;// 使用Spring自动注入工具类
     @Autowired
     private LikeMapper likeMapper;// 使用Spring自动注入工具类
@@ -71,7 +73,7 @@ public class PostServiceImpl implements PostService {
                 Map<String,Object> result=new LinkedHashMap<>();
                 result.put("content",post.getContent());
                 result.put("img",post.getImg());
-                result.put("profilePic",post.getImg());
+                result.put("profilePic",userMapper.selectById(post.getUserId()).getProfilePic());
                 result.put("userId",userid);
                 result.put("postId",post.getPostId());
                 result.put("date",new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(post.getPostTime()));
@@ -101,7 +103,7 @@ public class PostServiceImpl implements PostService {
                 Map<String, Object> result = new LinkedHashMap<>();
                 result.put("content", post.getContent());
                 result.put("img", post.getImg());
-                result.put("profilePic", post.getImg());
+                result.put("profilePic", userMapper.selectById(post.getUserId()).getProfilePic());
                 result.put("userId", userid);
                 result.put("postId", post.getPostId());
                 result.put("date", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(post.getPostTime()));
