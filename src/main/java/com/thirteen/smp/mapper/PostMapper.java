@@ -4,14 +4,31 @@ package com.thirteen.smp.mapper;
 import com.thirteen.smp.pojo.Post;
 import org.apache.ibatis.annotations.Param;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 /**
  * 用于t_post表数据库操作的Mapper
  */
 public interface PostMapper {
+    /**
+     * 获取近七天的发帖数量
+     * @param 无
+     * @return 发帖数量
+     */
+    Integer getPostByTime();
 
+    /**
+     * 给帖子点赞
+     * @param postId 帖子ID
+     * @return 是否点赞成功
+     */
     Integer likePost(Integer postId);
+    /**
+     * 取消帖子点赞
+     * @param postId 帖子ID
+     * @return 是否取消点赞成功
+     */
     Integer unlikePost(Integer postId);
 
     /**

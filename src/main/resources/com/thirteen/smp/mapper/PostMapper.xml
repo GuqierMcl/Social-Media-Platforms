@@ -23,6 +23,11 @@
         from t_post
         where content like "%"#{query}"%" and user_id=#{userid}
     </select>
+    <select id="getPostByTime" resultType="Integer">
+        select count(*)
+        from t_post
+        where post_time >= DATE_SUB(CURDATE(), INTERVAL 7 DAY);
+    </select>
     <insert id="insertPost" useGeneratedKeys="true" keyProperty="postId">
         insert into t_post
         values (null, #{userId}, #{content}, #{postTime}, #{likeNum}, #{img})

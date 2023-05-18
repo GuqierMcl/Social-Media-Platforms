@@ -20,10 +20,24 @@ public interface LikeMapper {
      */
     List<Integer> getLikeUserIdByPostId(int postid);
 
+    /**
+     * 进行点赞
+     * @param postid 帖子ID userid 用户id likeDate 点赞时间
+     * @return 是否点赞成功
+     */
     int giveLike(int postid, int userid, Timestamp likeDate);
 
+    /**
+     * 判断是否已经点过赞
+     * @param postId 帖子ID  userid 用户id
+     * @return 是否点过赞
+     */
     int jugeLiked(int postId,int userid);
-
+    /**
+     * 取消点赞
+     * @param postId 帖子ID userId用户id
+     * @return 是否取消成功
+     */
     int deleteLike(int postId,int userId);
 
     int insertCommentLike(Integer userId, Integer commentId, Timestamp time);

@@ -13,6 +13,20 @@ import java.util.Map;
 public interface UserMapper {
 
     /**
+     * 通过当前在线用户数量
+     * @param 无
+     * @return 在线用户数量
+     */
+    int getOnlineNum();
+
+    /**
+     * 通过当前注册用户数量
+     * @param 无
+     * @return 注册用户数量
+     */
+    int getRegisterNum();
+
+    /**
      * 通过username获取用户对象
      * @param username 用户名
      * @return 用户对象
