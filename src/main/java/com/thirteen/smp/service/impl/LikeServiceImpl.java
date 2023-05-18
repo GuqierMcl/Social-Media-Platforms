@@ -78,4 +78,16 @@ public class LikeServiceImpl implements LikeService {
         int res2 = postmapper.unlikePost(postId);
         return res==1&&res2==1;
     }
+
+    @Override
+    public boolean giveCommentLike(Integer userId, Integer commentId) {
+        // TODO 增加评论点赞
+        return false;
+    }
+
+    @Override
+    public boolean deleteCommentLike(Integer userId, Integer commentId) {
+        // TODO 增加评论点赞
+        return false;
+    }
 }

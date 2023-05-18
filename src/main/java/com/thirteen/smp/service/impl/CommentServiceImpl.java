@@ -3,6 +3,7 @@ package com.thirteen.smp.service.impl;
 import com.thirteen.smp.exception.CommentNotExistException;
 import com.thirteen.smp.exception.PostNotExistException;
 import com.thirteen.smp.mapper.CommentMapper;
+import com.thirteen.smp.mapper.LikeMapper;
 import com.thirteen.smp.mapper.PostMapper;
 import com.thirteen.smp.mapper.UserMapper;
 import com.thirteen.smp.pojo.Comment;
@@ -28,6 +29,9 @@ public class CommentServiceImpl implements CommentService {
     @Autowired
     private UserMapper userMapper;
 
+    @Autowired
+    private LikeMapper likeMapper;
+
     @Override
     public int getCount(Integer postId) throws PostNotExistException {
         Post post = postMapper.selectByPostId(postId);
@@ -38,7 +42,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public List<Map<String, Object>> getComments(Integer postId) throws PostNotExistException {
+    public List<Map<String, Object>> getComments(Integer postId, Integer userId) throws PostNotExistException {
         List<Map<String, Object>> resultList = new ArrayList<>();
         List<Comment> commentsLevel1 = new ArrayList<>();
         List<Comment> comments = commentMapper.selectByPostId(postId); // 查询当前帖子的所有评论
@@ -72,6 +76,12 @@ public class CommentServiceImpl implements CommentService {
             levelOne.put("name", nowUser.getNickname());    // 用户nickname
             levelOne.put("profilePic", nowUser.getProfilePic());  // 用户个人图片
             levelOne.put("createAt", comment.getCommentDate().toString());    // 发布时间
+            levelOne.put("likeNum", likeMapper.selectCommentLikeNum(comment.getCommentId()));    // 点赞数
+            boolean isLike;
+            Map<String, Object> map = likeMapper.selectCommentLikeById(userId, comment.getCommentId());
+            isLike = map != null;
+            levelOne.put("isLike", isLike);    // 当前用户是否点赞
+
 
             // 查找子评论
             List<Map<String, Object>> subComments = new ArrayList<>();
@@ -88,6 +98,12 @@ public class CommentServiceImpl implements CommentService {
                         levelTwo.put("name", nowUserTwo.getNickname());    // 用户nickname
                         levelTwo.put("profilePic", nowUserTwo.getProfilePic());  // 用户个人图片
                         levelTwo.put("createAt", c.getCommentDate().toString());    // 发布时间
+                        levelTwo.put("likeNum", likeMapper.selectCommentLikeNum(c.getCommentId()));    // 发布时间
+                        boolean flag;
+                        Map<String, Object> map1 = likeMapper.selectCommentLikeById(userId, c.getCommentId());
+                        flag = map1 != null;
+                        levelTwo.put("isLike", flag);    // 发布时间
+
 
                         subComments.add(levelTwo);
                     }

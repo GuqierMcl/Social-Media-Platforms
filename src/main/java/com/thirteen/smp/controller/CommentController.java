@@ -40,9 +40,10 @@ public class CommentController {
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public ResponseData getComments(Integer postId) {
+    public ResponseData getComments(Integer postId, HttpServletRequest request) {
+        Integer userId = AccessTokenUtil.getUserId(request);
         try {
-            return ResponseUtil.getSuccessRes(commentService.getComments(postId));
+            return ResponseUtil.getSuccessRes(commentService.getComments(postId, userId));
         } catch (PostNotExistException e) {
             return ResponseUtil.getErrorRes(601);
         }

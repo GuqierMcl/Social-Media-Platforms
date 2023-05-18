@@ -2,6 +2,7 @@ package com.thirteen.smp.mapper;
 
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 数据库t_like表Mapper接口
@@ -24,5 +25,13 @@ public interface LikeMapper {
     int jugeLiked(int postId,int userid);
 
     int deleteLike(int postId,int userId);
+
+    int insertCommentLike(Integer userId, Integer commentId, Timestamp time);
+
+    int deleteCommentLike(Integer userId, Integer commentId);
+
+    Integer selectCommentLikeNum(Integer commentId);
+
+    Map<String,Object> selectCommentLikeById(Integer userId, Integer commentId);
 
 }

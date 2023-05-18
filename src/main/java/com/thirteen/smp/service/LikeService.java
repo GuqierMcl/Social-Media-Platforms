@@ -13,4 +13,8 @@ public interface LikeService {
     List<Integer> getLikeUserIdByPostId(Integer postId);
 
     boolean deleteLike(Integer postId, Integer userId);
+
+    boolean giveCommentLike(Integer userId, Integer commentId);
+
+    boolean deleteCommentLike(Integer userId, Integer commentId);
 }

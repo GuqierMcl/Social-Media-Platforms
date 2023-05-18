@@ -29,7 +29,7 @@ public interface CommentService {
      * @param postId 帖子ID
      * @return 评论列表
      */
-    List<Map<String, Object>> getComments(Integer postId) throws PostNotExistException;
+    List<Map<String, Object>> getComments(Integer postId, Integer userId) throws PostNotExistException;
 
     /**
      * 发布评论

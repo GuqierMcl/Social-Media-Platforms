@@ -5,19 +5,45 @@
 <mapper namespace="com.thirteen.smp.mapper.LikeMapper">
     <insert id="giveLike">
         insert into t_like
-        values(#{param1},#{param2},#{param3})
+        values (#{param1}, #{param2}, #{param3})
     </insert>
     <delete id="deleteLike">
-        delete from t_like
-        where post_id=#{param1} and user_id=#{param2}
+        delete
+        from t_like
+        where post_id = #{param1}
+          and user_id = #{param2}
     </delete>
 
     <select id="getLikeUserIdByPostId" resultType="java.lang.Integer">
         select user_id
-        from t_like where post_id=#{postid};
+        from t_like
+        where post_id = #{postid}
     </select>
     <select id="jugeLiked" resultType="java.lang.Integer">
         select count(*)
-        from t_like where post_id=#{param1} and user_id=#{param2};
+        from t_like
+        where post_id = #{param1}
+          and user_id = #{param2}
+    </select>
+    <insert id="insertCommentLike">
+        insert into t_comment_like
+        values (null, #{param1}, #{param2}, #{param3})
+    </insert>
+    <delete id="deleteCommentLike">
+        delete
+        from t_comment_like
+        where user_id = #{param1}
+          and comment_id = #{param2}
+    </delete>
+    <select id="selectCommentLikeNum" resultType="Integer">
+        select count(*)
+        from t_comment_like
+        where comment_id = #{commentId}
+    </select>
+    <select id="selectCommentLikeById" resultType="Map">
+        select *
+        from t_comment_like
+        where user_id = #{param1}
+          and comment_id = #{param2}
     </select>
 </mapper>
