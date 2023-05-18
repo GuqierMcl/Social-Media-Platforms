@@ -12,11 +12,11 @@ import java.util.List;
  */
 public interface PostMapper {
     /**
-     * 获取近七天的发帖数量
+     * 获取所有帖子
      * @param 无
-     * @return 发帖数量
+     * @return 帖子对象列表
      */
-    Integer getPostByTime();
+    List<Post> selectAllPost();
 
     /**
      * 给帖子点赞
