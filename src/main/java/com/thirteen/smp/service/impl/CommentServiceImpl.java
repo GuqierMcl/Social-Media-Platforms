@@ -53,10 +53,10 @@ public class CommentServiceImpl implements CommentService {
         }
 
         /*
-        * 查找第一层评论
-        * 查找第二次评论
-        * 拼接返回对象
-        * */
+         * 查找第一层评论
+         * 查找第二次评论
+         * 拼接返回对象
+         * */
 
         /*查找第一层评论*/
         comments.forEach(comment -> {
@@ -124,8 +124,15 @@ public class CommentServiceImpl implements CommentService {
             throw new PostNotExistException("帖子不存在");
         }
         if (comment.getPreCommentId() != null) {
-            if (commentMapper.selectByCommentId(comment.getPreCommentId()) == null) {
+            Comment preComment = commentMapper.selectByCommentId(comment.getPreCommentId());
+            if (preComment == null) {
                 throw new CommentNotExistException("评论不存在");
+            }
+            if (preComment.getPreCommentId() != null) {
+                Integer userId = preComment.getUserId();
+                User user = userMapper.selectById(userId);
+                comment.setCommentContent("@" + user.getNickname() + ": " + comment.getCommentContent());
+                comment.setPreCommentId(preComment.getPreCommentId());
             }
         }
         int count = commentMapper.insertComment(comment);

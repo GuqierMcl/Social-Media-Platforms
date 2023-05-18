@@ -44,10 +44,12 @@ public class ResponseUtil {
         codeMap.put(605,"用户未发布帖子且关注用户未发布帖子或者未关注用户");
         codeMap.put(606,"搜索类型未指定或者搜索关键词未指出");
         codeMap.put(607,"未搜索到相关帖子");
+        codeMap.put(608,"评论不存在");
 
         // 7xx为点赞错误
         codeMap.put(701,"该用户已经点赞过本帖子");
         codeMap.put(702,"该用户还没点赞本帖子");
+        codeMap.put(703,"该用户已经点赞过本评论");
 
         // 8xx为聊天错误
         codeMap.put(801,"消息不存在");

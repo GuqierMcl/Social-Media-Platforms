@@ -1,8 +1,6 @@
 package com.thirteen.smp.controller;
 
-import com.thirteen.smp.exception.LikeExistException;
-import com.thirteen.smp.exception.PostNotExistException;
-import com.thirteen.smp.exception.UserNotExistsException;
+import com.thirteen.smp.exception.*;
 import com.thirteen.smp.response.ResponseData;
 import com.thirteen.smp.service.LikeService;
 import com.thirteen.smp.utils.AccessTokenUtil;
@@ -71,4 +69,40 @@ public class LikeController {
         }
         return ResponseUtil.getSuccessRes(null);
     }
+
+    @RequestMapping(value = "/comment",method = RequestMethod.POST)
+    public Object addCommentLike(HttpServletRequest request, @RequestBody Map<String,Object> param){
+        Integer userId = AccessTokenUtil.getUserId(request);
+        Integer commentId = (Integer) param.get("commentId");
+        boolean res;
+        try {
+            res = likeService.giveCommentLike(userId, commentId);
+        } catch (LikeExistException e) {
+            return ResponseUtil.getErrorRes(703);
+        } catch (CommentNotExistException e){
+            return ResponseUtil.getErrorRes(602);
+        }
+        if(!res){
+            return ResponseUtil.getErrorRes(501);
+        }
+        return ResponseUtil.getSuccessRes();
+    }
+
+    @RequestMapping(value = "/comment",method = RequestMethod.DELETE)
+    public Object deleteCommentLike(HttpServletRequest request, Integer commentId){
+        Integer userId = AccessTokenUtil.getUserId(request);
+        boolean res;
+        try {
+            res = likeService.deleteCommentLike(userId, commentId);
+        } catch (LikeNotExistException e) {
+            return ResponseUtil.getErrorRes(608);
+        }catch (CommentNotExistException e){
+            return ResponseUtil.getErrorRes(602);
+        }
+        if(!res){
+            return ResponseUtil.getErrorRes(501);
+        }
+        return ResponseUtil.getSuccessRes();
+    }
+
 }
