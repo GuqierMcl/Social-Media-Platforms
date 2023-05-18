@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thirteen.smp.mapper.HistoryMapper">
+
+    <insert id="addHistory">
+        insert into t_history
+        values (null,#{param1},#{param2},#{param3})
+    </insert>
+    <update id="updataHistoryDate">
+        update t_history
+        set time=#{param3}
+        where post_id=#{param1} and user_id=#{param2}
+    </update>
+    <delete id="deleteAllHistoryById">
+        delete from t_history
+        where user_id=#{user_id}
+    </delete>
+    <delete id="deleteHistoryById">
+        delete from t_history
+        where id = #{id}
+    </delete>
+    <select id="jugeHistory" resultType="Integer">
+        select count(*)
+        from t_history
+        where post_id=#{param1} and user_id=#{param2}
+    </select>
+    <select id="selectHistoryByUserId" resultType="History">
+        select *
+        from t_history
+        where user_id=#{userId}
+    </select>
+    <select id="selectHistoryById" resultType="History">
+        select *
+        from t_history
+        where id=#{id}
+    </select>
+    <select id="jugeHistory2" resultType="Integer">
+        select count(*)
+        from t_history
+        where post_id=#{param1} and user_id=#{param2} and id=#{param3}
+    </select>
+</mapper>

@@ -54,6 +54,10 @@ public class ResponseUtil {
         // 8xx为聊天错误
         codeMap.put(801,"消息不存在");
 
+        // 9xx为浏览记录错误
+        codeMap.put(901,"浏览记录条数为零");
+        codeMap.put(902,"该浏览记录不属于本用户");
+        codeMap.put(903,"浏览记录不存在");
     }
 
     public static ResponseData getResponseData(int code, Object data) {
