@@ -69,11 +69,13 @@ public class PostServiceImpl implements PostService {
         } else{
             List<Map<String,Object>> results=new ArrayList<>();
             posts.forEach(post->{
+                User user = userMapper.selectById(post.getUserId());
                 Map<String,Object> result=new LinkedHashMap<>();
                 result.put("content",post.getContent());
                 result.put("img",post.getImg());
                 result.put("profilePic",userMapper.selectById(post.getUserId()).getProfilePic());
-                result.put("userId",userid);
+                result.put("userId",post.getUserId());
+                result.put("name",user.getNickname());
                 result.put("postId",post.getPostId());
                 result.put("date",new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(post.getPostTime()));
                 result.put("likeNum",post.getLikeNum());
@@ -100,11 +102,13 @@ public class PostServiceImpl implements PostService {
         } else{
             List<Map<String,Object>> results=new ArrayList<>();
             finalPosts.forEach(post-> {
+                User user = userMapper.selectById(post.getUserId());
                 Map<String, Object> result = new LinkedHashMap<>();
                 result.put("content", post.getContent());
                 result.put("img", post.getImg());
                 result.put("profilePic", userMapper.selectById(post.getUserId()).getProfilePic());
-                result.put("userId", userid);
+                result.put("userId", post.getUserId());
+                result.put("name",user.getNickname());
                 result.put("postId", post.getPostId());
                 result.put("date", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(post.getPostTime()));
                 System.out.println(post.getPostTime());
