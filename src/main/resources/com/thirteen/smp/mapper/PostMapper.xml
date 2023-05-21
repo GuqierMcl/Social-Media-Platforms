@@ -12,6 +12,7 @@
         select *
         from t_post
         where user_id = #{userId}
+        order by post_time desc ;
     </select>
     <select id="selectByQuery" resultType="Post">
         select *
@@ -27,6 +28,7 @@
     <select id="selectAllPost" resultType="com.thirteen.smp.pojo.Post">
         select *
         from t_post
+        order by post_time desc ;
     </select>
     <insert id="insertPost" useGeneratedKeys="true" keyProperty="postId">
         insert into t_post

@@ -91,11 +91,17 @@ public class PostServiceImpl implements PostService {
     @Override
     public List<Map<String,Object>> getPost_self_follow(int userid) throws PostNotExistException {
         List<Post> posts = null;
-        posts = postMapper.selectByUserId(userid);
+        posts = postMapper.selectAllPost();
         List<User> Follows = followMapper.selectByFollowerUserId(userid);
-        List<Post> finalPosts = posts;
-        Follows.forEach(follow ->{
-            finalPosts.addAll(postMapper.selectByUserId(follow.getUserId()));
+        List<Integer> followIds = new ArrayList<>();
+        Follows.forEach(follow->{
+            followIds.add(follow.getUserId());
+        });
+        List<Post> finalPosts = new ArrayList<>();
+        posts.forEach(post -> {
+            if(followIds.contains(post.getUserId())||post.getUserId()==userid){
+                finalPosts.add(post);
+            }
         });
         if(finalPosts.size()==0){
             throw new PostNotExistException("该用户未发布帖子且关注用户未发布帖子或者未关注其他用户");
