@@ -136,6 +136,8 @@ public class HomeServiceImpl implements HomeService {
         item.put("username", user.getUsername());
         item.put("nickname", user.getNickname());
         item.put("profilePic", user.getProfilePic());
+        item.put("language", user.getUserLang());
+        item.put("location", user.getUserLocation());
         resultList.add(item);
     }
 
