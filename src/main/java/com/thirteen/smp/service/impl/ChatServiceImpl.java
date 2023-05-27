@@ -99,7 +99,7 @@ public class ChatServiceImpl implements ChatService {
             map.put("userId", latestMsg.getToUserId());
             map.put("username", user.getUsername());
             map.put("nickname", user.getNickname());
-            map.put("proFilePic", user.getProfilePic());
+            map.put("profilePic", user.getProfilePic());
             map.put("latestTime", latestMsg.getTime().toString());
             map.put("latestMsg", latestMsg.getContent());
 
