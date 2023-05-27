@@ -1,8 +1,10 @@
 package com.thirteen.smp.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.thirteen.smp.pojo.User;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 用户模块业务接口
@@ -23,6 +25,14 @@ public interface UserService {
      * @return 用户对象
      */
     User getUserByUserId(Integer userId);
+
+    /**
+     * 通过用户ID获取用户包括是否关注的信息
+     * @param userId 当前用户ID
+     * @param targetUserId 目标用户ID
+     * @return 用户信息Map
+     */
+    Map<String,Object> getUserByUserIdPlusFollow(Integer userId, Integer targetUserId) throws JsonProcessingException;
 
     /**
      * 获取所有用户信息

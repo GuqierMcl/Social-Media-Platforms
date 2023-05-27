@@ -1,5 +1,6 @@
 package com.thirteen.smp.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.thirteen.smp.response.ResponseData;
 import com.thirteen.smp.pojo.User;
 import com.thirteen.smp.service.UserService;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 用户操作控制器
@@ -26,7 +28,6 @@ public class UserController {
     private UserService userService;
 
 
-
     @RequestMapping(path = "/get/{userName}", method = RequestMethod.GET) // 配置方法路径
     public ResponseData getUserByUsername(@PathVariable("userName") String userName) {
         User resultUser = null;
@@ -40,7 +41,8 @@ public class UserController {
 
 
     @RequestMapping(path = "/get-id/{userId}", method = RequestMethod.GET) // 配置方法路径
-    public ResponseData getUserByUserId(@PathVariable("userId") Integer userId) {
+    public ResponseData getUserByUserId(@PathVariable("userId") Integer targetUserId, HttpServletRequest request) {
+        /*
         User resultUser = null;
         resultUser = userService.getUserByUserId(userId);
         if (resultUser != null) {
@@ -48,6 +50,15 @@ public class UserController {
         } else {
             return ResponseUtil.getResponseData(401);
         }
+         */
+        Integer crrUserId = AccessTokenUtil.getUserId(request);
+        Map<String, Object> userByUserIdPlusFollow = null;
+        try {
+            userByUserIdPlusFollow = userService.getUserByUserIdPlusFollow(crrUserId, targetUserId);
+        } catch (JsonProcessingException e) {
+            return ResponseUtil.getErrorRes(501);
+        }
+        return ResponseUtil.getSuccessRes(userByUserIdPlusFollow);
     }
 
 
