@@ -87,6 +87,7 @@ public class HomeServiceImpl implements HomeService {
             item.put("userId", user.getUserId());
             item.put("username", user.getUsername());
             item.put("nickname", user.getNickname());
+            item.put("profilePic", user.getProfilePic());
             item.put("content", post.getContent());
             item.put("time", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(post.getPostTime()));
             resultList.add(item);
