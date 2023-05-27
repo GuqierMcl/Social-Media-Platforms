@@ -46,7 +46,7 @@ public class HomeServiceImpl implements HomeService {
         for (User user : users) {
             if (cnt == count) break;
             if (user.getUserLocation().equals(crrUser.getUserLocation()) || user.getUserLang().equals(crrUser.getUserLang())) {
-                userListHandler(resultList, user);
+                userListHandler(resultList, user, userId);
                 usersBak.remove(user);
                 cnt++;
             }
@@ -55,7 +55,7 @@ public class HomeServiceImpl implements HomeService {
         if (cnt < count) {
             for (User user : usersBak) {
                 if (cnt == count) break;
-                userListHandler(resultList, user);
+                userListHandler(resultList, user, userId);
                 cnt++;
             }
         }
@@ -118,7 +118,14 @@ public class HomeServiceImpl implements HomeService {
             }
 
             if (each && online) {
-                userListHandler(resultList, user);
+                Map<String, Object> item = new LinkedHashMap<>();
+                item.put("userId", user.getUserId());
+                item.put("username", user.getUsername());
+                item.put("nickname", user.getNickname());
+                item.put("profilePic", user.getProfilePic());
+                item.put("language", user.getUserLang());
+                item.put("location", user.getUserLocation());
+                resultList.add(item);
             }
         }
         return resultList;
@@ -130,7 +137,7 @@ public class HomeServiceImpl implements HomeService {
      * @param resultList 结果列表
      * @param user       用户对象
      */
-    private void userListHandler(List<Map<String, Object>> resultList, User user) {
+    private void userListHandler(List<Map<String, Object>> resultList, User user, Integer userId) {
         Map<String, Object> item = new LinkedHashMap<>();
         item.put("userId", user.getUserId());
         item.put("username", user.getUsername());
@@ -138,6 +145,8 @@ public class HomeServiceImpl implements HomeService {
         item.put("profilePic", user.getProfilePic());
         item.put("language", user.getUserLang());
         item.put("location", user.getUserLocation());
+        Map<String, Object> map = followMapper.selectByUserId(userId, user.getUserId());
+        item.put("isFollowed", map != null);
         resultList.add(item);
     }
 
