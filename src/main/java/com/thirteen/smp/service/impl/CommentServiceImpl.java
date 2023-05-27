@@ -69,9 +69,11 @@ public class CommentServiceImpl implements CommentService {
         commentsLevel1.forEach(comment -> {
             Map<String, Object> levelOne = new LinkedHashMap<>();
             levelOne.put("id", comment.getCommentId());
-            levelOne.put("content", comment.getCommentContent());
 
             User nowUser = userMapper.selectById(comment.getUserId());
+
+            levelOne.put("userId", nowUser.getUserId());
+            levelOne.put("content", comment.getCommentContent());
 
             levelOne.put("name", nowUser.getNickname());    // 用户nickname
             levelOne.put("profilePic", nowUser.getProfilePic());  // 用户个人图片
@@ -91,9 +93,9 @@ public class CommentServiceImpl implements CommentService {
                         Map<String, Object> levelTwo = new LinkedHashMap<>();
 
                         levelTwo.put("id", c.getCommentId());
-                        levelTwo.put("content", c.getCommentContent());
-
                         User nowUserTwo = userMapper.selectById(c.getUserId());
+                        levelTwo.put("userId", nowUserTwo.getUserId());
+                        levelTwo.put("content", c.getCommentContent());
 
                         levelTwo.put("name", nowUserTwo.getNickname());    // 用户nickname
                         levelTwo.put("profilePic", nowUserTwo.getProfilePic());  // 用户个人图片
