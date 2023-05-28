@@ -71,7 +71,7 @@ public class ChatServiceImpl implements ChatService {
 
         // 标记消息为已读
         for (Msg msg : msgList) {
-            if (msg.getIsRead() == 0) {
+            if (msg.getIsRead().equals(0) && msg.getToUserId().equals(userId)) {
                 msg.setIsRead(1);
                 chatMapper.updateMsg(msg);
             }
