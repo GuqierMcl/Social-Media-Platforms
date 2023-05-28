@@ -98,11 +98,15 @@ public class PostServiceImpl implements PostService {
             followIds.add(follow.getUserId());
         });
         List<Post> finalPosts = new ArrayList<>();
-        posts.forEach(post -> {
-            if(followIds.contains(post.getUserId())||post.getUserId()==userid){
-                finalPosts.add(post);
+        int count=3;
+        for(int i=0;i<posts.size();i++){
+            if(followIds.contains(posts.get(i).getUserId())||posts.get(i).getUserId()==userid){
+                finalPosts.add(posts.get(i));
+            } else if(count>0){
+                finalPosts.add(posts.get(i));
+                count--;
             }
-        });
+        }
         if(finalPosts.size()==0){
             throw new PostNotExistException("该用户未发布帖子且关注用户未发布帖子或者未关注其他用户");
         } else{
