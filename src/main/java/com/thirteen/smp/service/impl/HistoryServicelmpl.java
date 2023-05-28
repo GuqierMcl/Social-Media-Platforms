@@ -58,11 +58,11 @@ public class HistoryServicelmpl implements HistoryService {
             throw new UserNotExistsException("用户不存在");
         }
         List<History> historyList = historyMapper.selectHistoryByUserId(userId);
-        historyList.forEach(history -> {
-            Instant instant = history.getTime().toInstant();
-            Instant newInstant = instant.plus(Duration.ofHours(8));
-            history.setTime(Timestamp.from(newInstant));
-        });
+//        historyList.forEach(history -> {
+//            Instant instant = history.getTime().toInstant();
+//            Instant newInstant = instant.plus(Duration.ofHours(8));
+//            history.setTime(Timestamp.from(newInstant));
+//        });
         return historyList;
     }
 

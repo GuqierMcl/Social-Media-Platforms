@@ -7,6 +7,7 @@ import java.sql.Timestamp;
 /**
  * 聊天消息封装类
  */
+
 public class Msg {
 
     private Integer id;
@@ -15,6 +16,7 @@ public class Msg {
 
     private Integer toUserId;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Timestamp time;
 
     private String content;
@@ -58,7 +60,6 @@ public class Msg {
         this.toUserId = toUserId;
     }
 
-    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     public Timestamp getTime() {
         return time;
     }

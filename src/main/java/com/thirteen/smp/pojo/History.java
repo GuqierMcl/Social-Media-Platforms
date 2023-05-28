@@ -8,7 +8,7 @@ public class History {
     private int id;
     private int postId;
     private int userId;
-    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Timestamp time;
 
     public int getId() {
