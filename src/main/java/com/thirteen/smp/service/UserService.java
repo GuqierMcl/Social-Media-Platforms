@@ -48,5 +48,19 @@ public interface UserService {
      */
     boolean updateUser(User user);
 
+    /**
+     * 标记用户上线
+     * @param userId 用户ID
+     * @return 结果
+     */
+    boolean markOnline(Integer userId);
+
+    /**
+     * 标记用户下线
+     * @param userId 用户ID
+     * @return 结果
+     */
+    boolean markOffline(Integer userId);
+
 
 }

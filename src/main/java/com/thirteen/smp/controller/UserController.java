@@ -89,4 +89,16 @@ public class UserController {
         }
     }
 
+    @RequestMapping(value = "/markline",method = RequestMethod.POST)
+    public Object markOnline(HttpServletRequest request){
+        Integer userId = AccessTokenUtil.getUserId(request);
+        return ResponseUtil.getSuccessRes(userService.markOnline(userId));
+    }
+
+    @RequestMapping(value = "/markline",method = RequestMethod.DELETE)
+    public Object markOffline(HttpServletRequest request){
+        Integer userId = AccessTokenUtil.getUserId(request);
+        return ResponseUtil.getSuccessRes(userService.markOffline(userId));
+    }
+
 }

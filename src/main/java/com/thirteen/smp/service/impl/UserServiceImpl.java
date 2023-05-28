@@ -72,4 +72,26 @@ public class UserServiceImpl implements UserService {
         return count == 1;
     }
 
+    @Override
+    public boolean markOnline(Integer userId) {
+        Map<String, Object> status = userMapper.selectUserStatus(userId);
+        if (status != null) {
+            userMapper.updateUserStatus(userId, 1);
+        } else {
+            userMapper.insertUserStatus(userId, 1);
+        }
+        return true;
+    }
+
+    @Override
+    public boolean markOffline(Integer userId) {
+        Map<String, Object> status = userMapper.selectUserStatus(userId);
+        if (status != null) {
+            userMapper.updateUserStatus(userId, 0);
+        } else {
+            userMapper.insertUserStatus(userId, 0);
+        }
+        return true;
+    }
+
 }
