@@ -58,6 +58,7 @@ public class ChatServiceImpl implements ChatService {
      * @throws UserNotExistsException
      */
     @Override
+    @Transactional
     public List<Msg> getMsg(Integer userId, Integer targetUserId) throws UserNotExistsException {
         User curr = userMapper.selectById(userId);
         User target = userMapper.selectById(targetUserId);
@@ -67,6 +68,15 @@ public class ChatServiceImpl implements ChatService {
         List<Msg> msgList = chatMapper.selectById(userId, targetUserId);
         msgList.addAll(chatMapper.selectById(targetUserId, userId));
         msgList.sort(Comparator.comparing(Msg::getTime)); // 根据消息时间排序
+
+        // 标记消息为已读
+        for (Msg msg : msgList) {
+            if (msg.getIsRead() == 0) {
+                msg.setIsRead(1);
+                chatMapper.updateMsg(msg);
+            }
+        }
+
         return msgList;
     }
 
