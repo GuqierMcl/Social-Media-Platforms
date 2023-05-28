@@ -139,6 +139,7 @@ public class HomeServiceImpl implements HomeService {
      * @param user       用户对象
      */
     private void userListHandler(List<Map<String, Object>> resultList, User user, Integer userId) {
+        if (user.getUserId().equals(userId)) return;
         Map<String, Object> item = new LinkedHashMap<>();
         item.put("userId", user.getUserId());
         item.put("username", user.getUsername());
