@@ -11,11 +11,13 @@ public class CORSInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
             throws Exception {
         if (request.getHeader(HttpHeaders.ORIGIN) != null) {
-            response.addHeader("Access-Control-Allow-Origin", "http://localhost:5173");
+            String origin = request.getHeader(HttpHeaders.ORIGIN);
+            response.addHeader("Access-Control-Allow-Origin", origin);
             response.addHeader("Access-Control-Allow-Credentials", "true");
             response.addHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE, HEAD");
             response.addHeader("Access-Control-Allow-Headers", "Content-Type");
             response.addHeader("Access-Control-Max-Age", "3600");
+            System.out.println("配置跨域请求放行：" + origin);
         }
         return true;
     }
