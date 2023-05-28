@@ -54,7 +54,6 @@ public class HistoryController {
         int userId = AccessTokenUtil.getUserId(request);
         try{
             historyList = historyService.selectHistoryByUerId(userId);
-            System.out.println(historyList.get(0).getTime());
             return ResponseUtil.getSuccessRes(historyList);
         }
         catch (UserNotExistsException e){
