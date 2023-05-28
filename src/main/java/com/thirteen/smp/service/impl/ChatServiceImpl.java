@@ -106,6 +106,15 @@ public class ChatServiceImpl implements ChatService {
             map.put("latestTime", latestMsg.getTime().toString());
             map.put("latestMsg", latestMsg.getContent());
 
+            // 获取未读消息数
+            List<Msg> msgList = chatMapper.selectById(id, userId);
+            int cnt = 0;
+            for (Msg msg : msgList) {
+                if (msg.getIsRead() == 0){
+                    cnt ++;
+                }
+            }
+            map.put("count", cnt);
             res.add(map);
         }
         return res;
