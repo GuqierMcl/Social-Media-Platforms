@@ -73,6 +73,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public boolean markOnline(Integer userId) {
         Map<String, Object> status = userMapper.selectUserStatus(userId);
         if (status != null) {
@@ -84,6 +85,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public boolean markOffline(Integer userId) {
         Map<String, Object> status = userMapper.selectUserStatus(userId);
         if (status != null) {
