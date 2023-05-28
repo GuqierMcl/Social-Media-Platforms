@@ -21,6 +21,12 @@
         from t_user
     </select>
 
+    <select id="selectByQuery" resultType="User">
+        select *
+        from t_user
+        where nickname like "%"#{query}"%"
+    </select>
+
     <insert id="insertUser" useGeneratedKeys="true" keyProperty="userId">
         insert into t_user
         values (null, #{username}, #{password}, #{profilePic}, #{nickname}, #{twitter}, #{facebook}, #{qq}, #{weibo},

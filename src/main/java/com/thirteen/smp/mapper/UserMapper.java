@@ -41,6 +41,13 @@ public interface UserMapper {
     List<User> selectAll();
 
     /**
+     * 通过关键词查询用户
+     * @param query 关键字
+     * @return 用户列表
+     */
+    List<User> selectByQuery(String query);
+
+    /**
      * 新增用户信息
      * @param user 用户对象
      * @return 插入修改数据条数
