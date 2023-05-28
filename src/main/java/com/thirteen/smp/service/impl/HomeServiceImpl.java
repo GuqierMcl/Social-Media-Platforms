@@ -42,19 +42,24 @@ public class HomeServiceImpl implements HomeService {
         User crrUser = userMapper.selectById(userId); // 获取当前用户信息
         List<User> users = userMapper.selectAll(); // 获取所有用户信息
         List<User> usersBak = userMapper.selectAll();
+        Collections.shuffle(users);
         // 查找地区相同和语言相同的用户
         for (User user : users) {
             if (cnt == count) break;
+            if (user.getUserId().equals(userId)) continue;
             if (user.getUserLocation().equals(crrUser.getUserLocation()) || user.getUserLang().equals(crrUser.getUserLang())) {
                 userListHandler(resultList, user, userId);
                 usersBak.remove(user);
+                System.out.println(cnt);
                 cnt++;
             }
         }
+        Collections.shuffle(usersBak);
         // 查找剩余用户
         if (cnt < count) {
             for (User user : usersBak) {
                 if (cnt == count) break;
+                if (user.getUserId().equals(userId)) continue;
                 userListHandler(resultList, user, userId);
                 cnt++;
             }
