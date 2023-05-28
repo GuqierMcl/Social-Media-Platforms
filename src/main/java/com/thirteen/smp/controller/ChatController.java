@@ -101,4 +101,11 @@ public class ChatController {
         return ResponseUtil.getSuccessRes();
     }
 
+    @RequestMapping(value = "/count",method = RequestMethod.GET)
+    public Object getNotReadCount(HttpServletRequest request){
+        Integer userId = AccessTokenUtil.getUserId(request);
+        int notReadCount = chatService.getNotReadCount(userId);
+        return ResponseUtil.getSuccessRes(notReadCount);
+    }
+
 }

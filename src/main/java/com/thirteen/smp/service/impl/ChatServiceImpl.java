@@ -24,6 +24,7 @@ public class ChatServiceImpl implements ChatService {
 
     /**
      * 把一次聊天消息插入表中
+     *
      * @param msg 消息对象
      * @return boolean 发送成功与否
      * @throws UserNotExistsException
@@ -50,7 +51,8 @@ public class ChatServiceImpl implements ChatService {
 
     /**
      * 获取 userId 与 targetUserId 的所有聊天记录
-     * @param userId 当前用户ID
+     *
+     * @param userId       当前用户ID
      * @param targetUserId 目标用户ID
      * @return Msg 列表
      * @throws UserNotExistsException
@@ -70,7 +72,8 @@ public class ChatServiceImpl implements ChatService {
 
     /**
      * 获取 userId 的所有聊天缩略
-      * @param userId 当前用户ID
+     *
+     * @param userId 当前用户ID
      * @return 聊天缩略映射对象列表
      */
     @Override
@@ -122,7 +125,8 @@ public class ChatServiceImpl implements ChatService {
 
     /**
      * 删除 userId 跟 targetUserId 的所有聊天记录
-     * @param userId 当前用户ID
+     *
+     * @param userId       当前用户ID
      * @param targetUserId 目标用户ID
      * @return 聊天消息的数量
      * @throws UserNotExistsException
@@ -148,10 +152,23 @@ public class ChatServiceImpl implements ChatService {
         return chatMapper.deleteMsgById(msgId);
     }
 
+    @Override
+    public int getNotReadCount(Integer userId) {
+        List<Msg> msgs = chatMapper.selectByToUserId(userId);
+        int cnt = 0;
+        for (Msg msg : msgs) {
+            if (msg.getIsRead() == 0) {
+                cnt++;
+            }
+        }
+        return cnt;
+    }
+
     /**
      * 获取当前对象与 targetUserId 的一次最新消息
-     * @param list1 targetUserId 作为发送者且当前用户作为接收者的 Msg 列表
-     * @param list2 targetUserId 作为接收者且当前用户作为发送者的 Msg 列表
+     *
+     * @param list1        targetUserId 作为发送者且当前用户作为接收者的 Msg 列表
+     * @param list2        targetUserId 作为接收者且当前用户作为发送者的 Msg 列表
      * @param targetUserId 当前用户的聊天对象Id
      * @return 当前用户与 targetUserId 的最新一次 Msg
      */
