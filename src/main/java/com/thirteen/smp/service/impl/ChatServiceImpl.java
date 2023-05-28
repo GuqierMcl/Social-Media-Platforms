@@ -99,7 +99,7 @@ public class ChatServiceImpl implements ChatService {
             User user = userMapper.selectById(id);
 
             Map<String, Object> map = new LinkedHashMap<>();
-            map.put("userId", latestMsg.getToUserId());
+            map.put("userId", user.getUserId());
             map.put("username", user.getUsername());
             map.put("nickname", user.getNickname());
             map.put("profilePic", user.getProfilePic());
