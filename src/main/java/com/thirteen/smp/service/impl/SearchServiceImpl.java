@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -42,14 +43,15 @@ public class SearchServiceImpl implements SearchService {
             data.put("userId",post.getUserId());
             data.put("name",user.getNickname());
             data.put("postId",post.getPostId());
-            data.put("date",post.getPostTime());
+            SimpleDateFormat dateformat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            data.put("date",dateformat.format(post.getPostTime()));
             data.put("likeNum",post.getLikeNum());
             data.put("isLike",likeMapper.jugeLiked(post.getPostId(), AccessTokenUtil.getUserId(request))!=0);
             data.put("commentNum",commentMapper.selectByPostId(post.getPostId()).size());
             finalPosts.add(data);
         });
         List<Map<String,Object>> finalUsers =new ArrayList<>();
-        users.forEach(user -> {;
+        users.forEach(user -> {
             Map<String,Object> data = new LinkedHashMap<>();
             data.put("coverPic",user.getCoverPic());
             data.put("email",user.getEmail());
