@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.*;
@@ -64,7 +65,8 @@ public class HistoryServicelmpl implements HistoryService {
             data.put("id",history.getId());
             data.put("postId",history.getPostId());
             data.put("userId",history.getUserId());
-            data.put("time",history.getTime());
+            SimpleDateFormat dateformat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            data.put("time",dateformat.format(history.getTime()));
             data.put("profilePic",user.getProfilePic());
             data.put("content",post.getContent());
             data.put("nickname",user.getNickname());
