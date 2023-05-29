@@ -64,7 +64,7 @@ public class SearchServiceImpl implements SearchService {
             data.put("userLocation",user.getUserLocation());
             data.put("username",user.getUsername());
             data.put("weibo",user.getWeibo());
-            data.put("isFollowed",followMapper.selectByUserId(AccessTokenUtil.getUserId(request),user.getUserId())!=null);
+            data.put("isFollowing",followMapper.selectByUserId(AccessTokenUtil.getUserId(request),user.getUserId())!=null);
             finalUsers.add(data);
         });
         datas.put("posts",finalPosts);
