@@ -48,7 +48,7 @@ public class HistoryController {
 
     @RequestMapping(method = RequestMethod.GET)
     public ResponseData SelectHistory(HttpServletRequest request){
-        List<History> historyList=null;
+        List<Map<String,Object>> historyList=null;
         int userId = AccessTokenUtil.getUserId(request);
         try{
             historyList = historyService.selectHistoryByUerId(userId);

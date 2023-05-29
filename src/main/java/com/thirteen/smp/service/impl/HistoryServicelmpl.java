@@ -17,8 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.sql.Timestamp;
 import java.time.Duration;
 import java.time.Instant;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class HistoryServicelmpl implements HistoryService {
@@ -52,18 +51,26 @@ public class HistoryServicelmpl implements HistoryService {
     }
 
     @Override
-    public List<History> selectHistoryByUerId(int userId) {
+    public List<Map<String,Object>> selectHistoryByUerId(int userId) {
         User user=userMapper.selectById(userId);
         if(user==null){
             throw new UserNotExistsException("用户不存在");
         }
         List<History> historyList = historyMapper.selectHistoryByUserId(userId);
-//        historyList.forEach(history -> {
-//            Instant instant = history.getTime().toInstant();
-//            Instant newInstant = instant.plus(Duration.ofHours(8));
-//            history.setTime(Timestamp.from(newInstant));
-//        });
-        return historyList;
+        List<Map<String,Object>> finalHitory = new ArrayList<>();
+        historyList.forEach(history -> {
+            Post post = postMapper.selectByPostId(history.getPostId());
+            Map<String ,Object> data = new LinkedHashMap<>();
+            data.put("id",history.getId());
+            data.put("postId",history.getPostId());
+            data.put("userId",history.getUserId());
+            data.put("time",history.getTime());
+            data.put("profilePic",user.getProfilePic());
+            data.put("content",post.getContent());
+            data.put("nickname",user.getNickname());
+            finalHitory.add(data);
+        });
+        return finalHitory;
     }
 
     @Override

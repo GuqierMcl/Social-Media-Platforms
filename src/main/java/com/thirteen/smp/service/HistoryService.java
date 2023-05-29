@@ -3,6 +3,8 @@ package com.thirteen.smp.service;
 import com.thirteen.smp.pojo.History;
 
 import java.util.List;
+import java.util.Map;
+
 /**
  * 浏览记录模块业务接口
  */
@@ -18,7 +20,7 @@ public interface HistoryService {
      * @param userId 用户id
      * @return 返回用户浏览记录对象列表
      */
-    List<History> selectHistoryByUerId(int userId);
+    List<Map<String,Object>> selectHistoryByUerId(int userId);
     /**
      * 删除全部浏览记录
      * @param userId 用户id
