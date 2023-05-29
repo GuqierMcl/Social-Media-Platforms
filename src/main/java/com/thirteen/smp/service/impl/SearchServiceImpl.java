@@ -1,14 +1,16 @@
 package com.thirteen.smp.service.impl;
 
 import com.thirteen.smp.exception.HistoryNotExistException;
-import com.thirteen.smp.mapper.PostMapper;
-import com.thirteen.smp.mapper.UserMapper;
+import com.thirteen.smp.mapper.*;
 import com.thirteen.smp.pojo.Post;
 import com.thirteen.smp.pojo.User;
 import com.thirteen.smp.service.SearchService;
+import com.thirteen.smp.utils.AccessTokenUtil;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,13 +21,54 @@ public class SearchServiceImpl implements SearchService {
     PostMapper postMapper;
     @Autowired
     UserMapper userMapper;
+    @Autowired
+    LikeMapper likeMapper;
+    @Autowired
+    CommentMapper commentMapper;
+    @Autowired
+    FollowMapper followMapper;
     @Override
-    public Map<String, Object> globalSearch(String query) {
+    public Map<String, Object> globalSearch(String query, HttpServletRequest request) {
         Map<String,Object> datas = new LinkedHashMap<>();
         List<Post> posts = postMapper.selectByQuery(query);
         List<User> users = userMapper.selectByQuery(query);
-        datas.put("posts",posts);
-        datas.put("users",users);
+        List<Map<String,Object>> finalPosts =new ArrayList<>();
+        posts.forEach(post -> {
+            User user = userMapper.selectById(post.getUserId());
+            Map<String,Object> data = new LinkedHashMap<>();
+            data.put("content",post.getContent());
+            data.put("img",post.getImg());
+            data.put("profilePic",user.getProfilePic());
+            data.put("userId",post.getUserId());
+            data.put("name",user.getNickname());
+            data.put("postId",post.getPostId());
+            data.put("date",post.getPostTime());
+            data.put("likeNum",post.getLikeNum());
+            data.put("isLike",likeMapper.jugeLiked(post.getPostId(), AccessTokenUtil.getUserId(request))!=0);
+            data.put("commentNum",commentMapper.selectByPostId(post.getPostId()).size());
+            finalPosts.add(data);
+        });
+        List<Map<String,Object>> finalUsers =new ArrayList<>();
+        users.forEach(user -> {;
+            Map<String,Object> data = new LinkedHashMap<>();
+            data.put("coverPic",user.getCoverPic());
+            data.put("email",user.getEmail());
+            data.put("facebook",user.getFacebook());
+            data.put("nickname",user.getNickname());
+            data.put("password",user.getPassword());
+            data.put("profilePic",user.getProfilePic());
+            data.put("qq",user.getQq());
+            data.put("twitter",user.getTwitter());
+            data.put("userId",user.getUserId());
+            data.put("userLang",user.getUserLang());
+            data.put("userLocation",user.getUserLocation());
+            data.put("username",user.getUsername());
+            data.put("weibo",user.getWeibo());
+            data.put(" isFollowing",followMapper.selectByUserId(AccessTokenUtil.getUserId(request),user.getUserId())!=null);
+            finalUsers.add(data);
+        });
+        datas.put("posts",finalPosts);
+        datas.put("users",finalUsers);
         return datas;
     }
 }

@@ -12,12 +12,10 @@ import com.thirteen.smp.utils.AccessTokenUtil;
 import com.thirteen.smp.utils.ResponseUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -34,11 +32,11 @@ public class HistoryController {
     HistoryService historyService;
 
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseData addHistory(HttpServletRequest request,@RequestParam("postId") Integer postId){
+    public ResponseData addHistory(HttpServletRequest request, @RequestBody Map<String,String> data){
 
         int userId = AccessTokenUtil.getUserId(request);
         try{
-            historyService.addHistory(postId,userId);
+            historyService.addHistory(Integer.parseInt(data.get("postId")),userId);
             return ResponseUtil.getSuccessRes(null);
         }
         catch (PostNotExistException e){
