@@ -60,16 +60,18 @@ public class HistoryServicelmpl implements HistoryService {
         List<History> historyList = historyMapper.selectHistoryByUserId(userId);
         List<Map<String,Object>> finalHitory = new ArrayList<>();
         historyList.forEach(history -> {
+
             Post post = postMapper.selectByPostId(history.getPostId());
+            User user1 = userMapper.selectById(post.getUserId());
             Map<String ,Object> data = new LinkedHashMap<>();
             data.put("id",history.getId());
             data.put("postId",history.getPostId());
             data.put("userId",history.getUserId());
             SimpleDateFormat dateformat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             data.put("time",dateformat.format(history.getTime()));
-            data.put("profilePic",user.getProfilePic());
+            data.put("profilePic",user1.getProfilePic());
             data.put("content",post.getContent());
-            data.put("nickname",user.getNickname());
+            data.put("nickname",user1.getNickname());
             finalHitory.add(data);
         });
         return finalHitory;
