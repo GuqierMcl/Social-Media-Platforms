@@ -2,6 +2,7 @@ package com.thirteen.smp.service.impl;
 
 import com.thirteen.smp.exception.HistoryNotExistException;
 import com.thirteen.smp.mapper.*;
+import com.thirteen.smp.pojo.Favorite;
 import com.thirteen.smp.pojo.Post;
 import com.thirteen.smp.pojo.User;
 import com.thirteen.smp.service.SearchService;
@@ -28,6 +29,9 @@ public class SearchServiceImpl implements SearchService {
     CommentMapper commentMapper;
     @Autowired
     FollowMapper followMapper;
+
+    @Autowired
+    FavoriteMapper favoriteMapper;
     @Override
     public Map<String, Object> globalSearch(String query, HttpServletRequest request) {
         Map<String,Object> datas = new LinkedHashMap<>();
@@ -48,6 +52,10 @@ public class SearchServiceImpl implements SearchService {
             data.put("likeNum",post.getLikeNum());
             data.put("isLike",likeMapper.jugeLiked(post.getPostId(), AccessTokenUtil.getUserId(request))!=0);
             data.put("commentNum",commentMapper.selectByPostId(post.getPostId()).size());
+            Favorite favorite = new Favorite();
+            favorite.setPostId(post.getPostId());
+            favorite.setUserId(AccessTokenUtil.getUserId(request));
+            data.put(" isStaring",favoriteMapper.selectByUserIdAndPostId(favorite)!=null);
             finalPosts.add(data);
         });
         List<Map<String,Object>> finalUsers =new ArrayList<>();

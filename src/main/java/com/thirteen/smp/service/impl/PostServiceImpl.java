@@ -2,6 +2,7 @@ package com.thirteen.smp.service.impl;
 
 import com.thirteen.smp.exception.PostNotExistException;
 import com.thirteen.smp.mapper.*;
+import com.thirteen.smp.pojo.Favorite;
 import com.thirteen.smp.pojo.Post;
 import com.thirteen.smp.pojo.User;
 import com.thirteen.smp.service.PostService;
@@ -28,6 +29,9 @@ public class PostServiceImpl implements PostService {
 
     @Autowired
     private FollowMapper followMapper;// 使用Spring自动注入工具类
+
+    @Autowired
+    private FavoriteMapper favoriteMapper;
 
     @Override
     @Transactional // 启用事务
@@ -81,6 +85,10 @@ public class PostServiceImpl implements PostService {
                 result.put("likeNum",post.getLikeNum());
                 result.put("isLike",likeMapper.jugeLiked(post.getPostId(),userid)!=0);
                 result.put("commentNum",commentMapper.selectCountByPostId(post.getPostId()));
+                Favorite favorite = new Favorite();
+                favorite.setPostId(post.getPostId());
+                favorite.setUserId(userid);
+                result.put(" isStaring",favoriteMapper.selectByUserIdAndPostId(favorite)!=null);
                 results.add(result);
             });
             return results;
@@ -125,6 +133,10 @@ public class PostServiceImpl implements PostService {
                 result.put("likeNum", post.getLikeNum());
                 result.put("isLike", likeMapper.jugeLiked(post.getPostId(), userid) != 0);
                 result.put("commentNum",commentMapper.selectCountByPostId(post.getPostId()));
+                Favorite favorite = new Favorite();
+                favorite.setPostId(post.getPostId());
+                favorite.setUserId(userid);
+                result.put(" isStaring",favoriteMapper.selectByUserIdAndPostId(favorite)!=null);
                 results.add(result);
             });
             return results;
