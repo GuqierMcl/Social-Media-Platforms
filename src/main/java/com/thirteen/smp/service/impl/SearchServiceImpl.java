@@ -50,7 +50,7 @@ public class SearchServiceImpl implements SearchService {
             SimpleDateFormat dateformat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             data.put("date",dateformat.format(post.getPostTime()));
             data.put("likeNum",post.getLikeNum());
-            data.put("isLike",likeMapper.jugeLiked(post.getPostId(), AccessTokenUtil.getUserId(request))!=0);
+            data.put("isLike",likeMapper.judgeLiked(post.getPostId(), AccessTokenUtil.getUserId(request))!=0);
             data.put("commentNum",commentMapper.selectByPostId(post.getPostId()).size());
             Favorite favorite = new Favorite();
             favorite.setPostId(post.getPostId());

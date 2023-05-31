@@ -22,13 +22,13 @@ public interface HistoryMapper {
      * @param postId 帖子ID userId 用户Id
      * @return 是否存在
      */
-    int jugeHistory(int postId, int userId);
+    int judgeHistory(int postId, int userId);
     /**
      * 判断是否是用户自己的浏览记录
      * @param postId 帖子ID userId 用户Id id 浏览记录id
      * @return 是否是自己的
      */
-    int jugeHistory2(int postId, int userId,int id);
+    int judgeHistory2(int postId, int userId,int Id);
     /**
      * 更新浏览记录
      * @param postId 帖子ID userId 用户Id time 最近浏览时间
@@ -49,14 +49,14 @@ public interface HistoryMapper {
     int deleteAllHistoryById(int userId);
     /**
      * 删除单个浏览记录
-     * @param id 浏览记录Id
+     * @param Id 浏览记录Id
      * @return 是否删除成功
      */
-    int deleteHistoryById(int id);
+    int deleteHistoryById(int Id);
     /**
      * 获取单个浏览记录
-     * @param id 浏览记录id
+     * @param Id 浏览记录id
      * @return 浏览记录对象
      */
-    History selectHistoryById(int id);
+    History selectHistoryById(int Id);
 }

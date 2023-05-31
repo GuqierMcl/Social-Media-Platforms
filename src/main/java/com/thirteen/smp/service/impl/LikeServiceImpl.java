@@ -39,7 +39,7 @@ public class LikeServiceImpl implements LikeService {
             throw new UserNotExistsException("用户不存在");
         }
         int flag = 0;
-        flag = likemapper.jugeLiked(postId, userId);
+        flag = likemapper.judgeLiked(postId, userId);
         if (flag != 0) {
             throw new LikeExistException("该用户已经点赞过了");
         }
@@ -71,7 +71,7 @@ public class LikeServiceImpl implements LikeService {
             throw new UserNotExistsException("用户不存在");
         }
         int flag = 0;
-        flag = likemapper.jugeLiked(postId, userId);
+        flag = likemapper.judgeLiked(postId, userId);
         if (flag == 0) {
             throw new LikeExistException("该用户还没点赞");
         }

@@ -83,7 +83,7 @@ public class PostServiceImpl implements PostService {
                 result.put("postId",post.getPostId());
                 result.put("date",new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(post.getPostTime()));
                 result.put("likeNum",post.getLikeNum());
-                result.put("isLike",likeMapper.jugeLiked(post.getPostId(),userid)!=0);
+                result.put("isLike",likeMapper.judgeLiked(post.getPostId(),userid)!=0);
                 result.put("commentNum",commentMapper.selectCountByPostId(post.getPostId()));
                 Favorite favorite = new Favorite();
                 favorite.setPostId(post.getPostId());
@@ -131,7 +131,7 @@ public class PostServiceImpl implements PostService {
                 result.put("date", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(post.getPostTime()));
                 System.out.println(post.getPostTime());
                 result.put("likeNum", post.getLikeNum());
-                result.put("isLike", likeMapper.jugeLiked(post.getPostId(), userid) != 0);
+                result.put("isLike", likeMapper.judgeLiked(post.getPostId(), userid) != 0);
                 result.put("commentNum",commentMapper.selectCountByPostId(post.getPostId()));
                 Favorite favorite = new Favorite();
                 favorite.setPostId(post.getPostId());

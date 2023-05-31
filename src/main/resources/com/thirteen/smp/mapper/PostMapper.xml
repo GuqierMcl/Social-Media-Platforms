@@ -22,7 +22,7 @@
     <select id="selectByQuerySelf" resultType="Post">
         select *
         from t_post
-        where content like "%"#{query}"%" and user_id=#{userid}
+        where content like "%"#{query}"%" and user_id=#{userId}
     </select>
 
     <select id="selectAllPost" resultType="com.thirteen.smp.pojo.Post">

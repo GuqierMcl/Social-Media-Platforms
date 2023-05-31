@@ -18,24 +18,24 @@ import java.util.Map;
 public interface LikeMapper {
     /**
      * 通过帖子ID获取点赞数
-     * @param postid 帖子ID
+     * @param postId 帖子ID
      * @return 点赞数量
      */
-    List<Integer> getLikeUserIdByPostId(int postid);
+    List<Integer> getLikeUserIdByPostId(int postId);
 
     /**
      * 进行点赞
-     * @param postid 帖子ID userid 用户id likeDate 点赞时间
+     * @param postId 帖子ID userid 用户id likeDate 点赞时间
      * @return 是否点赞成功
      */
-    int giveLike(int postid, int userid, Timestamp likeDate);
+    int giveLike(int postId, int userId, Timestamp likeDate);
 
     /**
      * 判断是否已经点过赞
-     * @param postId 帖子ID  userid 用户id
+     * @param postId 帖子ID  userId 用户id
      * @return 是否点过赞
      */
-    int jugeLiked(int postId,int userid);
+    int judgeLiked(int postId,int userId);
     /**
      * 取消点赞
      * @param postId 帖子ID userId用户id

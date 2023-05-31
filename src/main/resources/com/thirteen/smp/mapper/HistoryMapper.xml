@@ -15,13 +15,13 @@
     </update>
     <delete id="deleteAllHistoryById">
         delete from t_history
-        where user_id=#{user_id}
+        where user_id=#{userId}
     </delete>
     <delete id="deleteHistoryById">
         delete from t_history
-        where id = #{id}
+        where id = #{Id}
     </delete>
-    <select id="jugeHistory" resultType="Integer">
+    <select id="judgeHistory" resultType="Integer">
         select count(*)
         from t_history
         where post_id=#{param1} and user_id=#{param2}
@@ -34,9 +34,9 @@
     <select id="selectHistoryById" resultType="History">
         select *
         from t_history
-        where id=#{id}
+        where id=#{Id}
     </select>
-    <select id="jugeHistory2" resultType="Integer">
+    <select id="judgeHistory2" resultType="Integer">
         select count(*)
         from t_history
         where post_id=#{param1} and user_id=#{param2} and id=#{param3}
