@@ -76,7 +76,6 @@ public class StatisticsServiceImpl implements StatisticsService {
         });
 
         userMapList.sort((user1, user2) -> {
-            // TODO 逻辑需要修改
             // 获取粉丝数
             List<User> fans1 = followMapper.selectByFollowedUserId((Integer) user1.get("userId"));
             List<User> fans2 = followMapper.selectByFollowedUserId((Integer) user2.get("userId"));
@@ -87,20 +86,39 @@ public class StatisticsServiceImpl implements StatisticsService {
             List<Post> posts2 = postMapper.selectByUserId((Integer) user2.get("userId"));
             user1.put("PostNum", posts1.size());
             user2.put("PostNum", posts2.size());
-            // 获取点赞数
-            List<Comment> comments1 = likeMapper.selectLikeCommentByUserId((Integer) user1.get("userId"));
-            List<Comment> comments2 = likeMapper.selectLikeCommentByUserId((Integer) user2.get("userId"));
-            List<Post> likePosts1 = likeMapper.selectLikePostByUserId((Integer) user1.get("userId"));
-            List<Post> likePosts2 = likeMapper.selectLikePostByUserId((Integer) user2.get("userId"));
-            user1.put("commentLikeNum", comments1.size());
-            user2.put("commentLikeNum", comments2.size());
-            user1.put("postLikeNum", likePosts1.size());
-            user2.put("postLikeNum", likePosts2.size());
-            // 获取收藏量
-            List<Favorite> favorites1 = favoriteMapper.selectByUserId((Integer) user1.get("userId"));
-            List<Favorite> favorites2 = favoriteMapper.selectByUserId((Integer) user2.get("userId"));
-            user1.put("favoriteNum", favorites1.size());
-            user2.put("favoriteNum", favorites2.size());
+            // 获取被点赞数
+            int likeNum1 = 0;
+            int likeNum2 = 0;
+            List<Comment> comments1 = commentMapper.selectByUserId((Integer) user1.get("userId"));
+            List<Comment> comments2 = commentMapper.selectByUserId((Integer) user2.get("userId"));
+            for (Comment comment : comments1) {
+                likeNum1 += likeMapper.selectCommentLikeNum(comment.getCommentId());
+            }
+            for (Comment comment : comments2) {
+                likeNum2 += likeMapper.selectCommentLikeNum(comment.getCommentId());
+            }
+            for (Post post : posts1) {
+                likeNum1 += post.getLikeNum();
+            }
+            for (Post post : posts2) {
+                likeNum2 += post.getLikeNum();
+            }
+            user1.put("beLikeNum", likeNum1);
+            user2.put("beLikeNum", likeNum2);
+
+            // 获取被收藏量
+            int favoriteNum1 = 0;
+            int favoriteNum2 = 0;
+            for (Post post : posts1) {
+                List<Favorite> favorites = favoriteMapper.selectByPostId(post.getPostId());
+                favoriteNum1 += favorites.size();
+            }
+            for (Post post : posts2) {
+                List<Favorite> favorites = favoriteMapper.selectByPostId(post.getPostId());
+                favoriteNum2 += favorites.size();
+            }
+            user1.put("beFavoriteNum", favoriteNum1);
+            user2.put("beFavoriteNum", favoriteNum2);
             // 获取评论量
             List<Comment> comments11 = commentMapper.selectByUserId((Integer) user1.get("userId"));
             List<Comment> comments22 = commentMapper.selectByUserId((Integer) user2.get("userId"));
@@ -121,10 +139,10 @@ public class StatisticsServiceImpl implements StatisticsService {
 
             // 根据排序规则进行排序
             double hotness1 = fans1.size() * 0.3 + posts1.size() * 0.3
-                    + (comments1.size() + likePosts1.size()) * 0.15 + favorites1.size() * 0.1
+                    + likeNum1 * 0.15 + favoriteNum1 * 0.1
                     + comments11.size() * 0.1 + followUsers1.size() * 0.05;
             double hotness2 = fans2.size() * 0.3 + posts2.size() * 0.3
-                    + (comments2.size() + likePosts2.size()) * 0.15 + favorites2.size() * 0.1
+                    + likeNum2 * 0.15 + favoriteNum2 * 0.1
                     + comments22.size() * 0.1 + followUsers2.size() * 0.05;
             user1.put("hotness", hotness1);
             user2.put("hotness", hotness2);
