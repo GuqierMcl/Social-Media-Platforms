@@ -19,7 +19,7 @@
         from t_post
         where content like "%"#{query}"%"
     </select>
-    <select id="selectByQuery_self" resultType="Post">
+    <select id="selectByQuerySelf" resultType="Post">
         select *
         from t_post
         where content like "%"#{query}"%" and user_id=#{userid}

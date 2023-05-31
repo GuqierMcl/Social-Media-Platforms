@@ -38,11 +38,10 @@ public class PostController {
         }
         List<Post> posts = null;
         try {
-
             if (type.equals("home")) {
                 posts = postService.queryPost(query);
             } else {
-                posts = postService.queryPost_self(query, AccessTokenUtil.getUserId(request));
+                posts = postService.queryPostSelf(query, AccessTokenUtil.getUserId(request));
             }
         } catch (PostNotExistException e) {
             return ResponseUtil.getErrorRes(607);
@@ -57,14 +56,14 @@ public class PostController {
         List<Map<String,Object>> results=null;
         if (userId != null) {
             try {
-                results = postService.getPost_self(userId);
+                results = postService.getPostSelf(userId);
                 return ResponseUtil.getSuccessRes(results);
             } catch (PostNotExistException e) {
                 return ResponseUtil.getErrorRes(604);
             }
         }else {
             try {
-                results = postService.getPost_self_follow(AccessTokenUtil.getUserId(request));
+                results = postService.getPostSelfFollow(AccessTokenUtil.getUserId(request));
                 return ResponseUtil.getSuccessRes(results);
             } catch (PostNotExistException e) {
                 return ResponseUtil.getErrorRes(605);

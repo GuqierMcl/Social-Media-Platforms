@@ -57,7 +57,7 @@ public interface PostMapper {
      * @param query 搜索内容
      * @return 帖子列表
      */
-    List<Post> selectByQuery_self(@Param("query")String query, @Param("userid")int userid);
+    List<Post> selectByQuerySelf(@Param("query")String query, @Param("userid")int userid);
 
     /**
      * 新增帖子
