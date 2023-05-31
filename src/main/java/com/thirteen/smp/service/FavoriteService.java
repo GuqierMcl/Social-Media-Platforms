@@ -3,6 +3,8 @@ package com.thirteen.smp.service;
 import com.thirteen.smp.pojo.Favorite;
 
 import java.util.List;
+import java.util.Map;
+
 /**
  * 收藏夹模块业务接口
  * @author 庄可欣
@@ -10,10 +12,11 @@ import java.util.List;
 public interface FavoriteService {
     /**
      * 通过用户Id获取用户所有收藏夹信息
+     *
      * @param userId 当前用户Id
      * @return 收藏夹列表
      */
-    List<Favorite> getFavorite(Integer userId);
+    List<Map<String, Object>> getFavorite(Integer userId);
 
     /**
      * 添加收藏

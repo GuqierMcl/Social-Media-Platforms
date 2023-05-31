@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 收藏夹模块控制器
@@ -29,7 +30,7 @@ public class FavoriteController {
     @RequestMapping(method = RequestMethod.GET)
     public Object getFavorite(HttpServletRequest request) {
         Integer userId = AccessTokenUtil.getUserId(request);
-        List<Favorite> favorite = favoriteService.getFavorite(userId);
+        List<Map<String, Object>> favorite = favoriteService.getFavorite(userId);
         return ResponseUtil.getSuccessRes(favorite);
     }
 
