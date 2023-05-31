@@ -60,7 +60,6 @@ public class HistoryServicelmpl implements HistoryService {
         List<History> historyList = historyMapper.selectHistoryByUserId(userId);
         List<Map<String,Object>> finalHitory = new ArrayList<>();
         historyList.forEach(history -> {
-
             Post post = postMapper.selectByPostId(history.getPostId());
             User user1 = userMapper.selectById(post.getUserId());
             Map<String ,Object> data = new LinkedHashMap<>();
