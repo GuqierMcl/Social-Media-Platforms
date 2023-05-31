@@ -48,6 +48,6 @@ public class StatisticsController {
             e.printStackTrace();
             return ResponseUtil.getErrorRes(0);
         }
-        return hotUserList;
+        return ResponseUtil.getSuccessRes(hotUserList);
     }
 }
