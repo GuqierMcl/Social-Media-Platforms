@@ -2,6 +2,7 @@ package com.thirteen.smp.controller;
 
 import com.thirteen.smp.exception.HistoryNotExistException;
 import com.thirteen.smp.service.SearchService;
+import com.thirteen.smp.utils.AccessTokenUtil;
 import com.thirteen.smp.utils.ResponseUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,7 @@ public class SearchController {
     @RequestMapping(method = RequestMethod.GET)
     public Object globalSearch(String query, HttpServletRequest request){
         try{
-            Map<String,Object> datas = searchService.globalSearch(query,request);
+            Map<String,Object> datas = searchService.globalSearch(query, AccessTokenUtil.getUserId(request));
             return ResponseUtil.getSuccessRes(datas);
         } catch (HistoryNotExistException e){
             return ResponseUtil.getErrorRes(904);

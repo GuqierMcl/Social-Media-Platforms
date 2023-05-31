@@ -65,9 +65,9 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<Map<String,Object>> getPostSelf(int userid) throws PostNotExistException {
+    public List<Map<String,Object>> getPostSelf(int userId) throws PostNotExistException {
         List<Post> posts = null;
-        posts = postMapper.selectByUserId(userid);
+        posts = postMapper.selectByUserId(userId);
         if(posts==null||posts.size()==0){
             throw new PostNotExistException("该用户没有发布帖子");
         } else{
@@ -83,11 +83,11 @@ public class PostServiceImpl implements PostService {
                 result.put("postId",post.getPostId());
                 result.put("date",new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(post.getPostTime()));
                 result.put("likeNum",post.getLikeNum());
-                result.put("isLike",likeMapper.judgeLiked(post.getPostId(),userid)!=0);
+                result.put("isLike",likeMapper.judgeLiked(post.getPostId(),userId)!=0);
                 result.put("commentNum",commentMapper.selectCountByPostId(post.getPostId()));
                 Favorite favorite = new Favorite();
                 favorite.setPostId(post.getPostId());
-                favorite.setUserId(userid);
+                favorite.setUserId(userId);
                 result.put("isStaring",favoriteMapper.selectByUserIdAndPostId(favorite)!=null);
                 results.add(result);
             });
@@ -97,10 +97,10 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<Map<String,Object>> getPostSelfFollow(int userid) throws PostNotExistException {
+    public List<Map<String,Object>> getPostSelfFollow(int userId) throws PostNotExistException {
         List<Post> posts = null;
         posts = postMapper.selectAllPost();
-        List<User> Follows = followMapper.selectByFollowerUserId(userid);
+        List<User> Follows = followMapper.selectByFollowerUserId(userId);
         List<Integer> followIds = new ArrayList<>();
         Follows.forEach(follow->{
             followIds.add(follow.getUserId());
@@ -108,7 +108,7 @@ public class PostServiceImpl implements PostService {
         List<Post> finalPosts = new ArrayList<>();
         int count=3;
         for(int i=0;i<posts.size();i++){
-            if(followIds.contains(posts.get(i).getUserId())||posts.get(i).getUserId()==userid){
+            if(followIds.contains(posts.get(i).getUserId())||posts.get(i).getUserId()==userId){
                 finalPosts.add(posts.get(i));
             } else if(count>0){
                 finalPosts.add(posts.get(i));
@@ -131,11 +131,11 @@ public class PostServiceImpl implements PostService {
                 result.put("date", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(post.getPostTime()));
                 System.out.println(post.getPostTime());
                 result.put("likeNum", post.getLikeNum());
-                result.put("isLike", likeMapper.judgeLiked(post.getPostId(), userid) != 0);
+                result.put("isLike", likeMapper.judgeLiked(post.getPostId(), userId) != 0);
                 result.put("commentNum",commentMapper.selectCountByPostId(post.getPostId()));
                 Favorite favorite = new Favorite();
                 favorite.setPostId(post.getPostId());
-                favorite.setUserId(userid);
+                favorite.setUserId(userId);
                 result.put("isStaring",favoriteMapper.selectByUserIdAndPostId(favorite)!=null);
                 results.add(result);
             });
@@ -155,9 +155,9 @@ public class PostServiceImpl implements PostService {
         }
     }
     @Override
-    public List<Post> queryPostSelf(String query,int userid) throws PostNotExistException {
+    public List<Post> queryPostSelf(String query,int userId) throws PostNotExistException {
         List<Post> posts = null;
-        posts = postMapper.selectByQuerySelf(query,userid);
+        posts = postMapper.selectByQuerySelf(query,userId);
         if(posts.size()==0){
             throw new PostNotExistException("未搜索到相关帖子");
         } else{

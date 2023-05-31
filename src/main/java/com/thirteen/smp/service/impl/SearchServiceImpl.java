@@ -33,7 +33,7 @@ public class SearchServiceImpl implements SearchService {
     @Autowired
     FavoriteMapper favoriteMapper;
     @Override
-    public Map<String, Object> globalSearch(String query, HttpServletRequest request) {
+    public Map<String, Object> globalSearch(String query, Integer userId) {
         Map<String,Object> datas = new LinkedHashMap<>();
         List<Post> posts = postMapper.selectByQuery(query);
         List<User> users = userMapper.selectByQuery(query);
@@ -50,11 +50,11 @@ public class SearchServiceImpl implements SearchService {
             SimpleDateFormat dateformat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             data.put("date",dateformat.format(post.getPostTime()));
             data.put("likeNum",post.getLikeNum());
-            data.put("isLike",likeMapper.judgeLiked(post.getPostId(), AccessTokenUtil.getUserId(request))!=0);
+            data.put("isLike",likeMapper.judgeLiked(post.getPostId(), userId)!=0);
             data.put("commentNum",commentMapper.selectByPostId(post.getPostId()).size());
             Favorite favorite = new Favorite();
             favorite.setPostId(post.getPostId());
-            favorite.setUserId(AccessTokenUtil.getUserId(request));
+            favorite.setUserId(userId);
             data.put("isStaring",favoriteMapper.selectByUserIdAndPostId(favorite)!=null);
             finalPosts.add(data);
         });
@@ -74,7 +74,7 @@ public class SearchServiceImpl implements SearchService {
             data.put("userLocation",user.getUserLocation());
             data.put("username",user.getUsername());
             data.put("weibo",user.getWeibo());
-            data.put("isFollowing",followMapper.selectByUserId(AccessTokenUtil.getUserId(request),user.getUserId())!=null);
+            data.put("isFollowing",followMapper.selectByUserId(userId,user.getUserId())!=null);
             finalUsers.add(data);
         });
         datas.put("posts",finalPosts);
