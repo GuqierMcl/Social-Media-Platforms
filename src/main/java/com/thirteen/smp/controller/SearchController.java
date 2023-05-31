@@ -12,6 +12,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Map;
 
+/**
+ * 搜索模块控制器
+ *
+ * @version 1.0
+ * @since 1.0
+ */
 @RestController
 @RequestMapping("/search")
 public class SearchController {
@@ -20,12 +26,12 @@ public class SearchController {
     SearchService searchService;
 
     @RequestMapping(method = RequestMethod.GET)
-    public Object globalSearch(String query, HttpServletRequest request){
-        try{
-            Map<String,Object> datas = searchService.globalSearch(query, AccessTokenUtil.getUserId(request));
-            return ResponseUtil.getSuccessRes(datas);
-        } catch (HistoryNotExistException e){
-            return ResponseUtil.getErrorRes(904);
+    public Object globalSearch(String query, HttpServletRequest request) {
+        try {
+            Map<String, Object> datas = searchService.globalSearch(query, AccessTokenUtil.getUserId(request));
+            return ResponseUtil.getSuccessResponse(datas);
+        } catch (HistoryNotExistException e) {
+            return ResponseUtil.getErrorResponse(904);
         }
     }
 }

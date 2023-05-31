@@ -10,7 +10,6 @@ import java.util.Map;
 /**
  * 数据库t_like表Mapper接口
  *
- * @author 张力文
  * @version 1.0
  * @since 1.0
  */

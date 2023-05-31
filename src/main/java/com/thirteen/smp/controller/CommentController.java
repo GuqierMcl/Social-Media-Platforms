@@ -5,7 +5,6 @@ import com.thirteen.smp.exception.PostNotExistException;
 import com.thirteen.smp.pojo.Comment;
 import com.thirteen.smp.response.ResponseData;
 import com.thirteen.smp.service.CommentService;
-import com.thirteen.smp.service.impl.CommentServiceImpl;
 import com.thirteen.smp.utils.AccessTokenUtil;
 import com.thirteen.smp.utils.ResponseUtil;
 import jakarta.servlet.http.HttpServletRequest;
@@ -18,7 +17,6 @@ import java.util.Map;
 /**
  * 评论模块控制器
  *
- * @author 庄可欣
  * @version 1.0
  * @since 1.0
  */
@@ -33,9 +31,9 @@ public class CommentController {
     @RequestMapping(value = "/get-number", method = RequestMethod.GET)
     public ResponseData getNumber(Integer postId) {
         try {
-            return ResponseUtil.getSuccessRes(commentService.getCount(postId));
+            return ResponseUtil.getSuccessResponse(commentService.getCount(postId));
         } catch (PostNotExistException e) {
-            return ResponseUtil.getErrorRes(601); //帖子不存在
+            return ResponseUtil.getErrorResponse(601); //帖子不存在
         }
     }
 
@@ -43,9 +41,9 @@ public class CommentController {
     public ResponseData getComments(Integer postId, HttpServletRequest request) {
         Integer userId = AccessTokenUtil.getUserId(request);
         try {
-            return ResponseUtil.getSuccessRes(commentService.getComments(postId, userId));
+            return ResponseUtil.getSuccessResponse(commentService.getComments(postId, userId));
         } catch (PostNotExistException e) {
-            return ResponseUtil.getErrorRes(601);
+            return ResponseUtil.getErrorResponse(601);
         }
     }
 
@@ -58,14 +56,14 @@ public class CommentController {
         try {
             res = commentService.publishComment(comment);
         } catch (PostNotExistException e) {
-            return ResponseUtil.getErrorRes(601);
+            return ResponseUtil.getErrorResponse(601);
         } catch (CommentNotExistException e) {
-            return ResponseUtil.getErrorRes(602); //评论不存在
+            return ResponseUtil.getErrorResponse(602); //评论不存在
         }
         if (res) {
-            return ResponseUtil.getSuccessRes(null);
+            return ResponseUtil.getSuccessResponse(null);
         } else {
-            return ResponseUtil.getErrorRes(501); //更新数据库失败
+            return ResponseUtil.getErrorResponse(501); //更新数据库失败
         }
     }
 
@@ -73,9 +71,9 @@ public class CommentController {
     public ResponseData deleteComment(Integer commentId) {
         boolean res = commentService.deleteComment(commentId);
         if (res) {
-            return ResponseUtil.getSuccessRes(null);
+            return ResponseUtil.getSuccessResponse(null);
         } else {
-            return ResponseUtil.getErrorRes(501);
+            return ResponseUtil.getErrorResponse(501);
         }
     }
 }

@@ -12,11 +12,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * 聊天模块控制器
+ *
+ * @version 1.0
+ * @since 1.0
+ */
 @RestController
 @RequestMapping("/chat")
 public class ChatController {
@@ -38,12 +43,12 @@ public class ChatController {
         try {
             res = chatService.sendMsg(msg);
         } catch (UserNotExistsException e) {
-            return ResponseUtil.getErrorRes(401);
+            return ResponseUtil.getErrorResponse(401);
         }
         if (res) {
-            return ResponseUtil.getSuccessRes();
+            return ResponseUtil.getSuccessResponse();
         } else {
-            return ResponseUtil.getErrorRes(501);
+            return ResponseUtil.getErrorResponse(501);
         }
     }
 
@@ -54,16 +59,16 @@ public class ChatController {
         try {
             list = chatService.getMsg(currUserId, userId);
         } catch (UserNotExistsException e) {
-            return ResponseUtil.getErrorRes(401);
+            return ResponseUtil.getErrorResponse(401);
         }
-        return ResponseUtil.getSuccessRes(list);
+        return ResponseUtil.getSuccessResponse(list);
     }
 
     @RequestMapping(value = "/getlist", method = RequestMethod.GET)
     public Object getChatList(HttpServletRequest request) {
         Integer userId = AccessTokenUtil.getUserId(request);
         List<Map<String, Object>> chatList = chatService.getChatList(userId);
-        return ResponseUtil.getSuccessRes(chatList);
+        return ResponseUtil.getSuccessResponse(chatList);
     }
 
     @RequestMapping(value = "/read", method = RequestMethod.POST)
@@ -71,9 +76,9 @@ public class ChatController {
         Integer msgId = (Integer) param.get("msgId");
         boolean res = chatService.setIsRead(msgId);
         if (res) {
-            return ResponseUtil.getSuccessRes();
+            return ResponseUtil.getSuccessResponse();
         } else {
-            return ResponseUtil.getErrorRes(801);
+            return ResponseUtil.getErrorResponse(801);
         }
     }
 
@@ -84,28 +89,28 @@ public class ChatController {
         try {
             count = chatService.deleteChat(currUserId, userId);
         } catch (UserNotExistsException e) {
-            return ResponseUtil.getErrorRes(401);
+            return ResponseUtil.getErrorResponse(401);
         }
 
         Map<String, Object> map = new LinkedHashMap<>();
         map.put("deleteCount", count);
-        return ResponseUtil.getSuccessRes(map);
+        return ResponseUtil.getSuccessResponse(map);
     }
 
     @RequestMapping(value = "/del", method = RequestMethod.DELETE)
     public Object deleteChatMsg(Integer msgId) {
         int res = chatService.deleteChatMsg(msgId);
         if (res == 0) {
-            return ResponseUtil.getErrorRes(801);
+            return ResponseUtil.getErrorResponse(801);
         }
-        return ResponseUtil.getSuccessRes();
+        return ResponseUtil.getSuccessResponse();
     }
 
-    @RequestMapping(value = "/count",method = RequestMethod.GET)
-    public Object getNotReadCount(HttpServletRequest request){
+    @RequestMapping(value = "/count", method = RequestMethod.GET)
+    public Object getNotReadCount(HttpServletRequest request) {
         Integer userId = AccessTokenUtil.getUserId(request);
         int notReadCount = chatService.getNotReadCount(userId);
-        return ResponseUtil.getSuccessRes(notReadCount);
+        return ResponseUtil.getSuccessResponse(notReadCount);
     }
 
 }

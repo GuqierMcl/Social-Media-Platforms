@@ -17,7 +17,6 @@ import java.util.Map;
 /**
  * 收藏夹模块控制器
  *
- * @author 庄可欣
  * @version 1.0
  * @since 1.0
  */
@@ -31,7 +30,7 @@ public class FavoriteController {
     public Object getFavorite(HttpServletRequest request) {
         Integer userId = AccessTokenUtil.getUserId(request);
         List<Map<String, Object>> favorite = favoriteService.getFavorite(userId);
-        return ResponseUtil.getSuccessRes(favorite);
+        return ResponseUtil.getSuccessResponse(favorite);
     }
 
     @RequestMapping(method = RequestMethod.POST)
@@ -41,23 +40,23 @@ public class FavoriteController {
         try {
             result = favoriteService.addFavorite(new Favorite(null, postId, userId, null));
         } catch (PostNotExistException e) {
-            return ResponseUtil.getErrorRes(601);//帖子不存在
+            return ResponseUtil.getErrorResponse(601);//帖子不存在
         }
         if (result == 1) {
-            return ResponseUtil.getSuccessRes();
-        }else{
-            return ResponseUtil.getErrorRes(501);//数据库更新失败
+            return ResponseUtil.getSuccessResponse();
+        } else {
+            return ResponseUtil.getErrorResponse(501);//数据库更新失败
         }
     }
 
     @RequestMapping(method = RequestMethod.DELETE)
-    public Object cancelFavorite(HttpServletRequest request,Integer postId){
+    public Object cancelFavorite(HttpServletRequest request, Integer postId) {
         Integer userId = AccessTokenUtil.getUserId(request);
         int result = favoriteService.cancelFavorite(userId, postId);
-        if(result==0) {
-            return ResponseUtil.getErrorRes(501);//数据库更新失败
-        }else{
-            return ResponseUtil.getSuccessRes();
+        if (result == 0) {
+            return ResponseUtil.getErrorResponse(501);//数据库更新失败
+        } else {
+            return ResponseUtil.getSuccessResponse();
         }
     }
 }

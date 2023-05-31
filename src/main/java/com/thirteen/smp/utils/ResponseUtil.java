@@ -12,8 +12,12 @@ import java.util.Map;
  */
 public class ResponseUtil {
 
+    /**
+     * 静态结果码枚举Map
+     */
     private static Map<Integer, String> codeMap = new HashMap<>();
 
+    /* 结果码枚举初始化 */
     static {
         codeMap.put(1, "success");
         codeMap.put(0, "error");
@@ -61,22 +65,48 @@ public class ResponseUtil {
         codeMap.put(904,"type输入错误");
     }
 
+    /**
+     * 获取响应对象
+     * @param code 结果码
+     * @param data 数据对象
+     * @return 响应对象
+     */
     public static ResponseData getResponseData(int code, Object data) {
         return new ResponseData(code, codeMap.get(code), data);
     }
 
+    /**
+     * 获取响应对象
+     * @param code 结果码
+     * @return 响应对象
+     */
     public static ResponseData getResponseData(int code) {
         return new ResponseData(code, codeMap.get(code), null);
     }
 
-    public static ResponseData getSuccessRes(Object data ) {
+    /**
+     * 获取成功响应对象
+     * @param data 响应数据
+     * @return 响应对象
+     */
+    public static ResponseData getSuccessResponse(Object data ) {
         return ResponseUtil.getResponseData(1, data);
     }
-    public static ResponseData getSuccessRes() {
+
+    /**
+     * 获取成功响应对象
+     * @return 响应对象
+     */
+    public static ResponseData getSuccessResponse() {
         return ResponseUtil.getResponseData(1, null);
     }
 
-    public static ResponseData getErrorRes(int code) {
+    /**
+     * 获取错误响应对象
+     * @param code 结果码
+     * @return 响应对象
+     */
+    public static ResponseData getErrorResponse(int code) {
         return getResponseData(code);
     }
 

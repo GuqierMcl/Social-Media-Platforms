@@ -10,9 +10,25 @@ import java.sql.Timestamp;
  * @since 1.0
  */
 public class Favorite {
+
+    /**
+     * 收藏ID
+     */
     private Integer id;
+
+    /**
+     * 收藏帖子ID
+     */
     private Integer postId;
+
+    /**
+     * 收藏用户ID
+     */
     private Integer userId;
+
+    /**
+     * 收藏时间
+     */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Timestamp time;
 

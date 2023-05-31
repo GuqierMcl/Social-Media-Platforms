@@ -14,9 +14,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 用户操作控制器
+ * 用户模块控制器
  *
- * @author 顾建平
  * @version 1.0
  * @since 1.0
  */
@@ -33,7 +32,7 @@ public class UserController {
         User resultUser = null;
         resultUser = userService.getUserByUsername(userName);
         if (resultUser != null) {
-            return ResponseUtil.getSuccessRes(resultUser);
+            return ResponseUtil.getSuccessResponse(resultUser);
         } else {
             return ResponseUtil.getResponseData(401);
         }
@@ -56,9 +55,9 @@ public class UserController {
         try {
             userByUserIdPlusFollow = userService.getUserByUserIdPlusFollow(crrUserId, targetUserId);
         } catch (JsonProcessingException e) {
-            return ResponseUtil.getErrorRes(501);
+            return ResponseUtil.getErrorResponse(501);
         }
-        return ResponseUtil.getSuccessRes(userByUserIdPlusFollow);
+        return ResponseUtil.getSuccessResponse(userByUserIdPlusFollow);
     }
 
 
@@ -67,7 +66,7 @@ public class UserController {
         List<User> resultUsers = null;
         resultUsers = userService.getUserAll();
         if (resultUsers != null) {
-            return ResponseUtil.getSuccessRes(resultUsers);
+            return ResponseUtil.getSuccessResponse(resultUsers);
         } else {
             return ResponseUtil.getResponseData(0);
         }
@@ -83,22 +82,22 @@ public class UserController {
 
         boolean res = userService.updateUser(user);
         if (res) {
-            return ResponseUtil.getSuccessRes(null);
+            return ResponseUtil.getSuccessResponse(null);
         } else {
-            return ResponseUtil.getErrorRes(0);
+            return ResponseUtil.getErrorResponse(0);
         }
     }
 
     @RequestMapping(value = "/markline",method = RequestMethod.POST)
     public Object markOnline(HttpServletRequest request){
         Integer userId = AccessTokenUtil.getUserId(request);
-        return ResponseUtil.getSuccessRes(userService.markOnline(userId));
+        return ResponseUtil.getSuccessResponse(userService.markOnline(userId));
     }
 
     @RequestMapping(value = "/markline",method = RequestMethod.DELETE)
     public Object markOffline(HttpServletRequest request){
         Integer userId = AccessTokenUtil.getUserId(request);
-        return ResponseUtil.getSuccessRes(userService.markOffline(userId));
+        return ResponseUtil.getSuccessResponse(userService.markOffline(userId));
     }
 
 }

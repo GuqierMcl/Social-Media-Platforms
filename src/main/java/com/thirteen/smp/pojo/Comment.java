@@ -12,19 +12,35 @@ import java.sql.Timestamp;
  */
 public class Comment {
 
-    // TODO 庄可欣 编写Comment实体类
-
+    /**
+     * 评论ID
+     */
     private Integer commentId;
 
+    /**
+     * 评论所在帖子ID
+     */
     private Integer postId;
 
+    /**
+     * 评论用户ID
+     */
     private Integer userId;
 
+    /**
+     * 评论内容
+     */
     private String commentContent;
 
+    /**
+     * 评论时间
+     */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Timestamp commentDate;
 
+    /**
+     * 上级评论ID
+     */
     private Integer preCommentId;
 
     public Comment() {

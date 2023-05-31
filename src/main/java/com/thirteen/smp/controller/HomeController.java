@@ -12,6 +12,12 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * 主页模块控制器
+ *
+ * @version 1.0
+ * @since 1.0
+ */
 @RestController
 @RequestMapping("/home")
 public class HomeController {
@@ -19,7 +25,7 @@ public class HomeController {
     @Autowired
     private HomeService homeService;
 
-    @RequestMapping(value = "/user",method = RequestMethod.GET)
+    @RequestMapping(value = "/user", method = RequestMethod.GET)
     public Object recommendUser(HttpServletRequest request, Integer count) {
         Integer userId = AccessTokenUtil.getUserId(request);
         int cnt;
@@ -29,11 +35,11 @@ public class HomeController {
             cnt = count;
         }
         List<Map<String, Object>> recommendUser = homeService.getRecommendUser(cnt, userId);
-        return ResponseUtil.getSuccessRes(recommendUser);
+        return ResponseUtil.getSuccessResponse(recommendUser);
     }
 
-    @RequestMapping(value = "/post",method = RequestMethod.GET)
-    public Object postUpdate(HttpServletRequest request, Integer count){
+    @RequestMapping(value = "/post", method = RequestMethod.GET)
+    public Object postUpdate(HttpServletRequest request, Integer count) {
         Integer userId = AccessTokenUtil.getUserId(request);
         int cnt;
         if (count == null) {
@@ -42,14 +48,14 @@ public class HomeController {
             cnt = count;
         }
         List<Map<String, Object>> postUpdate = homeService.getPostUpdate(cnt, userId);
-        return ResponseUtil.getSuccessRes(postUpdate);
+        return ResponseUtil.getSuccessResponse(postUpdate);
     }
 
-    @RequestMapping(value = "/online",method = RequestMethod.GET)
-    public Object onlineFriend(HttpServletRequest request){
+    @RequestMapping(value = "/online", method = RequestMethod.GET)
+    public Object onlineFriend(HttpServletRequest request) {
         Integer userId = AccessTokenUtil.getUserId(request);
         List<Map<String, Object>> onlineFriend = homeService.getOnlineFriend(0, userId);
-        return ResponseUtil.getSuccessRes(onlineFriend);
+        return ResponseUtil.getSuccessResponse(onlineFriend);
     }
 
 }

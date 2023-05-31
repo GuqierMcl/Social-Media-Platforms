@@ -12,19 +12,35 @@ import java.sql.Timestamp;
  */
 public class Post {
 
-    // TODO 张力文 编写POST实体类
-
+    /**
+     * 帖子ID
+     */
     private Integer postId;
 
+    /**
+     * 发帖用户ID
+     */
     private Integer userId;
 
+    /**
+     * 帖子内容
+     */
     private String content;
 
+    /**
+     * 发帖时间
+     */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Timestamp postTime;
 
+    /**
+     * 点赞数
+     */
     private Integer likeNum;
 
+    /**
+     * 帖子图片
+     */
     private String img;
 
     public Post() {

@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 /**
  * 权限验证控制器
  *
- * @author 庄可欣
  * @version 1.0
  * @since 1.0
  */
@@ -34,17 +33,17 @@ public class AuthController {
         try {
             resultUser = authService.login(user);
         } catch (UserNotExistsException e) {
-            return ResponseUtil.getErrorRes(401); // 用户不存在
+            return ResponseUtil.getErrorResponse(401); // 用户不存在
         }
         if (resultUser == null) {
-            return ResponseUtil.getErrorRes(403); // 密码错误
+            return ResponseUtil.getErrorResponse(403); // 密码错误
         }
 
         // 为当前用户配置accessToken
         String accessToken = AccessTokenUtil.generateAccessToken(resultUser);
         AccessTokenUtil.bindTokenToCookies(accessToken, response);
 
-        return ResponseUtil.getSuccessRes(resultUser);
+        return ResponseUtil.getSuccessResponse(resultUser);
     }
 
     @RequestMapping(path = "/register", method = RequestMethod.POST)
@@ -54,21 +53,21 @@ public class AuthController {
         try {
             resultUser = authService.register(user);
         } catch (UserAlreadyExistsException e) {
-            return ResponseUtil.getErrorRes(402); //用户名已存在
+            return ResponseUtil.getErrorResponse(402); //用户名已存在
         }
 
         if (resultUser == null) {
-            return ResponseUtil.getErrorRes(501); //更新数据库失败
+            return ResponseUtil.getErrorResponse(501); //更新数据库失败
         }
 
-        return ResponseUtil.getSuccessRes(resultUser);
+        return ResponseUtil.getSuccessResponse(resultUser);
     }
 
     @RequestMapping(path = "/logout", method = RequestMethod.POST)
     public ResponseData logout(HttpServletResponse response, HttpServletRequest request) {
         AccessTokenUtil.removeTokenToCookies(response); //收回AccessToken
-        authService.logout(AccessTokenUtil.getUserId(request));
-        return ResponseUtil.getSuccessRes(null);
+        boolean res = authService.logout(AccessTokenUtil.getUserId(request));
+        return ResponseUtil.getSuccessResponse(res);
     }
 
 }

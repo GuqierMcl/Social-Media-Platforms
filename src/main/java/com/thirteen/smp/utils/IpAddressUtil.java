@@ -11,7 +11,16 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * IP归属地查询工具类
+ */
 public class IpAddressUtil {
+
+    /**
+     * 查询IP归属地
+     * @param ip ip地址
+     * @return 归属地信息
+     */
     public static String getIpAddress(String ip) {
 //        if ("127.0.0.1".equals(ip) || ip.startsWith("192.168")) {
 //            return "局域网 ip";
@@ -53,6 +62,11 @@ public class IpAddressUtil {
         return region;
     }
 
+    /**
+     * 查询IP归属地信息并转换为Map
+     * @param ip ip地址
+     * @return Map
+     */
     public static Map<String,String> getIpAddressToMap(String ip){
         String address = getIpAddress(ip);
         if (address != null) {

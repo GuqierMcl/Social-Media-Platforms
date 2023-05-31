@@ -13,7 +13,6 @@ import java.util.Map;
  */
 public interface CommentService {
 
-    // TODO 庄可欣 编写评论模块业务接口
 
     /**
      * 获取帖子对应的评论数量

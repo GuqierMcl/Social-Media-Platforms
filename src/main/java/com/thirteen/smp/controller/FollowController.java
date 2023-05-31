@@ -17,7 +17,7 @@ import java.util.Map;
 
 /**
  * 好友模块控制器
- * @author 顾建平
+ *
  * @version 1.0
  * @since 1.0
  */
@@ -28,52 +28,52 @@ public class FollowController {
     @Autowired
     private FollowService followService;
 
-    @RequestMapping(value = "/getFollowers",method = RequestMethod.GET)
-    public ResponseData getFollowers(HttpServletRequest request){
+    @RequestMapping(value = "/getFollowers", method = RequestMethod.GET)
+    public ResponseData getFollowers(HttpServletRequest request) {
         Integer currentUserId = AccessTokenUtil.getUserId(request);
         List<Map<String, Object>> fansInfo = followService.getFansInfo(currentUserId);
-        return ResponseUtil.getSuccessRes(fansInfo);
+        return ResponseUtil.getSuccessResponse(fansInfo);
     }
 
-    @RequestMapping(value = "/getFollowedUsers",method = RequestMethod.GET)
-    public ResponseData getFollowedUser(HttpServletRequest request){
+    @RequestMapping(value = "/getFollowedUsers", method = RequestMethod.GET)
+    public ResponseData getFollowedUser(HttpServletRequest request) {
         Integer currentUserId = AccessTokenUtil.getUserId(request);
         List<Map<String, Object>> followedUser = followService.getFollowedUser(currentUserId);
-        return ResponseUtil.getSuccessRes(followedUser);
+        return ResponseUtil.getSuccessResponse(followedUser);
     }
 
-    @RequestMapping(value = "/follow",method = RequestMethod.POST)
-    public ResponseData follow(HttpServletRequest request, @RequestBody Map<String, Object> param){
+    @RequestMapping(value = "/follow", method = RequestMethod.POST)
+    public ResponseData follow(HttpServletRequest request, @RequestBody Map<String, Object> param) {
         Integer currentUserId = AccessTokenUtil.getUserId(request);
-        Integer targetUserId = (Integer)param.get("userId");
+        Integer targetUserId = (Integer) param.get("userId");
         boolean res = false;
         try {
             res = followService.follow(currentUserId, targetUserId);
-        }catch (UserNotExistsException e){
-            return ResponseUtil.getErrorRes(401);
+        } catch (UserNotExistsException e) {
+            return ResponseUtil.getErrorResponse(401);
         }
 
         if (!res) {
-            return ResponseUtil.getErrorRes(501);
-        }else{
-            return ResponseUtil.getSuccessRes(null);
+            return ResponseUtil.getErrorResponse(501);
+        } else {
+            return ResponseUtil.getSuccessResponse(null);
         }
     }
 
-    @RequestMapping(value = "/cancelFollow",method = RequestMethod.DELETE)
-    public ResponseData canselFollow(HttpServletRequest request, Integer userId){
+    @RequestMapping(value = "/cancelFollow", method = RequestMethod.DELETE)
+    public ResponseData canselFollow(HttpServletRequest request, Integer userId) {
         Integer currentUserId = AccessTokenUtil.getUserId(request);
         boolean res = false;
         try {
             res = followService.cancelFollow(currentUserId, userId);
-        }catch (UserNotExistsException e){
-            return ResponseUtil.getErrorRes(401);
+        } catch (UserNotExistsException e) {
+            return ResponseUtil.getErrorResponse(401);
         }
 
         if (!res) {
-            return ResponseUtil.getErrorRes(501);
-        }else{
-            return ResponseUtil.getSuccessRes(null);
+            return ResponseUtil.getErrorResponse(501);
+        } else {
+            return ResponseUtil.getSuccessResponse(null);
         }
     }
 

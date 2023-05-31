@@ -5,6 +5,9 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.servlet.HandlerInterceptor;
 
+/**
+ * CORS跨域请求拦截器
+ */
 public class CORSInterceptor implements HandlerInterceptor {
 
     @Override

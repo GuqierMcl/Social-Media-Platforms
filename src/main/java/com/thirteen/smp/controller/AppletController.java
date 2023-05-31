@@ -20,7 +20,6 @@ import org.springframework.web.multipart.MultipartFile;
 /**
  * 小程序控制器
  *
- * @author 顾建平
  * @version 1.0
  * @since 1.0
  */
@@ -33,7 +32,7 @@ public class AppletController {
     @RequestMapping(path = "/upload", method = RequestMethod.POST)
     public ResponseData fileUpload(MultipartFile img, HttpServletRequest request) {
         if (img == null) {
-            return ResponseUtil.getErrorRes(204);
+            return ResponseUtil.getErrorResponse(204);
         }
 
         //设置时间戳格式
@@ -108,7 +107,7 @@ public class AppletController {
             if (ipAddressToMap == null) {
                 return ResponseUtil.getResponseData(0, "内网IP或IP无效");
             } else {
-                return ResponseUtil.getSuccessRes(ipAddressToMap);
+                return ResponseUtil.getSuccessResponse(ipAddressToMap);
             }
         } else {
             // 如果给了ip参数，则为查询指定IP归属地
@@ -116,7 +115,7 @@ public class AppletController {
             if (ipAddressToMap == null) {
                 return ResponseUtil.getResponseData(0, "内网IP或IP无效");
             } else {
-                return ResponseUtil.getSuccessRes(ipAddressToMap);
+                return ResponseUtil.getSuccessResponse(ipAddressToMap);
             }
         }
     }

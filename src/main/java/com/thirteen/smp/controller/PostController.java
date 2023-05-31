@@ -4,11 +4,9 @@ import com.thirteen.smp.exception.PostNotExistException;
 import com.thirteen.smp.pojo.Post;
 import com.thirteen.smp.response.ResponseData;
 import com.thirteen.smp.service.PostService;
-import com.thirteen.smp.service.impl.PostServiceImpl;
 import com.thirteen.smp.utils.AccessTokenUtil;
 import com.thirteen.smp.utils.ResponseUtil;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,7 +16,6 @@ import java.util.Map;
 /**
  * 帖子模块控制器
  *
- * @author 张力文
  * @version 1.0
  * @since 1.0
  */
@@ -34,7 +31,7 @@ public class PostController {
     @RequestMapping(path = "/searchPosts", method = RequestMethod.GET)
     public ResponseData queryPost(HttpServletRequest request, @RequestParam("type") String type, @RequestParam("query") String query) {
         if (type.equals("") || type == null || query.equals("") || query == null) {
-            return ResponseUtil.getErrorRes(606);
+            return ResponseUtil.getErrorResponse(606);
         }
         List<Post> posts = null;
         try {
@@ -44,9 +41,9 @@ public class PostController {
                 posts = postService.queryPostSelf(query, AccessTokenUtil.getUserId(request));
             }
         } catch (PostNotExistException e) {
-            return ResponseUtil.getErrorRes(607);
+            return ResponseUtil.getErrorResponse(607);
         }
-        return ResponseUtil.getSuccessRes(posts);
+        return ResponseUtil.getSuccessResponse(posts);
     }
 
     //获取帖子（获取自己的帖子/获取自己和关注列表用户的帖子）
@@ -57,16 +54,16 @@ public class PostController {
         if (userId != null) {
             try {
                 results = postService.getPostSelf(userId);
-                return ResponseUtil.getSuccessRes(results);
+                return ResponseUtil.getSuccessResponse(results);
             } catch (PostNotExistException e) {
-                return ResponseUtil.getErrorRes(604);
+                return ResponseUtil.getErrorResponse(604);
             }
         }else {
             try {
                 results = postService.getPostSelfFollow(AccessTokenUtil.getUserId(request));
-                return ResponseUtil.getSuccessRes(results);
+                return ResponseUtil.getSuccessResponse(results);
             } catch (PostNotExistException e) {
-                return ResponseUtil.getErrorRes(605);
+                return ResponseUtil.getErrorResponse(605);
             }
         }
     }
@@ -79,12 +76,12 @@ public class PostController {
         try {
             count = postService.savePost(post);
             if (count == -1) {
-                return ResponseUtil.getErrorRes(603);
+                return ResponseUtil.getErrorResponse(603);
             }
         } catch (PostNotExistException e) {
-            return ResponseUtil.getErrorRes(501);
+            return ResponseUtil.getErrorResponse(501);
         }
-        return ResponseUtil.getSuccessRes(null);//发布成功
+        return ResponseUtil.getSuccessResponse(null);//发布成功
     }
 
     //删除帖子
@@ -94,8 +91,8 @@ public class PostController {
         try {
             count = postService.deletePost(postId);
         } catch (PostNotExistException e) {
-            return ResponseUtil.getErrorRes(601);//帖子不存在
+            return ResponseUtil.getErrorResponse(601);//帖子不存在
         }
-        return ResponseUtil.getSuccessRes(null);//删除成功
+        return ResponseUtil.getSuccessResponse(null);//删除成功
     }
 }

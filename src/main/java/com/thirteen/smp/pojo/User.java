@@ -8,30 +8,69 @@ package com.thirteen.smp.pojo;
  */
 public class User {
 
+    /**
+     * 用户ID
+     */
     private Integer userId;
 
+    /**
+     * 用户名
+     */
     private String username;
 
+    /**
+     * 密码
+     */
     private String password;
 
+    /**
+     * 头像
+     */
     private String profilePic;
 
+    /**
+     * 昵称
+     */
     private String nickname;
 
+    /**
+     * 推特
+     */
     private String twitter;
 
+    /**
+     * 脸书
+     */
     private String facebook;
 
+    /**
+     * QQ
+     */
     private String qq;
 
+    /**
+     * 微博
+     */
     private String weibo;
 
+    /**
+     * 电子邮箱
+     */
     private String email;
 
+    /**
+     * 用户语言
+     */
     private String userLang;
 
+    /**
+     * 用户位置
+     */
     private String userLocation;
 
+    /**
+     * 背景图片
+     */
     private String coverPic;
 
     public User() {

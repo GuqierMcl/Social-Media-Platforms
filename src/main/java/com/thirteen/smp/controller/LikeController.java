@@ -15,7 +15,6 @@ import java.util.Map;
 /**
  * 点赞模块
  *
- * @author 张力文
  * @version 1.0
  * @since 1.0
  */
@@ -32,13 +31,13 @@ public class LikeController {
         try{
             res=likeService.giveLike(postInfo.get("postId"), AccessTokenUtil.getUserId(request));
         } catch (PostNotExistException e){
-            return ResponseUtil.getErrorRes(601);
+            return ResponseUtil.getErrorResponse(601);
         } catch (UserNotExistsException e){
-            return ResponseUtil.getErrorRes(401);
+            return ResponseUtil.getErrorResponse(401);
         } catch (LikeExistException e){
-            return ResponseUtil.getErrorRes(701);
+            return ResponseUtil.getErrorResponse(701);
         }
-        return ResponseUtil.getSuccessRes(null);
+        return ResponseUtil.getSuccessResponse(null);
     }
 
     @RequestMapping(method = RequestMethod.GET)
@@ -47,9 +46,9 @@ public class LikeController {
         try{
             userIds = likeService.getLikeUserIdByPostId(postId);
         } catch (PostNotExistException e){
-            return  ResponseUtil.getErrorRes(601);
+            return  ResponseUtil.getErrorResponse(601);
         }
-        return ResponseUtil.getSuccessRes(userIds);
+        return ResponseUtil.getSuccessResponse(userIds);
     }
 
     @RequestMapping(method = RequestMethod.DELETE)
@@ -58,16 +57,16 @@ public class LikeController {
         try{
             res=likeService.deleteLike(postId, AccessTokenUtil.getUserId(request));
             if(!res){
-                return  ResponseUtil.getErrorRes(501);
+                return  ResponseUtil.getErrorResponse(501);
             }
         } catch (PostNotExistException e){
-            return ResponseUtil.getErrorRes(601);
+            return ResponseUtil.getErrorResponse(601);
         } catch (UserNotExistsException e){
-            return ResponseUtil.getErrorRes(401);
+            return ResponseUtil.getErrorResponse(401);
         } catch (LikeExistException e){
-            return ResponseUtil.getErrorRes(702);
+            return ResponseUtil.getErrorResponse(702);
         }
-        return ResponseUtil.getSuccessRes(null);
+        return ResponseUtil.getSuccessResponse(null);
     }
 
     @RequestMapping(value = "/comment",method = RequestMethod.POST)
@@ -78,14 +77,14 @@ public class LikeController {
         try {
             res = likeService.giveCommentLike(userId, commentId);
         } catch (LikeExistException e) {
-            return ResponseUtil.getErrorRes(703);
+            return ResponseUtil.getErrorResponse(703);
         } catch (CommentNotExistException e){
-            return ResponseUtil.getErrorRes(602);
+            return ResponseUtil.getErrorResponse(602);
         }
         if(!res){
-            return ResponseUtil.getErrorRes(501);
+            return ResponseUtil.getErrorResponse(501);
         }
-        return ResponseUtil.getSuccessRes();
+        return ResponseUtil.getSuccessResponse();
     }
 
     @RequestMapping(value = "/comment",method = RequestMethod.DELETE)
@@ -95,14 +94,14 @@ public class LikeController {
         try {
             res = likeService.deleteCommentLike(userId, commentId);
         } catch (LikeNotExistException e) {
-            return ResponseUtil.getErrorRes(608);
+            return ResponseUtil.getErrorResponse(608);
         }catch (CommentNotExistException e){
-            return ResponseUtil.getErrorRes(602);
+            return ResponseUtil.getErrorResponse(602);
         }
         if(!res){
-            return ResponseUtil.getErrorRes(501);
+            return ResponseUtil.getErrorResponse(501);
         }
-        return ResponseUtil.getSuccessRes();
+        return ResponseUtil.getSuccessResponse();
     }
 
 }

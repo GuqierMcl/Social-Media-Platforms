@@ -6,6 +6,9 @@ import java.util.List;
 
 /**
  * 用于t_chat表的数据库操作mapper
+ *
+ * @version 1.0
+ * @since 1.0
  */
 public interface ChatMapper {
 

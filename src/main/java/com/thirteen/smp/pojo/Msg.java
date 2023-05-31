@@ -6,21 +6,40 @@ import java.sql.Timestamp;
 
 /**
  * 聊天消息封装类
+ * @version 1.0
+ * @since 1.0
  */
-
 public class Msg {
 
+    /**
+     * 消息ID
+     */
     private Integer id;
 
+    /**
+     * 消息发送用户ID
+     */
     private Integer userId;
 
+    /**
+     * 消息接收用户ID
+     */
     private Integer toUserId;
 
+    /**
+     * 消息发送时间
+     */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Timestamp time;
 
+    /**
+     * 消息内容
+     */
     private String content;
 
+    /**
+     * 消息是否已读状态
+     */
     private Integer isRead;
 
     public Msg() {

@@ -4,8 +4,6 @@ package com.thirteen.smp.controller;
 import com.thirteen.smp.exception.HistoryNotExistException;
 import com.thirteen.smp.exception.PostNotExistException;
 import com.thirteen.smp.exception.UserNotExistsException;
-import com.thirteen.smp.mapper.HistoryMapper;
-import com.thirteen.smp.pojo.History;
 import com.thirteen.smp.response.ResponseData;
 import com.thirteen.smp.service.HistoryService;
 import com.thirteen.smp.utils.AccessTokenUtil;
@@ -21,7 +19,6 @@ import java.util.Map;
 /**
  * 浏览记录模块控制器
  *
- * @author 张力文
  * @version 1.0
  * @since 1.0
  */
@@ -37,12 +34,12 @@ public class HistoryController {
         int userId = AccessTokenUtil.getUserId(request);
         try{
             historyService.addHistory(Integer.parseInt(data.get("postId")),userId);
-            return ResponseUtil.getSuccessRes(null);
+            return ResponseUtil.getSuccessResponse(null);
         }
         catch (PostNotExistException e){
-            return ResponseUtil.getErrorRes(601);
+            return ResponseUtil.getErrorResponse(601);
         } catch (UserNotExistsException e){
-            return ResponseUtil.getErrorRes(401);
+            return ResponseUtil.getErrorResponse(401);
         }
     }
 
@@ -52,10 +49,10 @@ public class HistoryController {
         int userId = AccessTokenUtil.getUserId(request);
         try{
             historyList = historyService.selectHistoryByUerId(userId);
-            return ResponseUtil.getSuccessRes(historyList);
+            return ResponseUtil.getSuccessResponse(historyList);
         }
         catch (UserNotExistsException e){
-            return ResponseUtil.getErrorRes(401);
+            return ResponseUtil.getErrorResponse(401);
         }
     }
 
@@ -65,11 +62,11 @@ public class HistoryController {
         int count=0;
         try{
             count = historyService.deleteAllHistoryById(userId);
-            if(count!=0) return ResponseUtil.getSuccessRes(null);
-            else return ResponseUtil.getErrorRes(901);
+            if(count!=0) return ResponseUtil.getSuccessResponse(null);
+            else return ResponseUtil.getErrorResponse(901);
         }
         catch (UserNotExistsException e){
-            return ResponseUtil.getErrorRes(401);
+            return ResponseUtil.getErrorResponse(401);
         }
     }
 
@@ -79,15 +76,15 @@ public class HistoryController {
         try{
             int i = historyService.deleteHistoryById(id, userId);
             if(i==-1){
-                return ResponseUtil.getErrorRes(902);
+                return ResponseUtil.getErrorResponse(902);
             }
-            return ResponseUtil.getSuccessRes(null);
+            return ResponseUtil.getSuccessResponse(null);
         }
         catch (UserNotExistsException e){
-            return ResponseUtil.getErrorRes(401);
+            return ResponseUtil.getErrorResponse(401);
         }
         catch (HistoryNotExistException e){
-            return ResponseUtil.getErrorRes(903);
+            return ResponseUtil.getErrorResponse(903);
         }
     }
 }

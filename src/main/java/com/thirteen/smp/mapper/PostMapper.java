@@ -4,16 +4,17 @@ package com.thirteen.smp.mapper;
 import com.thirteen.smp.pojo.Post;
 import org.apache.ibatis.annotations.Param;
 
-import java.sql.Timestamp;
 import java.util.List;
 
 /**
  * 用于t_post表数据库操作的Mapper
+ *
+ * @version 1.0
+ * @since 1.0
  */
 public interface PostMapper {
     /**
      * 获取所有帖子
-     * @param 无
      * @return 帖子对象列表
      */
     List<Post> selectAllPost();

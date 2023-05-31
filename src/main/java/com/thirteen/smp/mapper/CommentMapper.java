@@ -6,7 +6,7 @@ import java.util.List;
 
 /**
  * 用于t_comment表数据库操作的Mapper
- * @author 庄可欣
+ *
  * @version 1.0
  * @since 1.0
  */
