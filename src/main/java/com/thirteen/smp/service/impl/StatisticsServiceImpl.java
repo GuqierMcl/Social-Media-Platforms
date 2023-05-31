@@ -41,10 +41,10 @@ public class StatisticsServiceImpl implements StatisticsService {
 
     @Override
     public Map<String, Object> getUserStatistics() {
-        Map<String, Object> userSatistics = new LinkedHashMap<>();
-        userSatistics.put("registerNum", userMapper.selectAll().size());
-        userSatistics.put("onlineNum", userMapper.getOnlineUserId().size());
-        return userSatistics;
+        Map<String, Object> userStatistics = new LinkedHashMap<>();
+        userStatistics.put("registerNum", userMapper.selectAll().size());
+        userStatistics.put("onlineNum", userMapper.getOnlineUserId().size());
+        return userStatistics;
     }
 
     @Override
@@ -182,8 +182,8 @@ public class StatisticsServiceImpl implements StatisticsService {
             post2.put("nickname", user2.getNickname());
             post1.put("profilePic", user1.getProfilePic());
             post2.put("profilePic", user2.getProfilePic());
-            post1.put("isLike", likeMapper.jugeLiked((Integer) post1.get("postId"), user1.getUserId()) != 0);
-            post2.put("isLike", likeMapper.jugeLiked((Integer) post2.get("postId"), user1.getUserId()) != 0);
+            post1.put("isLike", likeMapper.judgeLiked((Integer) post1.get("postId"), user1.getUserId()) != 0);
+            post2.put("isLike", likeMapper.judgeLiked((Integer) post2.get("postId"), user1.getUserId()) != 0);
 
             post1.put("isStaring", favoriteMapper.selectByUserIdAndPostId(
                     new Favorite(null, (Integer) post1.get("postId"), user1.getUserId(), null)) != null);
