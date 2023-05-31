@@ -65,7 +65,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<Map<String,Object>> getPost_self(int userid) throws PostNotExistException {
+    public List<Map<String,Object>> getPostSelf(int userid) throws PostNotExistException {
         List<Post> posts = null;
         posts = postMapper.selectByUserId(userid);
         if(posts==null||posts.size()==0){
@@ -97,7 +97,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<Map<String,Object>> getPost_self_follow(int userid) throws PostNotExistException {
+    public List<Map<String,Object>> getPostSelfFollow(int userid) throws PostNotExistException {
         List<Post> posts = null;
         posts = postMapper.selectAllPost();
         List<User> Follows = followMapper.selectByFollowerUserId(userid);
@@ -155,9 +155,9 @@ public class PostServiceImpl implements PostService {
         }
     }
     @Override
-    public List<Post> queryPost_self(String query,int userid) throws PostNotExistException {
+    public List<Post> queryPostSelf(String query,int userid) throws PostNotExistException {
         List<Post> posts = null;
-        posts = postMapper.selectByQuery_self(query,userid);
+        posts = postMapper.selectByQuerySelf(query,userid);
         if(posts.size()==0){
             throw new PostNotExistException("未搜索到相关帖子");
         } else{

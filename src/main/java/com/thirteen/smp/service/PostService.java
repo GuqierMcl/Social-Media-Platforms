@@ -29,13 +29,13 @@ public interface PostService {
      * @param userid 用户id
      * @return 帖子列表
      */
-    public List<Map<String,Object>> getPost_self(int userid) throws PostNotExistException;
+    public List<Map<String,Object>> getPostSelf(int userid) throws PostNotExistException;
     /**
      * 获得本用户和关注用户发布的帖子
      * @param userid 用户id
      * @return 帖子列表
      */
-    public List<Map<String,Object>> getPost_self_follow(int userid) throws PostNotExistException;
+    public List<Map<String,Object>> getPostSelfFollow(int userid) throws PostNotExistException;
     /**
      * 搜索帖子
      * @param query 搜索关键词
@@ -47,5 +47,5 @@ public interface PostService {
      * @param userid 用户id
      * @return 帖子列表
      */
-    public List<Post> queryPost_self(String query,int userid) throws PostNotExistException;
+    public List<Post> queryPostSelf(String query,int userid) throws PostNotExistException;
 }
