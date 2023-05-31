@@ -2,7 +2,9 @@ package com.thirteen.smp.controller;
 
 import com.thirteen.smp.response.ResponseData;
 import com.thirteen.smp.service.StatisticsService;
+import com.thirteen.smp.utils.AccessTokenUtil;
 import com.thirteen.smp.utils.ResponseUtil;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -34,7 +36,8 @@ public class StatisticsController {
     }
 
     @RequestMapping(value = "/hotUser", method = RequestMethod.GET)
-    public Object getHotUserList(Integer count) {
+    public Object getHotUserList(Integer count, HttpServletRequest request) {
+        Integer userId = AccessTokenUtil.getUserId(request);
         int cnt;
         if (count == null) {
             cnt = 10;
@@ -43,7 +46,7 @@ public class StatisticsController {
         }
         List<Map<String, Object>> hotUserList = null;
         try {
-            hotUserList = statisticsService.getHotUserList(cnt);
+            hotUserList = statisticsService.getHotUserList(cnt, userId);
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseUtil.getErrorRes(0);

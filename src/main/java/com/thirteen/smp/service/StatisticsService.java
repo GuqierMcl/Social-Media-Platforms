@@ -20,7 +20,7 @@ public interface StatisticsService {
      * @param count 获取数量
      * @return 用户排行榜
      */
-    List<Map<String, Object>> getHotUserList(Integer count) throws Exception;
+    List<Map<String, Object>> getHotUserList(Integer count, Integer userId) throws Exception;
 
     /**
      * 获取帖子热度排行榜

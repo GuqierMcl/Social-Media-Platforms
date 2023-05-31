@@ -62,7 +62,7 @@ public class StatisticsServiceImpl implements StatisticsService {
     }
 
     @Override
-    public List<Map<String, Object>> getHotUserList(Integer count) throws Exception {
+    public List<Map<String, Object>> getHotUserList(Integer count, Integer userId) throws Exception {
         /*
          * 用户热度 = 粉丝数 * 0.3 + 发帖量 * 0.3 + 点赞数 * 0.15 + 收藏量 * 0.1 + 评论数 * 0.1 + 关注量 * 0.05
          */
@@ -110,6 +110,13 @@ public class StatisticsServiceImpl implements StatisticsService {
             List<User> followUsers2 = followMapper.selectByFollowerUserId((Integer) user2.get("userId"));
             user1.put("followNum", followUsers1.size());
             user2.put("followNum", followUsers2.size());
+            // 判断是否关注
+            Map<String, Object> map1 = followMapper.selectByUserId(userId, (Integer) user1.get("userId"));
+            Map<String, Object> map2 = followMapper.selectByUserId(userId, (Integer) user2.get("userId"));
+            if(map1 != null) user1.put("isFollowing", true);
+            else user1.put("isFollowing", false);
+            if(map2 != null) user2.put("isFollowing", true);
+            else user2.put("isFollowing", false);
 
             // 根据排序规则进行排序
             double hotness1 = fans1.size() * 0.3 + posts1.size() * 0.3
@@ -138,7 +145,7 @@ public class StatisticsServiceImpl implements StatisticsService {
         List<Map<String, Object>> postMaps = objectMapper.readValue(s, new TypeReference<>() {
         });
 
-        postMaps.sort((post1,post2)->{
+        postMaps.sort((post1, post2) -> {
             // 获取收藏量
             List<Favorite> favorites1 = favoriteMapper.selectByPostId((Integer) post1.get("postId"));
             List<Favorite> favorites2 = favoriteMapper.selectByPostId((Integer) post2.get("postId"));
@@ -165,9 +172,9 @@ public class StatisticsServiceImpl implements StatisticsService {
                 comLike2 += num;
             }
 
-            double hotness1 = (Integer)post1.get("likeNum") * 0.3 + favorites1.size() * 0.5
+            double hotness1 = (Integer) post1.get("likeNum") * 0.3 + favorites1.size() * 0.5
                     + commCnt1 * 0.15 + comLike1 * 0.05;
-            double hotness2 = (Integer)post2.get("likeNum") * 0.3 + favorites2.size() * 0.5
+            double hotness2 = (Integer) post2.get("likeNum") * 0.3 + favorites2.size() * 0.5
                     + commCnt2 * 0.15 + comLike2 * 0.05;
             post1.put("hotness", hotness1);
             post2.put("hotness", hotness2);
