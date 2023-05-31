@@ -55,7 +55,7 @@ public class SearchServiceImpl implements SearchService {
             Favorite favorite = new Favorite();
             favorite.setPostId(post.getPostId());
             favorite.setUserId(AccessTokenUtil.getUserId(request));
-            data.put(" isStaring",favoriteMapper.selectByUserIdAndPostId(favorite)!=null);
+            data.put("isStaring",favoriteMapper.selectByUserIdAndPostId(favorite)!=null);
             finalPosts.add(data);
         });
         List<Map<String,Object>> finalUsers =new ArrayList<>();

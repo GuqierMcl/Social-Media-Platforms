@@ -88,7 +88,7 @@ public class PostServiceImpl implements PostService {
                 Favorite favorite = new Favorite();
                 favorite.setPostId(post.getPostId());
                 favorite.setUserId(userid);
-                result.put(" isStaring",favoriteMapper.selectByUserIdAndPostId(favorite)!=null);
+                result.put("isStaring",favoriteMapper.selectByUserIdAndPostId(favorite)!=null);
                 results.add(result);
             });
             return results;
@@ -136,7 +136,7 @@ public class PostServiceImpl implements PostService {
                 Favorite favorite = new Favorite();
                 favorite.setPostId(post.getPostId());
                 favorite.setUserId(userid);
-                result.put(" isStaring",favoriteMapper.selectByUserIdAndPostId(favorite)!=null);
+                result.put("isStaring",favoriteMapper.selectByUserIdAndPostId(favorite)!=null);
                 results.add(result);
             });
             return results;
