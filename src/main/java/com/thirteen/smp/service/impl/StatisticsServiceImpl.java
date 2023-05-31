@@ -1,5 +1,6 @@
 package com.thirteen.smp.service.impl;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.thirteen.smp.mapper.*;
@@ -113,9 +114,9 @@ public class StatisticsServiceImpl implements StatisticsService {
             // 判断是否关注
             Map<String, Object> map1 = followMapper.selectByUserId(userId, (Integer) user1.get("userId"));
             Map<String, Object> map2 = followMapper.selectByUserId(userId, (Integer) user2.get("userId"));
-            if(map1 != null) user1.put("isFollowing", true);
+            if (map1 != null) user1.put("isFollowing", true);
             else user1.put("isFollowing", false);
-            if(map2 != null) user2.put("isFollowing", true);
+            if (map2 != null) user2.put("isFollowing", true);
             else user2.put("isFollowing", false);
 
             // 根据排序规则进行排序
@@ -171,6 +172,23 @@ public class StatisticsServiceImpl implements StatisticsService {
                 Integer num = likeMapper.selectCommentLikeNum(comment.getCommentId());
                 comLike2 += num;
             }
+
+            // 完善帖子用户信息
+            User user1 = userMapper.selectById((Integer) post1.get("userId"));
+            User user2 = userMapper.selectById((Integer) post2.get("userId"));
+            post1.put("userId", user1.getUserId());
+            post2.put("userId", user2.getUserId());
+            post1.put("nickname", user1.getNickname());
+            post2.put("nickname", user2.getNickname());
+            post1.put("profilePic", user1.getProfilePic());
+            post2.put("profilePic", user2.getProfilePic());
+            post1.put("isLike", likeMapper.jugeLiked((Integer) post1.get("postId"), user1.getUserId()) != 0);
+            post2.put("isLike", likeMapper.jugeLiked((Integer) post2.get("postId"), user1.getUserId()) != 0);
+
+            post1.put("isStaring", favoriteMapper.selectByUserIdAndPostId(
+                    new Favorite(null, (Integer) post1.get("postId"), user1.getUserId(), null)) != null);
+            post2.put("isStaring", favoriteMapper.selectByUserIdAndPostId(
+                    new Favorite(null, (Integer) post2.get("postId"), user2.getUserId(), null)) != null);
 
             double hotness1 = (Integer) post1.get("likeNum") * 0.3 + favorites1.size() * 0.5
                     + commCnt1 * 0.15 + comLike1 * 0.05;
