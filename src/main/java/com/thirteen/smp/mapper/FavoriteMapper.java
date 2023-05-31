@@ -33,6 +33,13 @@ public interface FavoriteMapper {
     Favorite selectByUserIdAndPostId(Favorite favorite);
 
     /**
+     * 通过帖子ID获取收藏信息
+     * @param postId 帖子ID
+     * @return 收藏列表
+     */
+    List<Favorite> selectByPostId(Integer postId);
+
+    /**
      * 添加收藏
      * @param favorite 收藏夹信息
      * @return 添加收藏夹信息条数
