@@ -14,6 +14,17 @@
           and user_id = #{param2}
     </delete>
 
+    <select id="selectLikePostByUserId" resultType="Post">
+        select *
+        from t_like
+        where user_id = #{userId}
+    </select>
+    <select id="selectLikeCommentByUserId" resultType="Comment">
+        select *
+        from t_comment_like
+        where user_id = #{userId}
+    </select>
+
     <select id="getLikeUserIdByPostId" resultType="java.lang.Integer">
         select user_id
         from t_like

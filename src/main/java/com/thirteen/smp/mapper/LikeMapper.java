@@ -1,5 +1,8 @@
 package com.thirteen.smp.mapper;
 
+import com.thirteen.smp.pojo.Comment;
+import com.thirteen.smp.pojo.Post;
+
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;
@@ -40,12 +43,50 @@ public interface LikeMapper {
      */
     int deleteLike(int postId,int userId);
 
+    /**
+     * 查询指定用户点赞的帖子列表
+     * @param userId 用户ID
+     * @return 帖子列表
+     */
+    List<Post> selectLikePostByUserId(Integer userId);
+
+    /**
+     * 查询指定用户点赞的评论列表
+     * @param userId 用户ID
+     * @return 评论列表
+     */
+    List<Comment> selectLikeCommentByUserId(Integer userId);
+
+    /**
+     * 新增评论点赞
+     * @param userId 用户ID
+     * @param commentId 评论ID
+     * @param time 点赞时间
+     * @return 执行结果
+     */
     int insertCommentLike(Integer userId, Integer commentId, Timestamp time);
 
+    /**
+     * 删除评论点赞
+     * @param userId 用户ID
+     * @param commentId 评论ID
+     * @return 执行结果
+     */
     int deleteCommentLike(Integer userId, Integer commentId);
 
+    /**
+     * 根据评论ID查询点赞数
+     * @param commentId 评论ID
+     * @return 点赞数
+     */
     Integer selectCommentLikeNum(Integer commentId);
 
+    /**
+     * 根据用户ID和评论ID查询评论
+     * @param userId 用户ID
+     * @param commentId 评论ID
+     * @return 查询结果
+     */
     Map<String,Object> selectCommentLikeById(Integer userId, Integer commentId);
 
 }
