@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-public class StatisticsServicelmpl implements StatisticsService {
+public class StatisticsServiceImpl implements StatisticsService {
 
     @Autowired
     private UserMapper userMapper;
@@ -71,10 +71,11 @@ public class StatisticsServicelmpl implements StatisticsService {
         // 将用户对象列表转为Map对象
         ObjectMapper objectMapper = new ObjectMapper();
         String s = objectMapper.writeValueAsString(users);
-        List<Map<String, Object>> userMapList = objectMapper.readValue(s, new TypeReference<List<Map<String, Object>>>() {
+        List<Map<String, Object>> userMapList = objectMapper.readValue(s, new TypeReference<>() {
         });
 
         userMapList.sort((user1, user2) -> {
+            // TODO 逻辑需要修改
             // 获取粉丝数
             List<User> fans1 = followMapper.selectByFollowedUserId((Integer) user1.get("userId"));
             List<User> fans2 = followMapper.selectByFollowedUserId((Integer) user2.get("userId"));
@@ -125,7 +126,53 @@ public class StatisticsServicelmpl implements StatisticsService {
     }
 
     @Override
-    public List<Post> getHotPostList() {
-        return null;
+    public List<Map<String, Object>> getHotPostList(Integer count) throws Exception {
+        /*
+         帖子热度 = 点赞数 * 0.3 + 收藏量 * 0.5 + 评论量 * 0.15 + 评论点赞量 * 0.05
+         */
+        List<Post> posts = postMapper.selectAllPost();
+
+        // 将帖子对象列表转换为Map列表
+        ObjectMapper objectMapper = new ObjectMapper();
+        String s = objectMapper.writeValueAsString(posts);
+        List<Map<String, Object>> postMaps = objectMapper.readValue(s, new TypeReference<>() {
+        });
+
+        postMaps.sort((post1,post2)->{
+            // 获取收藏量
+            List<Favorite> favorites1 = favoriteMapper.selectByPostId((Integer) post1.get("postId"));
+            List<Favorite> favorites2 = favoriteMapper.selectByPostId((Integer) post2.get("postId"));
+            post1.put("favoriteNum", favorites1.size());
+            post2.put("favoriteNum", favorites2.size());
+
+            // 获取评论数
+            int commCnt1 = commentMapper.selectCountByPostId((Integer) post1.get("postId"));
+            int commCnt2 = commentMapper.selectCountByPostId((Integer) post2.get("postId"));
+            post1.put("commentNum", commCnt1);
+            post2.put("commentNum", commCnt2);
+
+            // 获取评论点赞总数
+            int comLike1 = 0;
+            int comLike2 = 0;
+            List<Comment> comments1 = commentMapper.selectByPostId((Integer) post1.get("postId"));
+            List<Comment> comments2 = commentMapper.selectByPostId((Integer) post2.get("postId"));
+            for (Comment comment : comments1) {
+                Integer num = likeMapper.selectCommentLikeNum(comment.getCommentId());
+                comLike1 += num;
+            }
+            for (Comment comment : comments2) {
+                Integer num = likeMapper.selectCommentLikeNum(comment.getCommentId());
+                comLike2 += num;
+            }
+
+            double hotness1 = (Integer)post1.get("likeNum") * 0.3 + favorites1.size() * 0.5
+                    + commCnt1 * 0.15 + comLike1 * 0.05;
+            double hotness2 = (Integer)post2.get("likeNum") * 0.3 + favorites2.size() * 0.5
+                    + commCnt2 * 0.15 + comLike2 * 0.05;
+            post1.put("hotness", hotness1);
+            post2.put("hotness", hotness2);
+            return Double.compare(hotness2, hotness1);
+        });
+        return postMaps.subList(0, count <= postMaps.size() ? count : postMaps.size());
     }
 }

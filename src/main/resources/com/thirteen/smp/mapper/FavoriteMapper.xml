@@ -19,6 +19,11 @@
         where user_id = #{userId}
           and post_id = #{postId}
     </select>
+    <select id="selectByPostId" resultType="Favorite">
+        select *
+        from t_favorite
+        where post_id = #{postId}
+    </select>
     <insert id="insertFavorite" useGeneratedKeys="true" keyProperty="id">
         insert into t_favorite
         values (null, #{postId}, #{userId}, #{time})

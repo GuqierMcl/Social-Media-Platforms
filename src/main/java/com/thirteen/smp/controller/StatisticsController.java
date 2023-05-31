@@ -33,7 +33,7 @@ public class StatisticsController {
         return ResponseUtil.getSuccessRes(result);
     }
 
-    @RequestMapping(value = "/hotUser",method = RequestMethod.GET)
+    @RequestMapping(value = "/hotUser", method = RequestMethod.GET)
     public Object getHotUserList(Integer count) {
         int cnt;
         if (count == null) {
@@ -49,5 +49,23 @@ public class StatisticsController {
             return ResponseUtil.getErrorRes(0);
         }
         return ResponseUtil.getSuccessRes(hotUserList);
+    }
+
+    @RequestMapping(value = "/hotPost", method = RequestMethod.GET)
+    public Object getHotPostList(Integer count) {
+        int cnt;
+        if (count == null) {
+            cnt = 10;
+        } else {
+            cnt = count;
+        }
+        List<Map<String, Object>> hotPostList = null;
+        try {
+            hotPostList = statisticsService.getHotPostList(cnt);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseUtil.getErrorRes(0);
+        }
+        return ResponseUtil.getSuccessRes(hotPostList);
     }
 }
