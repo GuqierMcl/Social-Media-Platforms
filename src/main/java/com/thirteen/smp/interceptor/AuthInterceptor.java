@@ -12,6 +12,14 @@ import org.springframework.web.servlet.HandlerInterceptor;
  */
 public class AuthInterceptor implements HandlerInterceptor {
 
+    /**
+     * 权限验证前置方法
+     * @param request 请求Request对象
+     * @param response 响应Response对象
+     * @param handler 目标方法
+     * @return 拦截结果
+     * @throws Exception 异常
+     */
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         // 获取accessToken
