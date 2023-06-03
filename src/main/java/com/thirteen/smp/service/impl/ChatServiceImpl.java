@@ -160,6 +160,8 @@ public class ChatServiceImpl implements ChatService {
 
         int count = 0;
         List<Msg> list = chatMapper.selectById(userId, targetUserId);
+        List<Msg> reverse_list = chatMapper.selectById(targetUserId,userId);//删除所有聊天记录
+        list.addAll(reverse_list);
         for (Msg msg : list) {
             count += chatMapper.deleteMsgById(msg.getId());
         }
