@@ -1,8 +1,10 @@
 package com.thirteen.smp.service.impl;
 
+import com.thirteen.smp.mapper.FavoriteMapper;
 import com.thirteen.smp.mapper.FollowMapper;
 import com.thirteen.smp.mapper.PostMapper;
 import com.thirteen.smp.mapper.UserMapper;
+import com.thirteen.smp.pojo.Favorite;
 import com.thirteen.smp.pojo.Post;
 import com.thirteen.smp.pojo.User;
 import com.thirteen.smp.service.FollowService;
@@ -28,40 +30,57 @@ public class HomeServiceImpl implements HomeService {
     @Autowired
     private FollowService followService;
 
+    @Autowired
+    private FavoriteMapper favoriteMapper;
+
     @Override
     public List<Map<String, Object>> getRecommendUser(Integer count, Integer userId) {
         /*
         获取所有用户列表
+        查找收藏夹中的作者用户
         查找地区相同的用户
         查找语言相同的用户
         算法匹配剩余用户
          */
         List<Map<String, Object>> resultList = new ArrayList<>();
-        int cnt = 0;
 
         User crrUser = userMapper.selectById(userId); // 获取当前用户信息
         List<User> users = userMapper.selectAll(); // 获取所有用户信息
         List<User> usersBak = userMapper.selectAll();
-        Collections.shuffle(users);
-        // 查找地区相同和语言相同的用户
+        Collections.shuffle(users); // 打乱列表顺序
+
+        // 查找收藏夹中的作者用户
+        List<Favorite> favorites = favoriteMapper.selectByUserId(userId);
+        for (Favorite favorite : favorites) {
+            Integer postId = favorite.getPostId();
+            Integer authorUserId = postMapper.selectByPostId(postId).getUserId();
+            for (User user : users) {
+                if (resultList.size() == count) break;
+                if (user.getUserId().equals(authorUserId)){
+                    if (user.getUserId().equals(userId)) continue;
+                    userListHandler(resultList, user, userId, "收藏过TA的帖子");
+                    usersBak.remove(user);
+                }
+            }
+        }
+
+        // 查找地区相同或语言相同的用户
         for (User user : users) {
-            if (cnt == count) break;
+            if (resultList.size() == count) break;
             if (user.getUserId().equals(userId)) continue;
             if (user.getUserLocation().equals(crrUser.getUserLocation()) || user.getUserLang().equals(crrUser.getUserLang())) {
-                userListHandler(resultList, user, userId);
+                userListHandler(resultList, user, userId, "与TA地区/语言相同");
                 usersBak.remove(user);
-                System.out.println(cnt);
-                cnt++;
+                System.out.println(resultList.size());
             }
         }
         Collections.shuffle(usersBak);
         // 查找剩余用户
-        if (cnt < count) {
+        if (resultList.size() < count) {
             for (User user : usersBak) {
-                if (cnt == count) break;
+                if (resultList.size() == count) break;
                 if (user.getUserId().equals(userId)) continue;
-                userListHandler(resultList, user, userId);
-                cnt++;
+                userListHandler(resultList, user, userId, "推荐关注");
             }
         }
         return resultList;
@@ -143,7 +162,7 @@ public class HomeServiceImpl implements HomeService {
      * @param resultList 结果列表
      * @param user       用户对象
      */
-    private void userListHandler(List<Map<String, Object>> resultList, User user, Integer userId) {
+    private void userListHandler(List<Map<String, Object>> resultList, User user, Integer userId, String reason) {
         if (user.getUserId().equals(userId)) return;
         Map<String, Object> item = new LinkedHashMap<>();
         item.put("userId", user.getUserId());
@@ -154,6 +173,7 @@ public class HomeServiceImpl implements HomeService {
         item.put("location", user.getUserLocation());
         Map<String, Object> map = followMapper.selectByUserId(userId, user.getUserId());
         item.put("isFollowed", map != null);
+        item.put("reason", reason);
         resultList.add(item);
     }
 
