@@ -2,6 +2,7 @@ package com.thirteen.smp.service;
 
 import com.thirteen.smp.exception.PostNotExistException;
 import com.thirteen.smp.pojo.Post;
+import jakarta.servlet.http.HttpServletRequest;
 
 import java.util.List;
 import java.util.Map;
@@ -29,7 +30,7 @@ public interface PostService {
      * @param userId 用户id
      * @return 帖子列表
      */
-    public List<Map<String,Object>> getPostSelf(int userId) throws PostNotExistException;
+    public List<Map<String,Object>> getPostSelf(int userId, HttpServletRequest request) throws PostNotExistException;
     /**
      * 获得本用户和关注用户发布的帖子
      * @param userId 用户id

@@ -60,7 +60,7 @@ public class LikeController {
                 return  ResponseUtil.getErrorResponse(501);
             }
         } catch (PostNotExistException e){
-            return ResponseUtil.getErrorResponse(601);
+            return ResponseUtil.getErrorResponse(2601);
         } catch (UserNotExistsException e){
             return ResponseUtil.getErrorResponse(401);
         } catch (LikeExistException e){

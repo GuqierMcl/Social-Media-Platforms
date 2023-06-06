@@ -6,6 +6,8 @@ import com.thirteen.smp.pojo.Favorite;
 import com.thirteen.smp.pojo.Post;
 import com.thirteen.smp.pojo.User;
 import com.thirteen.smp.service.PostService;
+import com.thirteen.smp.utils.AccessTokenUtil;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -65,7 +67,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<Map<String,Object>> getPostSelf(int userId) throws PostNotExistException {
+    public List<Map<String,Object>> getPostSelf(int userId, HttpServletRequest request) throws PostNotExistException {
         List<Post> posts = null;
         posts = postMapper.selectByUserId(userId);
         if(posts==null||posts.size()==0){
@@ -83,7 +85,7 @@ public class PostServiceImpl implements PostService {
                 result.put("postId",post.getPostId());
                 result.put("date",new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(post.getPostTime()));
                 result.put("likeNum",post.getLikeNum());
-                result.put("isLike",likeMapper.judgeLiked(post.getPostId(),userId)!=0);
+                result.put("isLike",likeMapper.judgeLiked(post.getPostId(), AccessTokenUtil.getUserId(request))!=0);
                 result.put("commentNum",commentMapper.selectCountByPostId(post.getPostId()));
                 Favorite favorite = new Favorite();
                 favorite.setPostId(post.getPostId());

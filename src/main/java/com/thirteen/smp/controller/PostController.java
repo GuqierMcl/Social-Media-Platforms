@@ -53,7 +53,7 @@ public class PostController {
         List<Map<String,Object>> results=null;
         if (userId != null) {
             try {
-                results = postService.getPostSelf(userId);
+                results = postService.getPostSelf(userId,request);
                 return ResponseUtil.getSuccessResponse(results);
             } catch (PostNotExistException e) {
                 return ResponseUtil.getErrorResponse(604);
