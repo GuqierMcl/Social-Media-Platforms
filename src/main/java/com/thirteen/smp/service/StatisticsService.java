@@ -8,12 +8,12 @@ public interface StatisticsService {
      * 获取用户的相关统计信息
      * @return 相关统计信息
      */
-    Map<String ,Object> getUserStatistics();
+    List<Map<String ,String>> getUserStatistics();
     /**
      * 获取帖子相关的统计信息
      * @return 相关统计信息
      */
-    Map<String ,Object> getPostNum();
+    List<Map<String, Integer>> getPostNum();
 
     /**
      * 获取用户热度排行榜

@@ -40,26 +40,63 @@ public class StatisticsServiceImpl implements StatisticsService {
     private CommentMapper commentMapper;
 
     @Override
-    public Map<String, Object> getUserStatistics() {
-        Map<String, Object> userStatistics = new LinkedHashMap<>();
-        userStatistics.put("registerNum", userMapper.selectAll().size());
-        userStatistics.put("onlineNum", userMapper.getOnlineUserId().size());
-        return userStatistics;
+    public List<Map<String, String>> getUserStatistics() {
+        List<String> locations = new ArrayList<>();
+        List<User> users = userMapper.selectAll();
+        List<Map<String, String>> datas = new ArrayList<>();
+        users.forEach(user -> {
+            if (!locations.contains(user.getUserLocation())) {
+                locations.add(user.getUserLocation());
+            }
+        });
+        for (String location : locations) {
+            int num = 0;
+            for (User user : users) {
+                if (user.getUserLocation().equals(location)) {
+                    num++;
+                }
+            }
+            Map<String, String> oneLocation = new LinkedHashMap<>();
+            oneLocation.put("location", location);
+            oneLocation.put("num", Integer.toString(num));
+            datas.add(oneLocation);
+        }
+
+        return datas;
     }
 
     @Override
-    public Map<String, Object> getPostNum() {
+    public List<Map<String, Integer>> getPostNum() {
         Map<String, Object> result = new LinkedHashMap<>();
+        List<Map<String, Integer>> datas = new ArrayList<>();
         List<Post> posts = postMapper.selectAllPost();
         List<Post> postList = new ArrayList<>();
-        Timestamp lastWeek = new Timestamp(System.currentTimeMillis() - 7 * 24 * 60 * 60 * 1000);
-        posts.forEach(post -> {
-            if (post.getPostTime().compareTo(lastWeek) > 0) {
-                postList.add(post);
+        Timestamp endTimestamp = new Timestamp(System.currentTimeMillis());
+        List<Long> timeLimit = new ArrayList<>();
+        for (int i = 1; i <= 7; i++) {
+            Map<String, Integer> data = new LinkedHashMap<>();
+            data.put("id", i);
+            data.put("num", 0);
+            datas.add(data);
+            timeLimit.add((long) i * 1000 * 60 * 60 * 24);
+        }
+        for (Map<String, Integer> data : datas) {
+            int num = 0;
+            for (Post post : posts) {
+                if (data.get("id") == 1) {
+                    if (endTimestamp.getTime() - post.getPostTime().getTime() < timeLimit.get(data.get("id") - 1)) {
+                        num++;
+                    }
+                } else {
+                    if ((endTimestamp.getTime() - post.getPostTime().getTime()) < timeLimit.get(data.get("id") - 1) && (endTimestamp.getTime() - post.getPostTime().getTime()) >= timeLimit.get(data.get("id") - 2)) {
+                        num++;
+                    }
+                }
             }
-        });
-        result.put("postNum", postList.size());
-        return result;
+            data.replace("num", num);
+        }
+
+        return datas;
     }
 
     @Override

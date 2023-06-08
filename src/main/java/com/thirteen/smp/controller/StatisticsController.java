@@ -28,14 +28,14 @@ public class StatisticsController {
 
     @RequestMapping(path = "/user", method = RequestMethod.GET)
     public ResponseData getUserStatistics() {
-        Map<String, Object> result = null;
+        List<Map<String, String>> result = null;
         result = statisticsService.getUserStatistics();
         return ResponseUtil.getSuccessResponse(result);
     }
 
     @RequestMapping(path = "/post", method = RequestMethod.GET)
     public ResponseData getPostNum() {
-        Map<String, Object> result = null;
+        List<Map<String, Integer>> result = null;
         result = statisticsService.getPostNum();
         return ResponseUtil.getSuccessResponse(result);
     }
