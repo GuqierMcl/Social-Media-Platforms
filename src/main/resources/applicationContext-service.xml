@@ -4,8 +4,11 @@
        xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
 
-    <!--添加组件扫描-->
+    <!--添加service包组件扫描-->
     <context:component-scan base-package="com.thirteen.smp.service"/>
+
+    <!--添加异常全局处理包组件扫描-->
+    <context:component-scan base-package="com.thirteen.smp.exception.resolver"/>
 
     <!--配置事务管理器--><!--使用@Transactional注解在类或方法上使用事务-->
     <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
