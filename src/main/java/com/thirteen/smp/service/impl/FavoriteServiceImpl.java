@@ -53,6 +53,7 @@ public class FavoriteServiceImpl implements FavoriteService {
             map.put("likeNum", post.getLikeNum());
             map.put("commentNum", commentMapper.selectCountByPostId(post.getPostId()));
             map.put("isLike", likeMapper.judgeLiked(post.getPostId(),userId));
+            map.put("isStaring", true);
             map.put("userId", user.getUserId());
             map.put("nickname", user.getNickname());
             map.put("profilePic", user.getProfilePic());
