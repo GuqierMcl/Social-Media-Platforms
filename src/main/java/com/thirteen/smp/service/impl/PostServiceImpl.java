@@ -36,6 +36,40 @@ public class PostServiceImpl implements PostService {
     private FavoriteMapper favoriteMapper;
 
     @Override
+    public Map<String, Object> getPostById(int userId, int postId) throws PostNotExistException {
+        List<Post> posts = null;
+        posts = postMapper.selectAllPost();
+        Map<String, Object> result=null;
+        for(Post post:posts){
+            if(post.getPostId()==postId){
+                User user = userMapper.selectById(post.getUserId());
+                result = new LinkedHashMap<>();
+                result.put("content", post.getContent());
+                result.put("img", post.getImg());
+                result.put("profilePic", userMapper.selectById(post.getUserId()).getProfilePic());
+                result.put("userId", post.getUserId());
+                result.put("name",user.getNickname());
+                result.put("postId", post.getPostId());
+                result.put("date", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(post.getPostTime()));
+                System.out.println(post.getPostTime());
+                result.put("likeNum", post.getLikeNum());
+                result.put("isLike", likeMapper.judgeLiked(post.getPostId(), userId) != 0);
+                result.put("commentNum",commentMapper.selectCountByPostId(post.getPostId()));
+                Favorite favorite = new Favorite();
+                favorite.setPostId(post.getPostId());
+                favorite.setUserId(userId);
+                result.put("isStaring",favoriteMapper.selectByUserIdAndPostId(favorite)!=null);
+                break;
+            }
+        }
+        if(result!=null){
+            return result;
+        }else {
+            throw new PostNotExistException("帖子不存在");
+        }
+    }
+
+    @Override
     @Transactional // 启用事务
     public int savePost(Post post) throws PostNotExistException {
         if(post.getContent()==null||post.getContent().equals("")){
@@ -143,7 +177,6 @@ public class PostServiceImpl implements PostService {
             });
             return results;
         }
-
     }
 
     @Override

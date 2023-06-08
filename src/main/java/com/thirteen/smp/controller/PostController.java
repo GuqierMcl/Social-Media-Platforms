@@ -27,6 +27,19 @@ public class PostController {
     @Autowired
     private PostService postService;
 
+    //根据id获取单个帖子
+    @RequestMapping(path = "/getDetail", method = RequestMethod.GET)
+    public ResponseData getPostById(HttpServletRequest request, @RequestParam("postId") String postId) {
+
+        Map<String,Object> post=null;
+        try {
+             post = postService.getPostById(AccessTokenUtil.getUserId(request),Integer.parseInt(postId));
+        } catch (PostNotExistException e) {
+            return ResponseUtil.getErrorResponse(601);
+        }
+        return ResponseUtil.getSuccessResponse(post);
+    }
+
     //根据关键词搜索帖子
     @RequestMapping(path = "/searchPosts", method = RequestMethod.GET)
     public ResponseData queryPost(HttpServletRequest request, @RequestParam("type") String type, @RequestParam("query") String query) {

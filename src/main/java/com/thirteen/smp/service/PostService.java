@@ -14,6 +14,12 @@ import java.util.Map;
 public interface PostService {
     // TODO 张力文 规划业务接口
     /**
+     * 获取单个帖子
+     * @param postId 帖子id
+     * @return 帖子信息
+     */
+    public Map<String,Object> getPostById(int userid, int postId) throws PostNotExistException;
+    /**
      * 发布帖子
      * @param post 帖子对象
      * @return 是否保存成功
