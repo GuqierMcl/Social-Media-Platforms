@@ -29,9 +29,10 @@ public class GlobalServiceExceptionResolver implements HandlerExceptionResolver 
     public ModelAndView resolveException(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
         // 获取异常消息
         String message = ex.getMessage();
+        String replace = message.replace("\"", "'");
         try {
             // 响应异常消息
-            response.getWriter().print(ResponseUtil.parseAsJSON(ResponseUtil.getResponseData(0, message)));
+            response.getWriter().print(ResponseUtil.parseAsJSON(ResponseUtil.getResponseData(0, replace)));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
