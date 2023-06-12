@@ -8,6 +8,8 @@ import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 全局异常处理类
@@ -30,9 +32,13 @@ public class GlobalServiceExceptionResolver implements HandlerExceptionResolver 
         // 获取异常消息
         String message = ex.getMessage();
         String replace = message.replace("\"", "'");
+        StackTraceElement[] stackTrace = ex.getStackTrace();
+        Map<String, Object> map = new HashMap<>();
+        map.put("message", replace);
+        map.put("stackTrace", stackTrace);
         try {
             // 响应异常消息
-            response.getWriter().print(ResponseUtil.parseAsJSON(ResponseUtil.getResponseData(0, replace)));
+            response.getWriter().print(ResponseUtil.parseAsJSON(ResponseUtil.getResponseData(0, map)));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
