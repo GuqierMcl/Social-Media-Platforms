@@ -1,6 +1,5 @@
 package com.thirteen.smp.service.impl;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.thirteen.smp.mapper.*;
@@ -9,14 +8,12 @@ import com.thirteen.smp.pojo.Favorite;
 import com.thirteen.smp.pojo.Post;
 import com.thirteen.smp.pojo.User;
 import com.thirteen.smp.service.StatisticsService;
+import com.thirteen.smp.utils.ProvinceMapperUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class StatisticsServiceImpl implements StatisticsService {
@@ -40,29 +37,28 @@ public class StatisticsServiceImpl implements StatisticsService {
     private CommentMapper commentMapper;
 
     @Override
-    public List<Map<String, String>> getUserStatistics() {
-        List<String> locations = new ArrayList<>();
+    public List<Map<String, Object>> getUserStatistics() {
         List<User> users = userMapper.selectAll();
-        List<Map<String, String>> datas = new ArrayList<>();
-        users.forEach(user -> {
-            if (!locations.contains(user.getUserLocation())) {
-                locations.add(user.getUserLocation());
-            }
-        });
-        for (String location : locations) {
-            int num = 0;
+        List<Map<String, Object>> res = new ArrayList<>();
+        List<Map<String, Object>> provinceMapList = ProvinceMapperUtil.getProvinceMapList();
+        for (Map<String, Object> map : provinceMapList) {
+            Map<String, Object> one = new HashMap<>();
+            String name = (String) map.get("name");
+            int cnt = 0;
             for (User user : users) {
-                if (user.getUserLocation().equals(location)) {
-                    num++;
+                if (user.getUserLocation().equals(name)) {
+                    cnt++;
                 }
             }
-            Map<String, String> oneLocation = new LinkedHashMap<>();
-            oneLocation.put("location", location);
-            oneLocation.put("num", Integer.toString(num));
-            datas.add(oneLocation);
+            one.put("name", name);
+            List<Object> value = new ArrayList<>();
+            value.add(map.get("lon"));
+            value.add(map.get("lat"));
+            value.add(cnt);
+            one.put("value", value);
+            res.add(one);
         }
-
-        return datas;
+        return res;
     }
 
     @Override

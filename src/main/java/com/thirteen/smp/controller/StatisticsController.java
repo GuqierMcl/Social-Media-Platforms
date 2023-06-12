@@ -28,7 +28,7 @@ public class StatisticsController {
 
     @RequestMapping(path = "/user", method = RequestMethod.GET)
     public ResponseData getUserStatistics() {
-        List<Map<String, String>> result = null;
+        List<Map<String, Object>> result = null;
         result = statisticsService.getUserStatistics();
         return ResponseUtil.getSuccessResponse(result);
     }

@@ -8,6 +8,7 @@ import com.thirteen.smp.mapper.FollowMapper;
 import com.thirteen.smp.mapper.UserMapper;
 import com.thirteen.smp.pojo.User;
 import com.thirteen.smp.service.UserService;
+import com.thirteen.smp.utils.ProvinceMapperUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -49,10 +50,10 @@ public class UserServiceImpl implements UserService {
 
         // 判断是否关注
         Map<String, Object> followMap = followMapper.selectByUserId(userId, targetUserId);
-        if(followMap != null){
-            map.put("isFollowed",true);
-        }else{
-            map.put("isFollowed",false);
+        if (followMap != null) {
+            map.put("isFollowed", true);
+        } else {
+            map.put("isFollowed", false);
         }
         return map;
     }
@@ -68,6 +69,8 @@ public class UserServiceImpl implements UserService {
         User targetUser = userMapper.selectById(user.getUserId());
         if (targetUser == null) return false;
 
+        // 将接收到的省份拼音映射为省份名称
+        user.setUserLocation(ProvinceMapperUtil.toName(user.getUserLocation()) != null ? ProvinceMapperUtil.toName(user.getUserLocation()) : user.getUserLocation());
         int count = userMapper.updateUser(user);
         return count == 1;
     }
