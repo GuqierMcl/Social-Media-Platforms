@@ -35,7 +35,7 @@ public class StatisticsController {
 
     @RequestMapping(path = "/post", method = RequestMethod.GET)
     public ResponseData getPostNum() {
-        List<Map<String, Integer>> result = null;
+        List<Integer> result = null;
         result = statisticsService.getPostNum();
         return ResponseUtil.getSuccessResponse(result);
     }

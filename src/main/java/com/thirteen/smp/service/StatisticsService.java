@@ -14,7 +14,7 @@ public interface StatisticsService {
      * 获取帖子相关的统计信息
      * @return 相关统计信息
      */
-    List<Map<String, Integer>> getPostNum();
+    List<Integer> getPostNum();
 
     /**
      * 获取用户热度排行榜

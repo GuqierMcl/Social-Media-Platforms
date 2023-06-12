@@ -62,7 +62,7 @@ public class StatisticsServiceImpl implements StatisticsService {
     }
 
     @Override
-    public List<Map<String, Integer>> getPostNum() {
+    public List<Integer> getPostNum() {
         Map<String, Object> result = new LinkedHashMap<>();
         List<Map<String, Integer>> datas = new ArrayList<>();
         List<Post> posts = postMapper.selectAllPost();
@@ -91,8 +91,12 @@ public class StatisticsServiceImpl implements StatisticsService {
             }
             data.replace("num", num);
         }
-
-        return datas;
+        List<Integer> res = new ArrayList<>();
+        for(Map<String ,Integer> data :datas){
+            res.add(data.get("num"));
+        }
+        Collections.reverse(res);
+        return res;
     }
 
     @Override
