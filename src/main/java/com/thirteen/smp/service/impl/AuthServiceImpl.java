@@ -1,15 +1,19 @@
 package com.thirteen.smp.service.impl;
 
+import com.thirteen.smp.exception.PubBannedWordsException;
 import com.thirteen.smp.exception.UserAlreadyExistsException;
 import com.thirteen.smp.exception.UserNotExistsException;
 import com.thirteen.smp.mapper.UserMapper;
 import com.thirteen.smp.pojo.User;
 import com.thirteen.smp.service.AuthService;
+import com.thirteen.smp.utils.BannedWordUtil;
 import com.thirteen.smp.utils.SettingUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.util.Map;
 
 @Service
@@ -20,7 +24,12 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     @Transactional // 启用事务
-    public User register(User user) throws UserAlreadyExistsException {
+    public User register(User user) throws UserAlreadyExistsException, IOException {
+        // 敏感词监测
+        if(BannedWordUtil.isBannedWord(user.getUsername()) || BannedWordUtil.isBannedWord(user.getNickname())){
+            throw new PubBannedWordsException("昵称或用户名不合法");
+        }
+
         // 检查用户名是否存在
         User target = userMapper.selectByUsername(user.getUsername());
         if (target != null) {

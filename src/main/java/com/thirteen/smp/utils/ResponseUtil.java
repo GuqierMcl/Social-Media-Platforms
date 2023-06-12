@@ -36,6 +36,8 @@ public class ResponseUtil {
         codeMap.put(401, "用户不存在");
         codeMap.put(402, "用户名已存在");
         codeMap.put(403, "密码错误");
+        codeMap.put(405, "用户名或昵称不合法");
+        codeMap.put(406, "敏感词库IO异常");
 
         // 5xx为数据库错误
         codeMap.put(501, "更新数据到数据库失败");

@@ -1,5 +1,6 @@
 package com.thirteen.smp.controller;
 
+import com.thirteen.smp.exception.PubBannedWordsException;
 import com.thirteen.smp.exception.UserAlreadyExistsException;
 import com.thirteen.smp.exception.UserNotExistsException;
 import com.thirteen.smp.pojo.User;
@@ -11,6 +12,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.io.IOException;
 
 /**
  * 权限验证控制器
@@ -54,6 +57,10 @@ public class AuthController {
             resultUser = authService.register(user);
         } catch (UserAlreadyExistsException e) {
             return ResponseUtil.getErrorResponse(402); //用户名已存在
+        } catch (PubBannedWordsException e) {
+            return ResponseUtil.getErrorResponse(405); // 敏感词异常
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
 
         if (resultUser == null) {

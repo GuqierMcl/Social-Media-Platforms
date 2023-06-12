@@ -4,6 +4,8 @@ import com.thirteen.smp.exception.UserAlreadyExistsException;
 import com.thirteen.smp.exception.UserNotExistsException;
 import com.thirteen.smp.pojo.User;
 
+import java.io.IOException;
+
 /**
  * 权限验证模块业务接口
  * @author 庄可欣
@@ -16,7 +18,7 @@ public interface AuthService {
      * @return 注册后的用户对象
      * @throws UserAlreadyExistsException 用户已存在异常
      */
-    User register(User user) throws UserAlreadyExistsException;
+    User register(User user) throws UserAlreadyExistsException, IOException;
 
     /**
      * 用户登录业务方法
