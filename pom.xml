@@ -120,6 +120,14 @@
             <version>2.7.0</version>
         </dependency>
 
+        <!-- JavaMail库 -->
+        <dependency>
+            <groupId>com.sun.mail</groupId>
+            <artifactId>jakarta.mail</artifactId>
+            <version>2.0.1</version>
+        </dependency>
+
+
     </dependencies>
 
     <properties>

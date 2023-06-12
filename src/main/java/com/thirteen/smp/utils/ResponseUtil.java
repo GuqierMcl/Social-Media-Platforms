@@ -38,6 +38,8 @@ public class ResponseUtil {
         codeMap.put(403, "密码错误");
         codeMap.put(405, "用户名或昵称不合法");
         codeMap.put(406, "敏感词库IO异常");
+        codeMap.put(407, "body参数为空");
+        codeMap.put(408, "验证码错误");
 
         // 5xx为数据库错误
         codeMap.put(501, "更新数据到数据库失败");
