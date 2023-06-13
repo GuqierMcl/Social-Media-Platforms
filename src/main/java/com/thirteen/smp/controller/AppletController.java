@@ -1,12 +1,8 @@
 package com.thirteen.smp.controller;
 
-import java.io.File;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
 
 import com.thirteen.smp.response.ResponseData;
 import com.thirteen.smp.service.global.GlobalVariables;
@@ -16,6 +12,8 @@ import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
 import jakarta.servlet.http.HttpServletRequest;
 
+import org.springframework.util.DigestUtils;
+import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -39,7 +37,7 @@ public class AppletController {
 
     /**
      * 图片（文件）上传接口
-     * @param img 二进制文件
+     * @param img     二进制文件
      * @param request Http请求对象
      * @return 响应结果
      */
@@ -56,6 +54,37 @@ public class AppletController {
         // 获取保存目录的绝对路径
         String realPath = request.getServletContext().getRealPath(imgSavePath);
 
+        // 校验MD5码，判断是否是同一个文件
+        try {
+            // 获取上传文件MD5
+            InputStream inputStream = img.getInputStream();// 获取输入流
+            String imgMd5 = DigestUtils.md5DigestAsHex(inputStream);
+            System.out.println("img:" + imgMd5);
+
+            File dir = ResourceUtils.getFile(realPath);// 获取本地资源目录
+            File[] files = dir.listFiles();// 获得目录下所有文件
+            if (files != null) {
+                for (File file : files) {
+                    // 获取本地资源文件MD5值
+                    FileInputStream fileInputStream = new FileInputStream(file.getPath());
+                    String md5 = DigestUtils.md5DigestAsHex(fileInputStream);
+                    fileInputStream.close();
+
+                    // 判断MD5值是否相同
+                    if (md5.equals(imgMd5)){
+                        // 相同则返回已存在文件的文件名
+                        System.out.println("Same img:" + file.getName());
+                        ResponseData responseData = ResponseUtil.getResponseData(1);
+                        responseData.addData("url", SettingUtil.getValue("serverPath") + imgSavePath + "/" + file.getName());
+                        return responseData;
+                    }
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("Get MD5 failed.");
+        }
+
         // 将保存目录的绝对路径转化为File对象
         File folder = new File(realPath);
 
@@ -71,8 +100,10 @@ public class AppletController {
             return ResponseUtil.getResponseData(201);
         }
 
+        // 加入随机数，防止同时请求时时间戳冲突
+        Random random = new Random();
         // 拼接保存文件文件名（时间戳 + 后缀）
-        String newName =/*userId +*/ format + oldName.substring(oldName.lastIndexOf("."));
+        String newName =/*userId +*/ format + (random.nextInt(10) + 1) + oldName.substring(oldName.lastIndexOf("."));
 
         Integer userId = AccessTokenUtil.getUserId(request);
         newName = userId + newName;
@@ -80,6 +111,8 @@ public class AppletController {
         try {
             // 转存文件到服务器
             img.transferTo(new File(folder, newName));
+
+            System.out.println("New img:" + newName);
 
             // 创建响应对象
             ResponseData responseData = ResponseUtil.getResponseData(1);
@@ -101,7 +134,7 @@ public class AppletController {
     /**
      * 获取IP归属地接口
      * @param request Http请求接口
-     * @param ip IP地址
+     * @param ip      IP地址
      * @return 响应结果
      */
     @RequestMapping(value = "/ip", method = RequestMethod.GET)
@@ -228,13 +261,13 @@ public class AppletController {
      * @return 响应结果
      */
     @RequestMapping(value = "/mail/verify", method = RequestMethod.POST)
-    public Object verifyEmailCode(@RequestBody Map<String, String> body){
+    public Object verifyEmailCode(@RequestBody Map<String, String> body) {
         String code = body.get("code");
-        if(code == null){
+        if (code == null) {
             return ResponseUtil.getErrorResponse(407);
         }
 
-        if(GlobalVariables.GENERATED_CODE.contains(code)){
+        if (GlobalVariables.GENERATED_CODE.contains(code)) {
             GlobalVariables.GENERATED_CODE.remove(code);
             return ResponseUtil.getSuccessResponse("验证码校验通过");
         }
