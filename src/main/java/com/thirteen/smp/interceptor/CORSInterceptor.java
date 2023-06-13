@@ -20,7 +20,7 @@ public class CORSInterceptor implements HandlerInterceptor {
             response.addHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE, HEAD");
             response.addHeader("Access-Control-Allow-Headers", "Content-Type");
             response.addHeader("Access-Control-Max-Age", "3600");
-            System.out.println("配置跨域请求放行：" + origin);
+            System.out.println("CORS:" + origin);
         }
         return true;
     }

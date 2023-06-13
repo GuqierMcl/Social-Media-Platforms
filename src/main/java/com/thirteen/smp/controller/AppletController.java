@@ -32,8 +32,17 @@ import org.springframework.web.multipart.MultipartFile;
 @RequestMapping("/applet")
 public class AppletController {
 
+    /**
+     * 文件保存路径常量
+     */
     private static final String imgSavePath = SettingUtil.getValue("imgSavingPath");
 
+    /**
+     * 图片（文件）上传接口
+     * @param img 二进制文件
+     * @param request Http请求对象
+     * @return 响应结果
+     */
     @RequestMapping(path = "/upload", method = RequestMethod.POST)
     public ResponseData fileUpload(MultipartFile img, HttpServletRequest request) {
         if (img == null) {
@@ -89,6 +98,12 @@ public class AppletController {
         }
     }
 
+    /**
+     * 获取IP归属地接口
+     * @param request Http请求接口
+     * @param ip IP地址
+     * @return 响应结果
+     */
     @RequestMapping(value = "/ip", method = RequestMethod.GET)
     public Object ipAddress(HttpServletRequest request, String ip) {
         System.out.println(ip);
@@ -125,6 +140,11 @@ public class AppletController {
         }
     }
 
+    /**
+     * 邮件验证码发送接口
+     * @param body 参数体
+     * @return 响应结果
+     */
     @RequestMapping(value = "/mail/send", method = RequestMethod.POST)
     public Object sendCodeEMail(@RequestBody Map<String, String> body) {
         String address = body.get("address");
@@ -202,6 +222,11 @@ public class AppletController {
         }
     }
 
+    /**
+     * 验证邮箱验证码
+     * @param body 验证码
+     * @return 响应结果
+     */
     @RequestMapping(value = "/mail/verify", method = RequestMethod.POST)
     public Object verifyEmailCode(@RequestBody Map<String, String> body){
         String code = body.get("code");
