@@ -7,7 +7,7 @@ import org.ansj.splitWord.analysis.ToAnalysis;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ansjUtil {
+public class AnsjUtil {
 
     public static List<String> startParticiple(String s){
         Result result = ToAnalysis.parse(s);//进行分词，得到Result

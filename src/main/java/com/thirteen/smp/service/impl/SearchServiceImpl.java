@@ -1,14 +1,11 @@
 package com.thirteen.smp.service.impl;
 
-import com.thirteen.smp.exception.HistoryNotExistException;
 import com.thirteen.smp.mapper.*;
 import com.thirteen.smp.pojo.Favorite;
 import com.thirteen.smp.pojo.Post;
 import com.thirteen.smp.pojo.User;
 import com.thirteen.smp.service.SearchService;
-import com.thirteen.smp.utils.AccessTokenUtil;
-import com.thirteen.smp.utils.ansjUtil;
-import jakarta.servlet.http.HttpServletRequest;
+import com.thirteen.smp.utils.AnsjUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -39,7 +36,7 @@ public class SearchServiceImpl implements SearchService {
         List<Post> posts = postMapper.selectByQuery("");
         List<User> users = userMapper.selectByQuery("");
         List<Map<String,Object>> finalPosts =new ArrayList<>();
-        List<String> querys = ansjUtil.startParticiple(query);
+        List<String> querys = AnsjUtil.startParticiple(query);
         posts.forEach(post -> {
             for(String q : querys){
                 if(post.getContent().contains(q)){

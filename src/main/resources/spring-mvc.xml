@@ -40,6 +40,7 @@
             <!--设置放行的请求-->
             <mvc:exclude-mapping path="/auth/login"/>
             <mvc:exclude-mapping path="/auth/register"/>
+            <mvc:exclude-mapping path="/applet/mail/*"/>
             <!--设置进行功能处理的拦截器类-->
             <bean class="com.thirteen.smp.interceptor.AuthInterceptor"/>
         </mvc:interceptor>
