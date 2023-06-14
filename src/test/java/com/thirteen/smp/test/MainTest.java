@@ -5,10 +5,7 @@ import com.thirteen.smp.pojo.Msg;
 import com.thirteen.smp.pojo.Post;
 import com.thirteen.smp.pojo.User;
 import com.thirteen.smp.service.UserService;
-import com.thirteen.smp.utils.IpAddressUtil;
-import com.thirteen.smp.utils.SettingUtil;
-import com.thirteen.smp.utils.SqlSessionUtil;
-import com.thirteen.smp.utils.AccessTokenUtil;
+import com.thirteen.smp.utils.*;
 import org.apache.ibatis.session.SqlSession;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -22,15 +19,33 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+import java.util.Random;
 
 /**
- * 用于测试Mapper的测试类
+ * 用于测试的测试类
  *
  * @author 顾建平
  */
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration("classpath:applicationContext.xml")
 public class MainTest {
+
+    @Test
+    public void batchModifyUsers(){
+        SqlSession sqlSession = SqlSessionUtil.openSession();
+        UserMapper mapper = sqlSession.getMapper(UserMapper.class);
+
+        List<Map<String, Object>> provinceMapList = ProvinceMapperUtil.getProvinceMapList();
+        Random random = new Random();
+        List<User> users = mapper.selectAll();
+        for (User user : users) {
+            user.setUserLocation((String) provinceMapList.get(random.nextInt(provinceMapList.size())).get("name"));
+            System.out.println(user);
+            mapper.updateUser(user);
+        }
+        sqlSession.commit();
+    }
 
     @Test
     public void testLog(){

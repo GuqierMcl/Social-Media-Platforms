@@ -69,7 +69,7 @@ public class HomeServiceImpl implements HomeService {
             if (resultList.size() == count) break;
             if (user.getUserId().equals(userId)) continue;
             if (user.getUserLocation().equals(crrUser.getUserLocation()) || user.getUserLang().equals(crrUser.getUserLang())) {
-                userListHandler(resultList, user, userId, "与TA地区/语言相同");
+                userListHandler(resultList, user, userId, "与TA地区相同");
                 usersBak.remove(user);
                 System.out.println(resultList.size());
             }
@@ -83,6 +83,7 @@ public class HomeServiceImpl implements HomeService {
                 userListHandler(resultList, user, userId, "推荐关注");
             }
         }
+        Collections.shuffle(resultList);
         return resultList;
     }
 

@@ -32,7 +32,7 @@ public class BannedWordUtil {
         for (; ; ) {
             String str = reader.readLine();
             if (str == null) break;
-            System.out.println(str);
+//            System.out.println(str);
             bannedWords.add(str);
         }
         // 查询关键词是否包含敏感词
