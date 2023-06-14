@@ -12,6 +12,8 @@ import com.thirteen.smp.utils.AccessTokenUtil;
 import org.apache.ibatis.session.SqlSession;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -29,6 +31,12 @@ import java.util.List;
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration("classpath:applicationContext.xml")
 public class MainTest {
+
+    @Test
+    public void testLog(){
+        Logger logger = LoggerFactory.getLogger(MainTest.class);
+        logger.info("Log测试");
+    }
 
     @Test
     public void testUserStatus() {

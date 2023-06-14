@@ -9,5 +9,7 @@
     <import resource="classpath:applicationContext-mapper.xml"/>
     <!--service包的Spring配置文件-->
     <import resource="classpath:applicationContext-service.xml"/>
+    <!--spring-aspectj-aop-annotation配置文件-->
+    <import resource="classpath:spring-aspectj-aop-annotation.xml"/>
 
 </beans>
