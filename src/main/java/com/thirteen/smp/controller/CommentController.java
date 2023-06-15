@@ -2,6 +2,7 @@ package com.thirteen.smp.controller;
 
 import com.thirteen.smp.exception.CommentNotExistException;
 import com.thirteen.smp.exception.PostNotExistException;
+import com.thirteen.smp.exception.PubBannedWordsException;
 import com.thirteen.smp.pojo.Comment;
 import com.thirteen.smp.response.ResponseData;
 import com.thirteen.smp.service.CommentService;
@@ -52,13 +53,14 @@ public class CommentController {
         Integer userId = AccessTokenUtil.getUserId(request);
         Comment comment = new Comment(null, (Integer) param.get("postId"), userId, (String) param.get("content"), new Timestamp(System.currentTimeMillis()), (Integer) param.get("commentId"));
         boolean res = false;
-
         try {
             res = commentService.publishComment(comment);
         } catch (PostNotExistException e) {
             return ResponseUtil.getErrorResponse(601);
         } catch (CommentNotExistException e) {
             return ResponseUtil.getErrorResponse(602); //评论不存在
+        } catch (PubBannedWordsException e){
+            return ResponseUtil.getErrorResponse(704);
         }
         if (res) {
             return ResponseUtil.getSuccessResponse(null);

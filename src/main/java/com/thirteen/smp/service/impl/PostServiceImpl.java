@@ -1,17 +1,20 @@
 package com.thirteen.smp.service.impl;
 
 import com.thirteen.smp.exception.PostNotExistException;
+import com.thirteen.smp.exception.PubBannedWordsException;
 import com.thirteen.smp.mapper.*;
 import com.thirteen.smp.pojo.Favorite;
 import com.thirteen.smp.pojo.Post;
 import com.thirteen.smp.pojo.User;
 import com.thirteen.smp.service.PostService;
 import com.thirteen.smp.utils.AccessTokenUtil;
+import com.thirteen.smp.utils.BannedWordUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -72,6 +75,13 @@ public class PostServiceImpl implements PostService {
     @Override
     @Transactional // 启用事务
     public int savePost(Post post) throws PostNotExistException {
+        try {
+            if(BannedWordUtil.isBannedWord(post.getContent())){
+                throw  new PubBannedWordsException("帖子内容不合法");
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         if(post.getContent()==null||post.getContent().equals("")){
             return -1; //表示帖子内容为空
         }

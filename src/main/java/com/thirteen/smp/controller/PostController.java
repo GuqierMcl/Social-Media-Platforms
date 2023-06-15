@@ -1,6 +1,7 @@
 package com.thirteen.smp.controller;
 
 import com.thirteen.smp.exception.PostNotExistException;
+import com.thirteen.smp.exception.PubBannedWordsException;
 import com.thirteen.smp.pojo.Post;
 import com.thirteen.smp.response.ResponseData;
 import com.thirteen.smp.service.PostService;
@@ -93,6 +94,8 @@ public class PostController {
             }
         } catch (PostNotExistException e) {
             return ResponseUtil.getErrorResponse(501);
+        } catch (PubBannedWordsException e){
+            return ResponseUtil.getErrorResponse(609);
         }
         return ResponseUtil.getSuccessResponse(null);//发布成功
     }

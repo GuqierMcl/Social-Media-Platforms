@@ -2,6 +2,7 @@ package com.thirteen.smp.service.impl;
 
 import com.thirteen.smp.exception.CommentNotExistException;
 import com.thirteen.smp.exception.PostNotExistException;
+import com.thirteen.smp.exception.PubBannedWordsException;
 import com.thirteen.smp.mapper.CommentMapper;
 import com.thirteen.smp.mapper.LikeMapper;
 import com.thirteen.smp.mapper.PostMapper;
@@ -10,10 +11,12 @@ import com.thirteen.smp.pojo.Comment;
 import com.thirteen.smp.pojo.Post;
 import com.thirteen.smp.pojo.User;
 import com.thirteen.smp.service.CommentService;
+import com.thirteen.smp.utils.BannedWordUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.util.*;
 
 @Service
@@ -122,6 +125,15 @@ public class CommentServiceImpl implements CommentService {
     @Transactional
     public boolean publishComment(Comment comment) throws PostNotExistException, CommentNotExistException {
         Post post = postMapper.selectByPostId(comment.getPostId());
+
+        try {
+            if(BannedWordUtil.isBannedWord(comment.getCommentContent())){
+                throw new PubBannedWordsException("评论内容不合法");
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
         if (post == null) {
             throw new PostNotExistException("帖子不存在");
         }
