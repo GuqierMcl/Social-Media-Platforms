@@ -64,6 +64,7 @@ public class PostServiceImpl implements PostService {
             for(int i=0;i< GlobalVariables.NearestProvinceNum+1;i++){
                 if(u.getUserLocation().equals(nearestProvinceDistance.get(i).get("name"))&&
                         (cityNumber.replace(u.getUserLocation(),cityNumber.get(u.getUserLocation()))+1)<=100/GlobalVariables.NearestProvinceNum){
+                    System.out.println(u.getNickname());
                     List<Favorite> favorites = favoriteMapper.selectByUserId(u.getUserId());
                     //添加推荐用户的收藏夹的帖子id
                     if(favorites.size()!=0){
@@ -91,7 +92,21 @@ public class PostServiceImpl implements PostService {
                             if(cnt==0) break;
                         }
                     }
+                    //添加推荐用户发布的帖子id
+                    List<Post> posts1 = postMapper.selectByUserId(user.getUserId());
+                    if(posts1.size()!=0){
+                        Collections.shuffle(posts1);//打乱增加随机性
+                        int cnt = GlobalVariables.recommendPostNum;//每个人最多提供推荐点赞帖子数量
+                        for (Post post :posts1){
+                            if(!postIds.contains(post.getPostId())){
+                                postIds.add(post.getPostId());
+                                cnt--;
+                            }
+                            if(cnt==0) break;
+                        }
+                    }
                 }
+                if(postIds.size()>100) break;
             }
         }
         if(postIds.size()<10)//如果帖子数量小于10个,启动基于语言的协同算法
@@ -125,10 +140,25 @@ public class PostServiceImpl implements PostService {
                             if(cnt==0) break;
                         }
                     }
+                    //添加推荐用户发布的帖子id
+                    List<Post> posts1 = postMapper.selectByUserId(user.getUserId());
+                    if(posts1.size()!=0){
+                        Collections.shuffle(posts1);//打乱增加随机性
+                        int cnt = GlobalVariables.recommendPostNum;//每个人最多提供推荐点赞帖子数量
+                        for (Post post :posts1){
+                            if(!postIds.contains(post.getPostId())){
+                                postIds.add(post.getPostId());
+                                cnt--;
+                            }
+                            if(cnt==0) break;
+                        }
+                    }
                 }
+                if(postIds.size()>100) break;
             }
         }
         Collections.shuffle(postIds);//再次随机，增加随机性
+        System.out.println(postIds);
         return postIds.subList(0,GlobalVariables.recommendPostNum);//随机返回五个经过推荐的帖子
     }
 
