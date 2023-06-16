@@ -41,24 +41,6 @@ public class PostController {
         return ResponseUtil.getSuccessResponse(post);
     }
 
-    //根据关键词搜索帖子
-    @RequestMapping(path = "/searchPosts", method = RequestMethod.GET)
-    public ResponseData queryPost(HttpServletRequest request, @RequestParam("type") String type, @RequestParam("query") String query) {
-        if (type.equals("") || type == null || query.equals("") || query == null) {
-            return ResponseUtil.getErrorResponse(606);
-        }
-        List<Post> posts = null;
-        try {
-            if (type.equals("home")) {
-                posts = postService.queryPost(query);
-            } else {
-                posts = postService.queryPostSelf(query, AccessTokenUtil.getUserId(request));
-            }
-        } catch (PostNotExistException e) {
-            return ResponseUtil.getErrorResponse(607);
-        }
-        return ResponseUtil.getSuccessResponse(posts);
-    }
 
     //获取帖子（获取自己的帖子/获取自己和关注列表用户的帖子）
     @RequestMapping(method = RequestMethod.GET)
@@ -67,7 +49,7 @@ public class PostController {
         List<Map<String,Object>> results=null;
         if (userId != null) {
             try {
-                results = postService.getPostSelf(userId,request);
+                results = postService.getPostSelf(userId,AccessTokenUtil.getUserId(request));
                 return ResponseUtil.getSuccessResponse(results);
             } catch (PostNotExistException e) {
                 return ResponseUtil.getErrorResponse(604);

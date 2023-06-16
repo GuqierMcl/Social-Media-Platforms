@@ -4,10 +4,13 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class ProvinceMapperUtil {
+    /**
+     * 地球半径，单位千米
+     */
+    public static final double EARTH_RADIUS = 6378.137;
 
     /**
      * 省份与其拼音映射枚举JSON
@@ -117,5 +120,66 @@ public class ProvinceMapperUtil {
      */
     public static List<Map<String, Object>> getProvinceMapList(){
         return provinceMapList;
+    }
+
+    /**
+     * 将角度转换成弧度
+     * @param d 角度
+     * @return
+     */
+    public static double rad(double d) {
+        return d * Math.PI / 180.0;
+    }
+
+    /**
+     * 计算两个经纬度坐标之间的距离
+     *计算过程使用了Haversine公式，最终结果通过四舍五入方式保留了4位小数
+     * @param lat1 第一个点的纬度
+     * @param lng1 第一个点的经度
+     * @param lat2 第二个点的纬度
+     * @param lng2 第二个点的经度
+     * @return s 距离
+     */
+    public static double getDistance(double lat1, double lng1, double lat2, double lng2) {
+        double radLat1 = rad(lat1);
+        double radLat2 = rad(lat2);
+        double a = radLat1 - radLat2;
+        double b = rad(lng1) - rad(lng2);
+        double s = 2 * Math.asin(Math.sqrt(Math.pow(Math.sin(a / 2), 2) + Math.cos(radLat1) * Math.cos(radLat2) * Math.pow(Math.sin(b / 2), 2)));
+        s *= EARTH_RADIUS;
+        s = Math.round(s * 10000) / 10000;
+        return s;
+    }
+    /**
+     * 通过省份名称计算距离所有省份的距离并且按距离从近到远进行排序(包括本省份，本省份的距离为0)
+     * @param name
+     * @return 返回排序过后的省份列表
+     */
+    public static List<Map<String,Object>> getNearestProvinceDistance(String name){
+        List<Map<String,Object>> provinces = new ArrayList<>();
+        Map<String, Object> nowProvince = getProvinceMapperItemByName(name);
+        if(nowProvince==null) return null;
+        for (Map<String, Object> map : provinceMapList) {
+            Map<String,Object> province = new LinkedHashMap<>();
+            String pName = (String) map.get("name");
+            if(pName.equals(nowProvince.get("name"))){//如果是本省份则距离为0
+                double s = 0;
+                province.put("name",pName);
+                province.put("s",s);
+            } else{
+                //计算距离
+                double s = getDistance((double)nowProvince.get("lon"),(double)nowProvince.get("lat"),(double)map.get("lon"),(double)map.get("lat"));
+                province.put("name",pName);
+                province.put("s",s);
+            }
+            provinces.add(province);
+        }
+        provinces.sort(new Comparator<Map<String, Object>>() {
+            @Override
+            public int compare(Map<String, Object> o1, Map<String, Object> o2) {
+                return (int)((double)o1.get("s")-(double)o2.get("s"));//升序排序
+            }
+        });
+        return provinces;
     }
 }

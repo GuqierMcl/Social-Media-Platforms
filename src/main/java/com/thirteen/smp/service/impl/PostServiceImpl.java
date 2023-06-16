@@ -7,8 +7,10 @@ import com.thirteen.smp.pojo.Favorite;
 import com.thirteen.smp.pojo.Post;
 import com.thirteen.smp.pojo.User;
 import com.thirteen.smp.service.PostService;
+import com.thirteen.smp.service.global.GlobalVariables;
 import com.thirteen.smp.utils.AccessTokenUtil;
 import com.thirteen.smp.utils.BannedWordUtil;
+import com.thirteen.smp.utils.ProvinceMapperUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -38,30 +40,131 @@ public class PostServiceImpl implements PostService {
     @Autowired
     private FavoriteMapper favoriteMapper;
 
+    /**
+     * 基于用户城市/语言的协同过滤算法
+     * @param userId
+     * @return 帖子Id列表
+     */
+    public  List<Integer> userCF(int userId){
+        User user = userMapper.selectById(userId);
+        Map<String,Integer> cityNumber = new LinkedHashMap<>();
+        List<User> users = userMapper.selectAll();
+        List<Integer> postIds = new ArrayList<>();
+        List<Favorite> relatedFavorite = new ArrayList<>();
+        //初始化所有城市人数为0
+        for(Map<String,Object> city:ProvinceMapperUtil.getProvinceMapList()){
+            cityNumber.put((String) city.get("name"),0);
+        }
+        //获取距离其他省份的距离
+        List<Map<String, Object>> nearestProvinceDistance = ProvinceMapperUtil.getNearestProvinceDistance(user.getUserLocation());
+        //获取距离当前用户的城市和附近城市的用户列表
+        //如果该用户城市距离当前用户较近，则纳入考虑范围,并且最多将会添加来自不同的几个城市的一百个用户
+        Collections.shuffle(users);//打乱列表，增加随机性
+        for (User u :users){
+            for(int i=0;i< GlobalVariables.NearestProvinceNum+1;i++){
+                if(u.getUserLocation().equals(nearestProvinceDistance.get(i).get("name"))&&
+                        (cityNumber.replace(u.getUserLocation(),cityNumber.get(u.getUserLocation()))+1)<=100/GlobalVariables.NearestProvinceNum){
+                    List<Favorite> favorites = favoriteMapper.selectByUserId(u.getUserId());
+                    //添加推荐用户的收藏夹的帖子id
+                    if(favorites.size()!=0){
+                        cityNumber.replace(u.getUserLocation(),cityNumber.get(u.getUserLocation())+1);
+                        Collections.shuffle(favorites);//打乱增加随机性
+                        int cnt= GlobalVariables.recommendPostNum;//每个人最多提供推荐收藏帖子数量
+                        for(Favorite favorite: favorites){
+                            if(!postIds.contains(favorite.getPostId())){
+                                postIds.add(favorite.getPostId());
+                                cnt--;
+                            }
+                            if(cnt==0) break;
+                        }
+                    }
+                    //添加推荐用户喜欢的帖子id
+                    List<Post> posts = likeMapper.selectLikePostByUserId(user.getUserId());
+                    if(posts.size()!=0){
+                        Collections.shuffle(posts);//打乱增加随机性
+                        int cnt = GlobalVariables.recommendPostNum;//每个人最多提供推荐点赞帖子数量
+                        for (Post post :posts){
+                            if(!postIds.contains(post.getPostId())){
+                                postIds.add(post.getPostId());
+                                cnt--;
+                            }
+                            if(cnt==0) break;
+                        }
+                    }
+                }
+            }
+        }
+        if(postIds.size()<10)//如果帖子数量小于10个,启动基于语言的协同算法
+        {
+            for(User u: users){
+                if(u.getUserLang().equals(user.getUserLang())){
+                    List<Favorite> favorites = favoriteMapper.selectByUserId(u.getUserId());
+                    //添加推荐用户的收藏夹的帖子id
+                    if(favorites.size()!=0){
+                        cityNumber.replace(u.getUserLocation(),cityNumber.get(u.getUserLocation())+1);
+                        Collections.shuffle(favorites);//打乱增加随机性
+                        int cnt= GlobalVariables.recommendPostNum;//每个人最多提供推荐收藏帖子数量
+                        for(Favorite favorite: favorites){
+                            if(!postIds.contains(favorite.getPostId())){
+                                postIds.add(favorite.getPostId());
+                                cnt--;
+                            }
+                            if(cnt==0) break;
+                        }
+                    }
+                    //添加推荐用户喜欢的帖子id
+                    List<Post> posts = likeMapper.selectLikePostByUserId(user.getUserId());
+                    if(posts.size()!=0){
+                        Collections.shuffle(posts);//打乱增加随机性
+                        int cnt = GlobalVariables.recommendPostNum;//每个人最多提供推荐点赞帖子数量
+                        for (Post post :posts){
+                            if(!postIds.contains(post.getPostId())){
+                                postIds.add(post.getPostId());
+                                cnt--;
+                            }
+                            if(cnt==0) break;
+                        }
+                    }
+                }
+            }
+        }
+        Collections.shuffle(postIds);//再次随机，增加随机性
+        return postIds.subList(0,GlobalVariables.recommendPostNum);//随机返回五个经过推荐的帖子
+    }
+
+    public List<Map<String,Object>> getAllPost(int userId){
+        List<Post> posts = postMapper.selectAllPost();
+        List<Map<String,Object>> datas = new ArrayList<>();
+        for(Post post:posts){
+            Map<String,Object> result = new LinkedHashMap<>();
+            User user = userMapper.selectById(post.getUserId());
+            result = new LinkedHashMap<>();
+            result.put("content", post.getContent());//帖子内容
+            result.put("img", post.getImg());//帖子图片
+            result.put("profilePic", userMapper.selectById(post.getUserId()).getProfilePic());//发布帖子用户的头像
+            result.put("userId", post.getUserId());//发布帖子用户Id
+            result.put("name",user.getNickname());//发布帖子用户名
+            result.put("postId", post.getPostId());//帖子Id
+            result.put("date", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(post.getPostTime()));//帖子发布时间
+            result.put("likeNum", post.getLikeNum());//帖子点赞数
+            result.put("isLike", likeMapper.judgeLiked(post.getPostId(), userId) != 0);//当前用户帖是否点赞帖子
+            result.put("commentNum",commentMapper.selectCountByPostId(post.getPostId()));//帖子评论数
+            Favorite favorite = new Favorite();
+            favorite.setPostId(post.getPostId());
+            favorite.setUserId(userId);
+            result.put("isStaring",favoriteMapper.selectByUserIdAndPostId(favorite)!=null);//当前用户是否收藏帖子
+            datas.add(result);
+        }
+        return datas;
+    }
+
     @Override
     public Map<String, Object> getPostById(int userId, int postId) throws PostNotExistException {
-        List<Post> posts = null;
-        posts = postMapper.selectAllPost();
-        Map<String, Object> result=null;
-        for(Post post:posts){
-            if(post.getPostId()==postId){
-                User user = userMapper.selectById(post.getUserId());
-                result = new LinkedHashMap<>();
-                result.put("content", post.getContent());
-                result.put("img", post.getImg());
-                result.put("profilePic", userMapper.selectById(post.getUserId()).getProfilePic());
-                result.put("userId", post.getUserId());
-                result.put("name",user.getNickname());
-                result.put("postId", post.getPostId());
-                result.put("date", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(post.getPostTime()));
-                System.out.println(post.getPostTime());
-                result.put("likeNum", post.getLikeNum());
-                result.put("isLike", likeMapper.judgeLiked(post.getPostId(), userId) != 0);
-                result.put("commentNum",commentMapper.selectCountByPostId(post.getPostId()));
-                Favorite favorite = new Favorite();
-                favorite.setPostId(post.getPostId());
-                favorite.setUserId(userId);
-                result.put("isStaring",favoriteMapper.selectByUserIdAndPostId(favorite)!=null);
+        List<Map<String,Object>> datas = getAllPost(userId);
+        Map<String,Object> result = null;
+        for(Map<String,Object> data :datas){
+            if((int)data.get("postId")==postId){
+                result = data;
                 break;
             }
         }
@@ -111,102 +214,37 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<Map<String,Object>> getPostSelf(int userId, HttpServletRequest request) throws PostNotExistException {
-        List<Post> posts = null;
-        posts = postMapper.selectByUserId(userId);
-        if(posts==null||posts.size()==0){
-            throw new PostNotExistException("该用户没有发布帖子");
-        } else{
-            List<Map<String,Object>> results=new ArrayList<>();
-            posts.forEach(post->{
-                User user = userMapper.selectById(post.getUserId());
-                Map<String,Object> result=new LinkedHashMap<>();
-                result.put("content",post.getContent());
-                result.put("img",post.getImg());
-                result.put("profilePic",userMapper.selectById(post.getUserId()).getProfilePic());
-                result.put("userId",post.getUserId());
-                result.put("name",user.getNickname());
-                result.put("postId",post.getPostId());
-                result.put("date",new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(post.getPostTime()));
-                result.put("likeNum",post.getLikeNum());
-                result.put("isLike",likeMapper.judgeLiked(post.getPostId(), AccessTokenUtil.getUserId(request))!=0);
-                result.put("commentNum",commentMapper.selectCountByPostId(post.getPostId()));
-                Favorite favorite = new Favorite();
-                favorite.setPostId(post.getPostId());
-                favorite.setUserId(userId);
-                result.put("isStaring",favoriteMapper.selectByUserIdAndPostId(favorite)!=null);
-                results.add(result);
-            });
-            return results;
+    public List<Map<String,Object>> getPostSelf(int userId, int nowUserId) throws PostNotExistException {
+        List<Map<String ,Object>> datas = getAllPost(nowUserId);
+        List<Map<String ,Object>> results = new ArrayList<>();
+        for(Map<String,Object> data :datas){
+            if((int)data.get("userId")==userId){
+                results.add(data);
+            }
         }
-
+        if(results.size()==0){
+            throw new PostNotExistException("该用户没有发布帖子");
+        }
+        return results;
     }
 
     @Override
     public List<Map<String,Object>> getPostSelfFollow(int userId) throws PostNotExistException {
-        List<Post> posts = null;
-        posts = postMapper.selectAllPost();
+        List<Map<String,Object>> datas = getAllPost(userId);
+        //获取当前用户关注用户id列表
         List<User> Follows = followMapper.selectByFollowerUserId(userId);
         List<Integer> followIds = new ArrayList<>();
         Follows.forEach(follow->{
             followIds.add(follow.getUserId());
         });
-        List<Post> finalPosts = new ArrayList<>();
-        int count=3;
-        for(int i=0;i<posts.size();i++){
-            if(followIds.contains(posts.get(i).getUserId())||posts.get(i).getUserId()==userId){
-                finalPosts.add(posts.get(i));
-            } else if(count>0){
-                finalPosts.add(posts.get(i));
-                count--;
+        List<Integer> recommendPostIds = userCF(userId);
+        List<Map<String,Object>> finalPosts = new ArrayList<>();
+        for(Map<String,Object> data:datas){
+            if(followIds.contains(data.get("userId"))||(int)data.get("userId")==userId||recommendPostIds.contains((int)data.get("postId"))){//如果是当前用户关注用户或者是当前用户发布的帖子或者是经过推荐算法推荐的帖子则加入最终返回列表
+                finalPosts.add(data);
             }
         }
-        if(finalPosts.size()==0){
-            throw new PostNotExistException("该用户未发布帖子且关注用户未发布帖子或者未关注其他用户");
-        } else{
-            List<Map<String,Object>> results=new ArrayList<>();
-            finalPosts.forEach(post-> {
-                User user = userMapper.selectById(post.getUserId());
-                Map<String, Object> result = new LinkedHashMap<>();
-                result.put("content", post.getContent());
-                result.put("img", post.getImg());
-                result.put("profilePic", userMapper.selectById(post.getUserId()).getProfilePic());
-                result.put("userId", post.getUserId());
-                result.put("name",user.getNickname());
-                result.put("postId", post.getPostId());
-                result.put("date", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(post.getPostTime()));
-                System.out.println(post.getPostTime());
-                result.put("likeNum", post.getLikeNum());
-                result.put("isLike", likeMapper.judgeLiked(post.getPostId(), userId) != 0);
-                result.put("commentNum",commentMapper.selectCountByPostId(post.getPostId()));
-                Favorite favorite = new Favorite();
-                favorite.setPostId(post.getPostId());
-                favorite.setUserId(userId);
-                result.put("isStaring",favoriteMapper.selectByUserIdAndPostId(favorite)!=null);
-                results.add(result);
-            });
-            return results;
-        }
+        return finalPosts;
     }
 
-    @Override
-    public List<Post> queryPost(String query) throws PostNotExistException {
-        List<Post> posts = null;
-        posts = postMapper.selectByQuery(query);
-        if(posts.size()==0){
-            throw new PostNotExistException("未搜索到相关帖子");
-        } else{
-            return posts;
-        }
-    }
-    @Override
-    public List<Post> queryPostSelf(String query,int userId) throws PostNotExistException {
-        List<Post> posts = null;
-        posts = postMapper.selectByQuerySelf(query,userId);
-        if(posts.size()==0){
-            throw new PostNotExistException("未搜索到相关帖子");
-        } else{
-            return posts;
-        }
-    }
 }
