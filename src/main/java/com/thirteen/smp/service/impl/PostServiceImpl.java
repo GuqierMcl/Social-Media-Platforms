@@ -4,6 +4,7 @@ import com.thirteen.smp.exception.PostNotExistException;
 import com.thirteen.smp.exception.PubBannedWordsException;
 import com.thirteen.smp.mapper.*;
 import com.thirteen.smp.pojo.Favorite;
+import com.thirteen.smp.pojo.Msg;
 import com.thirteen.smp.pojo.Post;
 import com.thirteen.smp.pojo.User;
 import com.thirteen.smp.service.PostService;
@@ -25,6 +26,8 @@ import java.util.*;
 public class PostServiceImpl implements PostService {
 
     // TODO 张力文 实现帖子业务接口
+    @Autowired
+    private ChatMapper chatMapper;
     @Autowired
     private CommentMapper commentMapper;// 使用Spring自动注入工具类
     @Autowired
@@ -233,6 +236,29 @@ public class PostServiceImpl implements PostService {
             throw new PostNotExistException("添加帖子失败");
         }
         else {
+            List<Post> posts = postMapper.selectByUserId(post.getUserId());
+            /**
+             * 如果该用户是第一次发布帖子，则管理员会对其发送相关信息
+             */
+            if(posts.size()==1){
+                Msg msg = new Msg();
+                msg.setToUserId(post.getUserId());//发给第一次发帖的用户
+                msg.setUserId(1);//用户id为1，即管理员账号，发起聊天
+                msg.setContent("亲爱的" + userMapper.selectById(post.getUserId()).getNickname() + ":\n" +
+                        "  你好呀！\n" +
+                        "  欢迎来到SMP网络社区，您可以在这里发布您的日常生活，您的兴趣爱好，也可以查看其他用户所发布的帖子。\n" +
+                        "  但是在本社区游玩的过程中，也需要遵守相关的规定。\n" +
+                        "  规定如下:\n" +
+                        "  1.帖子、评论内容禁止涉及黄赌毒\n" +
+                        "  2.评论禁止引战\n" +
+                        "  3.待后续补充\n" +
+                        "  以上规则如有违反，社区将会对其进行封号处理！\n" +
+                        "  祝您使用愉快，再见！");
+                msg.setTime(new Timestamp(new Date().getTime()));
+                msg.setIsRead(0);
+                int cou =  chatMapper.insertMsg(msg);
+                System.out.println(cou);
+            }
             return count;
         }
 
