@@ -64,7 +64,6 @@ public class PostServiceImpl implements PostService {
             for(int i=0;i< GlobalVariables.NearestProvinceNum+1;i++){
                 if(u.getUserLocation().equals(nearestProvinceDistance.get(i).get("name"))&&
                         (cityNumber.replace(u.getUserLocation(),cityNumber.get(u.getUserLocation()))+1)<=100/GlobalVariables.NearestProvinceNum){
-                    System.out.println(u.getNickname());
                     List<Favorite> favorites = favoriteMapper.selectByUserId(u.getUserId());
                     //添加推荐用户的收藏夹的帖子id
                     if(favorites.size()!=0){
@@ -109,7 +108,7 @@ public class PostServiceImpl implements PostService {
                 if(postIds.size()>100) break;
             }
         }
-        if(postIds.size()<10)//如果帖子数量小于10个,启动基于语言的协同算法
+        if(postIds.size()<GlobalVariables.recommendPostNum*2)//如果帖子数量小于10个,启动基于语言的协同算法
         {
             for(User u: users){
                 if(u.getUserLang().equals(user.getUserLang())){
@@ -157,9 +156,17 @@ public class PostServiceImpl implements PostService {
                 if(postIds.size()>100) break;
             }
         }
+        if(postIds.size()<GlobalVariables.recommendPostNum*2){
+            List<Map<String, Object>> allPost = getAllPost(userId);
+            int cnt = GlobalVariables.recommendPostNum*2-postIds.size();
+            for(Map<String,Object> post:allPost){
+                postIds.add((int)post.get("postId"));
+                cnt--;
+                if(cnt==0) break;
+            }
+        }
         Collections.shuffle(postIds);//再次随机，增加随机性
-        System.out.println(postIds);
-        return postIds.subList(0,GlobalVariables.recommendPostNum);//随机返回五个经过推荐的帖子
+        return postIds.subList(0,GlobalVariables.recommendPostNum <= postIds.size() ? GlobalVariables.recommendPostNum : postIds.size());//随机返回五个经过推荐的帖子
     }
 
     public List<Map<String,Object>> getAllPost(int userId){
