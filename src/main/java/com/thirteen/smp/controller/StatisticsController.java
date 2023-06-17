@@ -51,7 +51,8 @@ public class StatisticsController {
         }
         List<Map<String, Object>> hotUserList = null;
         try {
-            hotUserList = statisticsService.getHotUserList(cnt, userId);
+//            hotUserList = statisticsService.getHotUserList(cnt, userId);
+            hotUserList = statisticsService.getGeneratedHotUserList(cnt, userId);// 使用已生成的排行榜列表
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseUtil.getErrorResponse(0);
@@ -69,7 +70,8 @@ public class StatisticsController {
         }
         List<Map<String, Object>> hotPostList = null;
         try {
-            hotPostList = statisticsService.getHotPostList(cnt);
+//            hotPostList = statisticsService.getHotPostList(cnt);
+            hotPostList = statisticsService.getGeneratedHotPostList(cnt);// 使用已生成的排行榜列表
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseUtil.getErrorResponse(0);

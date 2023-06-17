@@ -9,10 +9,8 @@ import com.thirteen.smp.pojo.Post;
 import com.thirteen.smp.pojo.User;
 import com.thirteen.smp.service.PostService;
 import com.thirteen.smp.service.global.GlobalVariables;
-import com.thirteen.smp.utils.AccessTokenUtil;
 import com.thirteen.smp.utils.BannedWordUtil;
 import com.thirteen.smp.utils.ProvinceMapperUtil;
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -64,15 +62,15 @@ public class PostServiceImpl implements PostService {
         //如果该用户城市距离当前用户较近，则纳入考虑范围,并且最多将会添加来自不同的几个城市的一百个用户
         Collections.shuffle(users);//打乱列表，增加随机性
         for (User u :users){
-            for(int i=0;i< GlobalVariables.NearestProvinceNum+1;i++){
+            for(int i = 0; i< GlobalVariables.NEAREST_PROVINCE_NUM +1; i++){
                 if(u.getUserLocation().equals(nearestProvinceDistance.get(i).get("name"))&&
-                        (cityNumber.replace(u.getUserLocation(),cityNumber.get(u.getUserLocation()))+1)<=100/GlobalVariables.NearestProvinceNum){
+                        (cityNumber.replace(u.getUserLocation(),cityNumber.get(u.getUserLocation()))+1)<=100/GlobalVariables.NEAREST_PROVINCE_NUM){
                     List<Favorite> favorites = favoriteMapper.selectByUserId(u.getUserId());
                     //添加推荐用户的收藏夹的帖子id
                     if(favorites.size()!=0){
                         cityNumber.replace(u.getUserLocation(),cityNumber.get(u.getUserLocation())+1);
                         Collections.shuffle(favorites);//打乱增加随机性
-                        int cnt= GlobalVariables.recommendPostNum;//每个人最多提供推荐收藏帖子数量
+                        int cnt= GlobalVariables.RECOMMEND_POST_NUM;//每个人最多提供推荐收藏帖子数量
                         for(Favorite favorite: favorites){
                             if(!postIds.contains(favorite.getPostId())){
                                 postIds.add(favorite.getPostId());
@@ -85,7 +83,7 @@ public class PostServiceImpl implements PostService {
                     List<Post> posts = likeMapper.selectLikePostByUserId(user.getUserId());
                     if(posts.size()!=0){
                         Collections.shuffle(posts);//打乱增加随机性
-                        int cnt = GlobalVariables.recommendPostNum;//每个人最多提供推荐点赞帖子数量
+                        int cnt = GlobalVariables.RECOMMEND_POST_NUM;//每个人最多提供推荐点赞帖子数量
                         for (Post post :posts){
                             if(!postIds.contains(post.getPostId())){
                                 postIds.add(post.getPostId());
@@ -98,7 +96,7 @@ public class PostServiceImpl implements PostService {
                     List<Post> posts1 = postMapper.selectByUserId(user.getUserId());
                     if(posts1.size()!=0){
                         Collections.shuffle(posts1);//打乱增加随机性
-                        int cnt = GlobalVariables.recommendPostNum;//每个人最多提供推荐点赞帖子数量
+                        int cnt = GlobalVariables.RECOMMEND_POST_NUM;//每个人最多提供推荐点赞帖子数量
                         for (Post post :posts1){
                             if(!postIds.contains(post.getPostId())){
                                 postIds.add(post.getPostId());
@@ -111,7 +109,7 @@ public class PostServiceImpl implements PostService {
                 if(postIds.size()>100) break;
             }
         }
-        if(postIds.size()<GlobalVariables.recommendPostNum*2)//如果帖子数量小于10个,启动基于语言的协同算法
+        if(postIds.size()<GlobalVariables.RECOMMEND_POST_NUM *2)//如果帖子数量小于10个,启动基于语言的协同算法
         {
             for(User u: users){
                 if(u.getUserLang().equals(user.getUserLang())){
@@ -120,7 +118,7 @@ public class PostServiceImpl implements PostService {
                     if(favorites.size()!=0){
                         cityNumber.replace(u.getUserLocation(),cityNumber.get(u.getUserLocation())+1);
                         Collections.shuffle(favorites);//打乱增加随机性
-                        int cnt= GlobalVariables.recommendPostNum;//每个人最多提供推荐收藏帖子数量
+                        int cnt= GlobalVariables.RECOMMEND_POST_NUM;//每个人最多提供推荐收藏帖子数量
                         for(Favorite favorite: favorites){
                             if(!postIds.contains(favorite.getPostId())){
                                 postIds.add(favorite.getPostId());
@@ -133,7 +131,7 @@ public class PostServiceImpl implements PostService {
                     List<Post> posts = likeMapper.selectLikePostByUserId(user.getUserId());
                     if(posts.size()!=0){
                         Collections.shuffle(posts);//打乱增加随机性
-                        int cnt = GlobalVariables.recommendPostNum;//每个人最多提供推荐点赞帖子数量
+                        int cnt = GlobalVariables.RECOMMEND_POST_NUM;//每个人最多提供推荐点赞帖子数量
                         for (Post post :posts){
                             if(!postIds.contains(post.getPostId())){
                                 postIds.add(post.getPostId());
@@ -146,7 +144,7 @@ public class PostServiceImpl implements PostService {
                     List<Post> posts1 = postMapper.selectByUserId(user.getUserId());
                     if(posts1.size()!=0){
                         Collections.shuffle(posts1);//打乱增加随机性
-                        int cnt = GlobalVariables.recommendPostNum;//每个人最多提供推荐点赞帖子数量
+                        int cnt = GlobalVariables.RECOMMEND_POST_NUM;//每个人最多提供推荐点赞帖子数量
                         for (Post post :posts1){
                             if(!postIds.contains(post.getPostId())){
                                 postIds.add(post.getPostId());
@@ -159,9 +157,9 @@ public class PostServiceImpl implements PostService {
                 if(postIds.size()>100) break;
             }
         }
-        if(postIds.size()<GlobalVariables.recommendPostNum*2){
+        if(postIds.size()<GlobalVariables.RECOMMEND_POST_NUM *2){
             List<Map<String, Object>> allPost = getAllPost(userId);
-            int cnt = GlobalVariables.recommendPostNum*2-postIds.size();
+            int cnt = GlobalVariables.RECOMMEND_POST_NUM *2-postIds.size();
             for(Map<String,Object> post:allPost){
                 postIds.add((int)post.get("postId"));
                 cnt--;
@@ -169,7 +167,7 @@ public class PostServiceImpl implements PostService {
             }
         }
         Collections.shuffle(postIds);//再次随机，增加随机性
-        return postIds.subList(0,GlobalVariables.recommendPostNum <= postIds.size() ? GlobalVariables.recommendPostNum : postIds.size());//随机返回五个经过推荐的帖子
+        return postIds.subList(0,GlobalVariables.RECOMMEND_POST_NUM <= postIds.size() ? GlobalVariables.RECOMMEND_POST_NUM : postIds.size());//随机返回五个经过推荐的帖子
     }
 
     public List<Map<String,Object>> getAllPost(int userId){

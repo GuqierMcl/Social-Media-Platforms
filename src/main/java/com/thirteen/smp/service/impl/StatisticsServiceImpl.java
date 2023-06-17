@@ -8,8 +8,13 @@ import com.thirteen.smp.pojo.Favorite;
 import com.thirteen.smp.pojo.Post;
 import com.thirteen.smp.pojo.User;
 import com.thirteen.smp.service.StatisticsService;
+import com.thirteen.smp.service.global.GlobalVariables;
 import com.thirteen.smp.utils.ProvinceMapperUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
@@ -35,6 +40,11 @@ public class StatisticsServiceImpl implements StatisticsService {
 
     @Autowired
     private CommentMapper commentMapper;
+
+    /**
+     * 排行榜刷新时间
+     */
+    private static final Integer REFRESH_TIME = 1000 * 60 * 5;
 
     @Override
     public List<Map<String, Object>> getUserStatistics() {
@@ -92,7 +102,7 @@ public class StatisticsServiceImpl implements StatisticsService {
             data.replace("num", num);
         }
         List<Integer> res = new ArrayList<>();
-        for(Map<String ,Integer> data :datas){
+        for (Map<String, Integer> data : datas) {
             res.add(data.get("num"));
         }
         Collections.reverse(res);
@@ -254,5 +264,86 @@ public class StatisticsServiceImpl implements StatisticsService {
             return Double.compare(hotness2, hotness1);
         });
         return postMaps.subList(0, count <= postMaps.size() ? count : postMaps.size());
+    }
+
+
+    @Override
+    public List<Map<String, Object>> getGeneratedHotUserList(Integer count, Integer userId) throws Exception {
+        if(GlobalVariables.HOT_USER_LIST == null){
+            refreshHotUserListTask();
+            System.out.println("Get refresh user list");
+        }else {
+            System.out.println("Get generated user list");
+        }
+        List<Map<String, Object>> hotUserList = (List<Map<String, Object>>) GlobalVariables.HOT_USER_LIST.get("list");
+        for (Map<String, Object> map : hotUserList) {
+            map.put("isFollowing", followMapper.selectByUserId(userId, (Integer) map.get("userId")) != null);
+        }
+        return hotUserList;
+    }
+
+    @Override
+    public List<Map<String, Object>> getGeneratedHotPostList(Integer count) throws Exception {
+        if(GlobalVariables.HOT_USER_LIST == null){
+            refreshHotPostListTask();
+            System.out.println("Get refresh post list");
+        }else {
+            System.out.println("Get generated post list");
+        }
+        return (List<Map<String, Object>>)GlobalVariables.HOT_POST_LIST.get("list");
+    }
+
+    /**
+     * 刷新用户热度排行榜定时任务
+     * @throws Exception 异常
+     */
+    @Async
+    @Scheduled(cron = "0 */5 * * * *")// 每五分钟刷新一次
+    public void refreshHotUserListTask() throws Exception {
+        Logger logger = LoggerFactory.getLogger(StatisticsServiceImpl.class);
+        if (GlobalVariables.HOT_USER_LIST == null) {
+            List<Map<String, Object>> hotUserList = getHotUserList(10, 8);
+            GlobalVariables.HOT_USER_LIST = new HashMap<>();
+            GlobalVariables.HOT_USER_LIST.put("time", new Date());
+            GlobalVariables.HOT_USER_LIST.put("list", hotUserList);
+            logger.info("New Hot User List");
+        } else {
+            Date time = (Date) GlobalVariables.HOT_USER_LIST.get("time");
+            // 判断时间是否大于五分钟
+            if (new Date().getTime() - time.getTime() >= REFRESH_TIME) {
+                List<Map<String, Object>> hotUserList = getHotUserList(10, 8);
+                GlobalVariables.HOT_USER_LIST = new HashMap<>();
+                GlobalVariables.HOT_USER_LIST.put("time", new Date());
+                GlobalVariables.HOT_USER_LIST.put("list", hotUserList);
+                logger.info("Refresh Hot User List");
+            }
+        }
+    }
+
+    /**
+     * 刷新帖子热度排行榜定时任务
+     * @throws Exception 异常
+     */
+    @Async
+    @Scheduled(cron = "0 */5 * * * *") // 每五分钟刷新一次
+    public void refreshHotPostListTask() throws Exception {
+        Logger logger = LoggerFactory.getLogger(StatisticsServiceImpl.class);
+        if (GlobalVariables.HOT_POST_LIST == null) {
+            List<Map<String, Object>> hotPostList = getHotPostList(10);
+            GlobalVariables.HOT_POST_LIST = new HashMap<>();
+            GlobalVariables.HOT_POST_LIST.put("time", new Date());
+            GlobalVariables.HOT_POST_LIST.put("list", hotPostList);
+            logger.info("New Hot Post List");
+        } else {
+            Date time = (Date) GlobalVariables.HOT_POST_LIST.get("time");
+            // 判断时间是否大于五分钟
+            if (new Date().getTime() - time.getTime() >= REFRESH_TIME) {
+                List<Map<String, Object>> hotPostList = getHotPostList(10);
+                GlobalVariables.HOT_POST_LIST = new HashMap<>();
+                GlobalVariables.HOT_POST_LIST.put("time", new Date());
+                GlobalVariables.HOT_POST_LIST.put("list", hotPostList);
+                logger.info("Refresh Hot Post List");
+            }
+        }
     }
 }
